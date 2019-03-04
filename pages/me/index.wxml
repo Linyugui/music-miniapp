@@ -1,0 +1,45 @@
+<import src="../../utils/image.wxml"/>
+<view class="page">
+    <view class="page__hd i-header">
+        <view class="g-bd">
+            <view></view>
+            <view class="g-bda">
+                <view bindtap="" class="g-bda-userinfo">
+                    <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}"></image>
+                    <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+                </view>
+            </view>
+        </view>
+    </view>
+
+    <view class="menu">
+        <navigator url="../cloud/index" class="mn_list">
+            <view class="mn_ico">
+                <template is="image" data="{{src:'../../images/cm2_list_icn_rdi_new@2x.png',width:60}}"/>
+            </view>
+            <view class="cmain">收藏的单曲</view>
+            <view class="rdes">
+                <view class="arrow"></view>
+            </view>
+        </navigator>
+        <view class="mn_list">
+            <view class="mn_ico">
+                <template is="image" data="{{src:'../../images/cm4_my_icn_fav@2x.png',width:60}}"/>
+            </view>
+            <view class="cmain">收藏的专辑</view>
+            <view class="rdes">
+                <view class="arrow"></view>
+            </view>
+        </view>
+        <view class="mn_list">
+            <view class="mn_ico">
+                <template is="image" data="{{src:'../../images/cm2_lay_icn_similar_new@2x.png',width:60}}"/>
+            </view>
+            <view class="cmain">猜你喜欢</view>
+            <view class="rdes">
+                <view class="arrow"></view>
+            </view>
+        </view>
+    </view>
+
+</view>

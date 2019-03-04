@@ -1,0 +1,116 @@
+<import src="../../utils/playpercent.wxml"/>
+<view id="playingpage" class=" {{playing?'playing':''}}">
+    <image src="../../images/cm2_default_play_bg-ip6@2x.jpg" id="coverbg"/>
+    <image id="playing-bg" class="blurbg" mode="aspectFill"
+           src="{{music.al.picUrl||music.album.picUrl}}?param=600y600"/>
+    <view id="playing-zz" hidden="{{showlrc}}">
+        <image src="../../images/aag.png"/>
+    </view>
+    <view id="playing-main" hidden="{{showlrc}}">
+        <image id="playingmainbg" src="../../images/play.png"/>
+        <image src="{{music.al.picUrl||music.album.picUrl}}?param=200y200"  id="pmaincover"/>
+    </view>
+
+    <view id="playing-actwrap">
+
+        <template is="playingpercent"
+                  data="{{playtime:playtime,percent:percent,duration:duration,downloadPercent:downloadPercent}}"/>
+        <view id="playingaction">
+            <view class="pa-saction" bindtap="playshuffle" hidden="{{shuffle!=1}}">
+                <image src="../../images/cm2_icn_loop@2x.png"/>
+            </view>
+            <view class="pa-saction" bindtap="playshuffle" hidden="{{shuffle!=2}}">
+                <image src="../../images/cm2_icn_one@2x.png"/>
+            </view>
+            <view class="pa-saction" bindtap="playshuffle" hidden="{{shuffle!=3}}">
+                <image src="../../images/cm2_icn_shuffle@2x.png"/>
+            </view>
+            <view class="pa-maction" data-other="-1" bindtap="playother">
+                <image src="../../images/ajh.png"/>
+            </view>
+            <view class="pa-baction" hidden="{{!playing}}" bindtap="playingtoggle" data-p="{{playing}}">
+                <image id='pa-playing' src="../../images/ajd.png"/>
+            </view>
+            <view class="pa-baction" hidden="{{playing}}" bindtap="playingtoggle" data-p="{{playing}}">
+                <image id='pa-pause' src="../../images/ajf.png"/>
+            </view>
+            <view class="pa-maction" data-other="1" bindtap="playother">
+                <image src="../../images/ajb.png"/>
+            </view>
+
+            <view class="pa-saction" bindtap="songheart">
+                <image src="../../images/cm2_play_icn_love@2x.png" wx:if="{{!music.st}}"/>
+                <image src="../../images/cm2_play_icn_loved@2x.png" wx:if="{{music.st}}"/>
+            </view>
+
+            <!--<view class="pa-saction" bindtap="togpinfo">-->
+                <!--<image src="../../image/cm2_icn_list@2x.png"/>-->
+            <!--</view><view class="pa-saction" bindtap="togpinfo">-->
+                <!--<image src="../../image/cm2_icn_list@2x.png"/>-->
+            <!--</view>-->
+        </view>
+    </view>
+</view>
+
+<!--&lt;!&ndash; 歌单列表 &ndash;&gt;-->
+<!--<view class="pp_overlay" hidden="{{!showainfo}}" bindtap="togainfo"></view>-->
+<!--<view class="pp_main" hidden="{{!showainfo}}">-->
+    <!--<view class='ppm_header'>收藏到歌单</view>-->
+    <!--<view class='ppm_content'>-->
+        <!--<scroll-view scroll-y="true">-->
+            <!--<view class="flexlist flex-image" bindtap="trackstpl" data-pid="{{item.id}}" wx:for-items="{{playlist}}"-->
+                  <!--wx:key="{{item.id}}">-->
+                <!--<view class="flexlist">-->
+                    <!--<view class="flexleft fl-image">-->
+                        <!--<image src="{{item.coverImgUrl}}?param=100y100"/>-->
+                    <!--</view>-->
+                    <!--<view class="flexmain">-->
+                        <!--<view>{{item.name}}</view>-->
+                        <!--<view class="relistdes">{{item.trackCount}}首</view>-->
+                    <!--</view>-->
+                <!--</view>-->
+            <!--</view>-->
+        <!--</scroll-view>-->
+    <!--</view>-->
+<!--</view>-->
+
+<!--&lt;!&ndash; 播放列表 &ndash;&gt;-->
+<!--<view class="pp_overlay" hidden="{{!showpinfo}}" bindtap="togpinfo"></view>-->
+<!--<view class="pp_main" hidden="{{!showpinfo}}">-->
+    <!--<view class='ppm_header'>-->
+        <!--<view bindtap="playshuffle" class="pph_cnt">-->
+            <!--{{(shuffle==1?'列表循环':(shuffle==2?'单曲循环':'随机播放'))}}（{{curpl.length}}）-->
+        <!--</view>-->
+        <!--<view class="pph_cnt">-->
+            <!--<view bindtap="togainfo">-->
+                <!--<template is="image" data="{{src:'../../../image/cm2_btmlay_btn_fav_dis@2x.png',width:40}}"/>-->
+                <!--收藏-->
+            <!--</view>-->
+            <!--<view bindtap="del_all">-->
+                <!--<template is="image" data="{{src:'../../../image/cm2_btmlay_btn_dlt_dis@2x.png',width:40}}"/>-->
+                <!--清空-->
+            <!--</view>-->
+        <!--</view>-->
+    <!--</view>-->
+    <!--<view class='ppm_content'>-->
+        <!--<scroll-view scroll-y="true">-->
+            <!--<view class="ml flexlist flex-center {{item.id==music.id?'cur':''}}" bindtap="pospl" data-index="{{idx}}"-->
+                  <!--wx:for-index="idx" wx:for-items="{{curpl}}" wx:key="{{item.id}}">-->
+                <!--<view class="flexlist">-->
+                    <!--<view class="flexleft" wx:if="{{item.id==music.id}}">-->
+                        <!--<template is="image" data="{{src:'../../../image/aal.png',width:32}}"/>-->
+                    <!--</view>-->
+                    <!--<view class="flexmain">-->
+                        <!--<view>{{item.name}} - -->
+                            <!--<text>{{item.ar[0].name||item.artists[0].name}}</text>-->
+                        <!--</view>-->
+                    <!--</view>-->
+                    <!--<view class="flexact" catchtap="del_curpl" data-index="{{idx}}">-->
+                        <!--<template is="image" data="{{src:'../../../image/cm2_playlist_icn_dlt@2x.png',width:60}}"/>-->
+                    <!--</view>-->
+                <!--</view>-->
+            <!--</view>-->
+        <!--</scroll-view>-->
+    <!--</view>-->
+    <!--<view class='ppm_footer' bindtap="togpinfo">关闭</view>-->
+<!--</view>-->

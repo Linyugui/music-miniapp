@@ -1,0 +1,36 @@
+<import src="../../utils/playlist.wxml" />
+<import src="../../utils/loading.wxml" />
+<view id="plist-header">
+	<view class="music_cover blurbg" style="background-image:url({{result.album.picUrl}})" id="plh-filterbg"></view>
+	<view id="plh-main">
+		<view id="plh-cover">
+			<image class="music_cover" mode="aspectFit" src="{{result.album.picUrl}}?param=200y200" />
+		</view>
+		<view id="plh-cnt">
+			<text id="music_h_name">{{result.album.name||""}}</text>
+			<view data-userid="{{result.album.artist.id}}" bindtap="artlist">
+				歌手：
+				<text>{{result.album.artist.name}}</text>
+			</view>
+			<view>
+				发行时间：
+				<text>{{result.album.publishTime}}</text>
+			</view>
+		</view>
+	</view>
+</view>
+<view class="plist-detail page_pp">
+	<block wx:if="{{result.songs.length}}">
+		<view id="playall" bindtap="playall" class="flexlist flex-center">
+			<view class="flexleft flexnum">
+				<image src="../../images/pl-playall.png" mode="widthFix" />
+			</view>
+			<view class="flexlist">
+				<text id="pa-count">播放全部 <text> (共{{result.songs.length}}首)</text>
+				</text>
+			</view>
+		</view>
+		<template is="playlist" data="{{list:result.songs,curplay:curplay}}" />
+	</block>
+	<template is="loading" wx:else></template>
+</view>

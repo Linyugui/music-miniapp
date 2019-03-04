@@ -1,0 +1,94 @@
+<import src="../../utils/search_playlist.wxml"/>
+<import src="../../utils/loading.wxml"/>
+<view id="search_header">
+
+    <view id="search_input">
+        <form bindsubmit="searhFinput">
+            <view class="form">
+                <view class="form_input">
+                    <view>
+                        <icon type="search" size="16" color="#aaa"/>
+                    </view>
+                    <input type="text" auto-focus maxlength="20" name="name" bindinput="inputext"
+                           placeholder="搜索单曲、歌手、专辑等" value="{{value}}"/>
+                    <view class="sf_clear" hidden="{{!value}}" bindtap="clear_kw">
+                        <image src="../../images/search_form_delete.png"/>
+                    </view>
+                    <view class="sf_clear" hidden="{{value}}" bindtap="scan_code">
+                        <image src="../../images/search_form_scanning.png"/>
+                    </view>
+                </view>
+                <view class="button">
+                    <button form-type="submit" plain="true">
+                        搜索
+                    </button>
+                </view>
+            </view>
+        </form>
+    </view>
+    <view id="search_tab" class="{{!loading||!value?'vhidden':''}} tab">
+        <view class="tab-item {{tab.tab==item.type?'tbi-cur':''}}" wx:for-items="{{tabs}}" wx:key="{{item.type}}"
+              wx:for-index="idx" catchtap="tabtype" data-index="{{idx}}" data-tab="{{item.type}}">
+            <text class="tbi-text">{{item.name}}</text>
+        </view>
+    </view>
+</view>
+<view id="search_result">
+    <view class="seare_list" id="re_search_wrap" wx:if="{{!loading||!value}}">
+        <view id="search_recent" wx:if="{{recent.length}}">
+            <view id="search_hot"></view>
+            <text class="sm_title">历史搜索</text>
+            <view class="sr_lists flexlist flex-center" bindtap="searhFrecent" wx:for="{{recent}}" wx:if="{{idx<5}}"
+                  data-value="{{item}}" wx:for-index="idx">
+                <view class="flexnum">
+                    <icon type="waiting_circle" size="22" color="#ddd"></icon>
+                </view>
+                <view class="flexlist">
+                    <view class="flexmain">
+                        <view>{{item}}</view>
+                    </view>
+                    <view class="flexact" catchtap="del_research" data-index="{{idx}}">
+                        <icon type="cancel" size="22" color="#ddd"></icon>
+                    </view>
+
+                </view>
+            </view>
+        </view>
+    </view>
+    <view class="seare_list" hidden="{{tab.tab!=item.type||!loading||!value}}" wx:for-items="{{tabs}}" wx:index="idx">
+        <template is="search_playlist" data="{{list:item.relist.songs}}"/>
+        <view wx:for="{{item.relist.albums}}" class="albums" wx:for-item="re" wx:for-index="idx" wx:key="{{item.id}}">
+            <navigator url="../album/index?pid={{re.id}}&from=album" class="flexlist flex-image">
+                <view class="flexleft fl-image">
+                    <image src="{{re.picUrl}}?param=100y100" class="album_cover"/>
+                </view>
+                <view class="flexlist">
+                    <view class="flexmain">
+                        <view>{{re.name}}
+                            <text wx:if="{{re.alias[0]}}">({{re.alias[0]}})</text>
+                        </view>
+                        <view class="relistdes">{{re.artist.name}}
+                            <text wx:if="{{re.artist.alias[re.artist.alias.length-1]}}">
+                                ({{re.artist.alias[re.artist.alias.length-1]}})
+                            </text>
+                        </view>
+                    </view>
+                    <view class="flexact">
+                        <view catchtap="lovealbum" data-re="{{re}}" data-idx="{{idx}}" class="fa_list fa_mv" hidden="{{re.love==1}}">
+                            <image src="../../images/music_like.png" mode="widthFix"/>
+                        </view>
+                        <view catchtap="cancellovealbum" data-re="{{re}}" data-idx="{{idx}}" class="fa_list fa_mv" hidden="{{re.love==0}}">
+                            <image src="../../images/music_liked.png" mode="widthFix"/>
+                        </view>
+                    </view>
+                </view>
+            </navigator>
+        </view>
+
+        <view wx:if="{{item.loading}}">
+            <view class="cntloading" wx:if="{{'1'==item.type&&!item.relist.songs.length}}">暂无结果</view>
+            <view class="cntloading" wx:if="{{'10'==item.type&&!item.relist.albums.length}}">暂无结果</view>
+        </view>
+        <template is="loading" wx:if="{{!item.loading||!item.none}}"/>
+    </view>
+</view>
