@@ -76,14 +76,14 @@ App({
     lovealbum: function () {
         var that = this;
         wx.request({
-            url: asurl + "song/all-love-song",
+            url: asurl + "album/all-love-album",
             data: {
                 user_id: that.globalData.id,
             },
             success: function (res) {
                 console.log('---------- app.js.success()  line:68()  res=');
                 console.dir(res);
-                that.globalData.loved_music[0] = res.data.data;
+                that.globalData.loved_music[1] = res.data.data;
             }
         })
     },

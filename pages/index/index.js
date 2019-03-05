@@ -1,4 +1,6 @@
+var asurl = require('../../utils/bsurl.js');
 var bsurl = require('../../utils/csurl.js');
+var async = require('../../utils/async.js');
 var common = require('../../utils/util.js');
 var nt = require("../../utils/nt.js");
 var app = getApp();
@@ -46,7 +48,8 @@ Page({
                 }
             })
             return;
-        };
+        }
+        ;
     },
     onHide: function () {
         nt.removeNotification("music_next", this)
@@ -70,11 +73,11 @@ Page({
         var that = this;
         var rec = this.data.rec;
         //个性推荐内容,歌单，新歌，mv，电台
-        async.map(['personalized', 'personalized/newsong'], function (item, callback) {
+        async.map(['v1/personalized', 'v1/personalized/newsong'], function (item, callback) {
             wx.request({
-                url: bsurl + item,
-                data:{
-                  limit:6
+                url: asurl + item,
+                data: {
+                    limit: 6
                 },
                 success: function (res) {
                     // console.log('---------- index.js.success()  line:218()  res='); console.dir(res);

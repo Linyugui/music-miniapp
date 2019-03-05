@@ -11,7 +11,7 @@
     "pages/album/index"
   ],
   "window": {
-    "navigationBarTextStyle": "#fff",
+    "navigationBarTextStyle": "white",
     "navigationBarTitleText": "Music",
     "backgroundColor": "#fbfcfd",
     "navigationBarBackgroundColor": "#28A173"
@@ -19,7 +19,7 @@
   "tabBar": {
     "color": "#aaa",
     "selectedColor": "#fff",
-    "borderStyle": "#333",
+    "borderStyle": "white",
     "backgroundColor": "#212121",
     "list": [
       {

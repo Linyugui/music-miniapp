@@ -16,6 +16,7 @@ Page({
         var v = options.key;
         v && this.search(v);
         app.lovemusic();
+        app.lovealbum();
     },
     inputext: function (e) {
         var name = e.detail.value;
@@ -266,8 +267,9 @@ Page({
     },
     lovesong: function (e) {
         var that = this;
+        var index = this.data.tab.index;
         var tl = this.data.tabs;
-        var curtab = tl[0];
+        var curtab = tl[index];
         wx.showLoading({
             title: '正在收藏...',
         });
@@ -285,10 +287,10 @@ Page({
             method: "GET",
             data: data,
             success: function (res) {
-                app.globalData.loved_music[0].push(song.id);
+                app.globalData.loved_music[index].push(song.id);
                 // console.log('---------- index.js.success()  line:291()  curtab.relist='); console.dir(curtab.relist);
                 curtab.relist.songs[idx].love = 1;
-                tl[0] = curtab;
+                tl[index] = curtab;
                 that.setData({
                     tabs:tl
                 })
@@ -301,8 +303,9 @@ Page({
     },
     cancellovesong: function (e) {
         var that = this;
+        var index = this.data.tab.index;
         var tl = this.data.tabs;
-        var curtab = tl[0];
+        var curtab = tl[index];
         wx.showLoading({
             title: '取消收藏...',
         });
@@ -317,9 +320,9 @@ Page({
             method: "GET",
             data: data,
             success: function (res) {
-                app.globalData.loved_music[0].splice(idx,1);
+                app.globalData.loved_music[index].splice(idx,1);
                 curtab.relist.songs[idx].love = 0;
-                tl[0] = curtab;
+                tl[index] = curtab;
                 that.setData({
                     tabs:tl
                 })
@@ -331,12 +334,70 @@ Page({
 
     },
     lovealbum: function (e) {
-        var data = e.currentTarget.dataset;
-        console.log('---------- index.js.lovealbum()  line:336()  data='); console.dir(data);
+        var that = this;
+        var index = this.data.tab.index;
+        var tl = this.data.tabs;
+        var curtab = tl[index];
+        wx.showLoading({
+            title: '正在收藏...',
+        });
+        var album = e.currentTarget.dataset.re;
+        var idx = e.currentTarget.dataset.idx;
+        var data = {
+            user_id: app.globalData.id,
+            album_id: album.id,
+            album_name: album.name,
+            album_picurl: album.picUrl,
+            artist_name: album.artists[0].name,
+        };
+        wx.request({
+            url: asurl + "album/add-love-album",
+            method: "GET",
+            data: data,
+            success: function (res) {
+                app.globalData.loved_music[index].push(album.id);
+                // console.log('---------- index.js.success()  line:291()  curtab.relist='); console.dir(curtab.relist);
+                curtab.relist.albums[idx].love = 1;
+                tl[index] = curtab;
+                that.setData({
+                    tabs:tl
+                })
+            },
+            complete:function () {
+                wx.hideLoading();
+            }
+        })
     },
     cancellovealbum: function (e) {
-        var data = e.currentTarget.dataset;
-        console.log('---------- index.js.lovealbum()  line:336()  data='); console.dir(data);
+        var that = this;
+        var index = this.data.tab.index;
+        var tl = this.data.tabs;
+        var curtab = tl[index];
+        wx.showLoading({
+            title: '取消收藏...',
+        });
+        var album = e.currentTarget.dataset.re;
+        var idx = e.currentTarget.dataset.idx;
+        var data = {
+            user_id: app.globalData.id,
+            album_id: album.id,
+        };
+        wx.request({
+            url: asurl + "album/del-love-album",
+            method: "GET",
+            data: data,
+            success: function (res) {
+                app.globalData.loved_music[index].splice(idx,1);
+                curtab.relist.albums[idx].love = 0;
+                tl[index] = curtab;
+                that.setData({
+                    tabs:tl
+                })
+            },
+            complete:function () {
+                wx.hideLoading();
+            }
+        })
     }
 
 })

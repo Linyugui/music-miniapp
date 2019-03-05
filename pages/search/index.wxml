@@ -56,7 +56,7 @@
         </view>
     </view>
     <view class="seare_list" hidden="{{tab.tab!=item.type||!loading||!value}}" wx:for-items="{{tabs}}" wx:index="idx">
-        <template is="search_playlist" data="{{list:item.relist.songs}}"/>
+        <template is="search_playlist" data="{{list:item.relist.songs,curplay:curplay}}"/>
         <view wx:for="{{item.relist.albums}}" class="albums" wx:for-item="re" wx:for-index="idx" wx:key="{{item.id}}">
             <navigator url="../album/index?pid={{re.id}}&from=album" class="flexlist flex-image">
                 <view class="flexleft fl-image">
