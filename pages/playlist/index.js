@@ -110,6 +110,7 @@ Page({
         app.globalData.globalStop = false;
     },
     playmusic: function (event) {
+        console.log('---------- index.js.playmusic()  line:113()  event='); console.dir(event);
         let music = event.currentTarget.dataset.idx;
         let st = event.currentTarget.dataset.st;
         if (st * 1 < 0) {

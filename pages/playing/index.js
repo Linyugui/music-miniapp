@@ -4,36 +4,31 @@ var nt = require('../../utils/nt.js');
 let app = getApp();
 let seek = 0;
 let defaultdata = {
-    playing: false,
-    music: {},
-    playtime: '00:00',
-    duration: '00:00',
-    percent: 0,
-    lrc: [],
-    commentscount: 0,
-    lrcindex: 0,
-    showlrc: false,
-    disable: false,
-    downloadPercent: 0,
-    showminfo: false,
-    showpinfo: false,
-    showainfo: false,
-    playlist: [],
-    curpl: [],
-    share: {
-        title: "",
-        des: ""
-    }
+
 };
 
 Page({
-    data: defaultdata,
-    onShareAppMessage: function () {
-        return {
-            title: this.data.share.title,
-            desc: this.data.share.des,
-            path: 'pages/index/index?share=1&st=playing&id=' + this.data.share.id + '&br=' + this.data.share.br
-        }
+    data: {
+        playing: false,
+        music: {},
+        playtime: '00:00',
+        duration: '00:00',
+        percent: 0,
+        lrc: [],
+        commentscount: 0,
+        lrcindex: 0,
+        showlrc: false,
+        disable: false,
+        downloadPercent: 0,
+        showminfo: false,
+        showpinfo: false,
+        showainfo: false,
+        playlist: [],
+        curpl: [],
+        share: {
+            title: "",
+            des: ""
+        },
     },
     playmusic: function (that, id, br) {
         wx.request({
@@ -167,10 +162,8 @@ Page({
         var that = this;
         app.globalData.playtype = 1;
         nt.addNotification("music_next", this.music_next, this);
-        // common.playAlrc(that, app);
-        // seek = setInterval(function () {
-        //     common.playAlrc(that, app);
-        // }, 1000);
+        common.playAlrc(that, app);
+
     },
     onUnload: function () {
         clearInterval(seek);
@@ -206,7 +199,6 @@ Page({
                 },
             });
             wx.setNavigationBarTitle({title: app.globalData.curplay.name});
-
         }
         // var id = wx.getStorageSync('user');
         // id = id.account.id;

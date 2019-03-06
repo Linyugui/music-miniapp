@@ -1,13 +1,15 @@
 //app.js
 var asurl = require('utils/bsurl.js');
 var bsurl = require('utils/csurl.js');
-var nt = require('utils/nt.js')
+var nt = require('utils/nt.js');
 App({
     onLaunch: function () {
         var id = wx.getStorageSync('id');
         var userInfo = wx.getStorageSync('userInfo');
         var that = this;
-
+        that.globalData.backgroundAudioManager = wx.getBackgroundAudioManager();
+        console.log('---------- app.js.onLaunch()  line:11()  that.globalData.backgroundAudioManager=');
+        console.dir(that.globalData.backgroundAudioManager);
         if (userInfo) {
             that.globalData.id = id;
             that.globalData.userInfo = userInfo;
@@ -27,7 +29,7 @@ App({
                         success: function (res) {
                             that.globalData.id = res.data.data.id;
                             that.globalData.openid = res.data.data.openid;
-                            wx.setStorageSync('id',res.data.data.id);
+                            wx.setStorageSync('id', res.data.data.id);
 
                         }
                     });
@@ -42,7 +44,7 @@ App({
                             success: res => {
                                 // 可以将 res 发送给后台解码出 unionId
                                 this.globalData.userInfo = res.userInfo;
-                                wx.setStorageSync('userInfo',res.userInfo);
+                                wx.setStorageSync('userInfo', res.userInfo);
                                 // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
                                 // 所以此处加入 callback 以防止这种情况
                                 if (this.userInfoReadyCallback) {
@@ -67,8 +69,6 @@ App({
                 user_id: that.globalData.id,
             },
             success: function (res) {
-                console.log('---------- app.js.success()  line:68()  res=');
-                console.dir(res);
                 that.globalData.loved_music[0] = res.data.data;
             }
         })
@@ -81,18 +81,7 @@ App({
                 user_id: that.globalData.id,
             },
             success: function (res) {
-                console.log('---------- app.js.success()  line:68()  res=');
-                console.dir(res);
                 that.globalData.loved_music[1] = res.data.data;
-            }
-        })
-    },
-    likelist: function () {
-        var that = this
-        this.globalData.cookie && wx.request({
-            url: bsurl + 'likelist',
-            success: function (res) {
-                that.globalData.staredlist = res.data.ids
             }
         })
     },
@@ -132,40 +121,11 @@ App({
         this.seekmusic(this.globalData.playtype);
         cb && cb();
     },
-    nextfm: function (cb) {
-        //下一首fm
-        this.preplay()
-        var that = this;
-        var list = that.globalData.list_fm;
-        var index = that.globalData.index_fm;
-        index++;
-        this.globalData.playtype = 2;
-        if (index > list.length - 1) {
-            that.getfm();
-
-        } else {
-            // console.log("获取下一首fm")
-            that.globalData.index_fm = index;
-            that.globalData.curplay = list[index];
-            if (this.globalData.staredlist.indexOf(this.globalData.curplay.id) != -1) {
-                this.globalData.curplay.starred = true;
-                this.globalData.curplay.st = true;
-            }
-            that.seekmusic(2);
-            nt.postNotificationName("music_next", {
-                music: this.globalData.curplay,
-                playtype: 2,
-                index: index
-            });
-            cb && cb();
-        }
-
-    },
     preplay: function () {
         //歌曲切换 停止当前音乐
         this.globalData.playing = false;
         this.globalData.globalStop = true;
-        wx.pauseBackgroundAudio();
+        this.globalData.backgroundAudioManager.pause();
     },
     getfm: function () {
         var that = this;
@@ -189,7 +149,7 @@ App({
         })
     },
     stopmusic: function (type, cb) {
-        wx.pauseBackgroundAudio();
+        this.globalData.backgroundAudioManager.pause();
     },
     seekmusic: function (type, seek, cb) {
         var that = this;
@@ -205,33 +165,50 @@ App({
         }
     },
     playing: function (type, cb, seek) {
-        var that = this
-        var m = that.globalData.curplay
-        wx.playBackgroundAudio({
-            dataUrl: type == 1 ? m.url : m.mp3Url,
-            title: m.name,
-            success: function (res) {
-                if (seek != undefined) {
-                    wx.seekBackgroundAudio({position: seek})
-                }
-                that.globalData.globalStop = false;
-                that.globalData.playtype = type;
-                that.globalData.playing = true;
-                nt.postNotificationName("music_toggle", {
-                    playing: true,
-                    music: that.globalData.curplay,
-                    playtype: that.globalData.playtype
-                });
-                cb && cb();
-            },
-            fail: function () {
-                if (type != 2) {
-                    that.nextplay(1)
-                } else {
-                    that.nextfm();
-                }
-            }
-        })
+        var that = this;
+        var m = that.globalData.curplay;
+        that.globalData.backgroundAudioManager.src = type == 1 ? m.url : m.mp3Url;
+        that.globalData.backgroundAudioManager.title = m.name;
+        if (seek != undefined) {
+            var temp = that.globalData.backgroundAudioManager.seek(seek);
+            console.log('---------- app.js.playing()  line:214()  temp=');
+            console.dir(temp);
+        }
+        that.globalData.globalStop = false;
+        that.globalData.playtype = type;
+        that.globalData.playing = true;
+        nt.postNotificationName("music_toggle", {
+            playing: true,
+            music: that.globalData.curplay,
+            playtype: that.globalData.playtype
+        });
+        cb && cb();
+
+        // wx.playBackgroundAudio({
+        //     dataUrl: type == 1 ? m.url : m.mp3Url,
+        //     title: m.name,
+        //     success: function (res) {
+        //         if (seek != undefined) {
+        //             wx.seekBackgroundAudio({position: seek})
+        //         }
+        //         that.globalData.globalStop = false;
+        //         that.globalData.playtype = type;
+        //         that.globalData.playing = true;
+        //         nt.postNotificationName("music_toggle", {
+        //             playing: true,
+        //             music: that.globalData.curplay,
+        //             playtype: that.globalData.playtype
+        //         });
+        //         cb && cb();
+        //     },
+        //     fail: function () {
+        //         if (type != 2) {
+        //             that.nextplay(1)
+        //         } else {
+        //             that.nextfm();
+        //         }
+        //     }
+        // })
     },
     geturl: function (suc, err, cb) {
         var that = this;
@@ -265,11 +242,9 @@ App({
         that.globalData.shuffle = shuffle;
         if (shuffle == 1) {
             that.globalData.list_am = that.globalData.list_sf;
-        }
-        else if (shuffle == 2) {
+        } else if (shuffle == 2) {
             that.globalData.list_am = [that.globalData.curplay]
-        }
-        else {
+        } else {
             that.globalData.list_am = [].concat(that.globalData.list_sf);
             var sort = that.globalData.list_am;
             sort.sort(function () {
@@ -283,6 +258,7 @@ App({
             }
         }
     },
+
     globalData: {
         userInfo: null,
         openid: '',
@@ -295,6 +271,6 @@ App({
         list_sf: [],
         staredlist: [],
         loved_music: [[], []],
-
+        backgroundAudioManager: {},
     }
 })
