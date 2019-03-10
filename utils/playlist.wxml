@@ -60,7 +60,7 @@
                 <view class="flexlist flex-center">
                     <view class="flexleft flexnum ">
                         <block wx:if="{{re.id===curplay}}">
-                            <template is="image" data="{{src:'../../images/music_like.png',width:36}}"/>
+                            <template is="image" data="{{src:'../../images/aal.png',width:36}}"/>
                         </block>
                         <block wx:else>
                             <text class="{{toplist&&idx<3?'topindex':''}}">{{idx+1}}</text>

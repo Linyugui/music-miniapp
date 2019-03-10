@@ -1,5 +1,6 @@
 var common = require('../../utils/util.js');
 var bsurl = require('../../utils/csurl.js');
+var asurl = require('../../utils/bsurl.js');
 var nt = require('../../utils/nt.js');
 let app = getApp();
 let seek = 0;
@@ -11,77 +12,60 @@ Page({
     data: {
         playing: false,
         music: {},
-        playtime: '00:00',
-        duration: '00:00',
+        playtime: '00:00',  //当前时间
+        duration: '00:00',  //播放时间
         percent: 0,
-        lrc: [],
-        commentscount: 0,
-        lrcindex: 0,
-        showlrc: false,
-        disable: false,
-        downloadPercent: 0,
-        showminfo: false,
-        showpinfo: false,
-        showainfo: false,
+        downloadPercent: 0, //已缓存百分比
+        // showminfo: false,
+        // showpinfo: false,
+        // showainfo: false,
         playlist: [],
-        curpl: [],
-        share: {
-            title: "",
-            des: ""
-        },
+        curpl: [],      //播放列表
     },
-    playmusic: function (that, id, br) {
+    playmusic: function (that, id) {
         wx.request({
-            url: bsurl + 'song/detail',
+            url: asurl + 'v1/song/detail',
             data: {
                 ids: id
             },
             success: function (res) {
-                console.log('---------- index.js.success()  line:45()  res='); console.dir(res);
                 app.globalData.curplay = res.data.songs[0];
-                !app.globalData.list_am.length && (app.globalData.list_am.push(res.data.songs[0]))
-                !app.globalData.list_sf.length && (app.globalData.list_sf.push(res.data.songs[0]))
-                app.globalData.curplay.st = app.globalData.staredlist.indexOf(app.globalData.curplay.id) < 0 ? false : true
+                !app.globalData.list_am.length && (app.globalData.list_am.push(res.data.songs[0]));         //list_am？
+                !app.globalData.list_sf.length && (app.globalData.list_sf.push(res.data.songs[0]));          //list_sf？
+                app.globalData.curplay.st = app.globalData.staredlist.indexOf(app.globalData.curplay.id) < 0 ? false : true; //staredlist?
                 that.setData({
-                    start: 0,
-                    share: {
-                        id: id,
-                        title: app.globalData.curplay.name,
-                        br: res.data.privileges[0].maxbr,
-                        des: (app.globalData.curplay.ar || app.globalData.curplay.artists)[0].name
-                    },
+                    start: 0,   //start?
                     music: app.globalData.curplay,
                     duration: common.formatduration(app.globalData.curplay.dt || app.globalData.curplay.duration)
                 });
                 wx.setNavigationBarTitle({title: app.globalData.curplay.name});
                 app.seekmusic(1);
-
             }
         })
 
     },
-    togminfo: function () {
-        this.setData({
-            showainfo: false,
-            showpinfo: false,
-            showminfo: !this.data.showminfo
-        })
-    },
-    togpinfo: function () {
-        this.setData({
-            showminfo: false,
-            showainfo: false,
-            showpinfo: !this.data.showpinfo
-        })
-    },
+    // togminfo: function () {
+    //     this.setData({
+    //         showainfo: false,
+    //         showpinfo: false,
+    //         showminfo: !this.data.showminfo
+    //     })
+    // },
+    // togpinfo: function () {
+    //     this.setData({
+    //         showminfo: false,
+    //         showainfo: false,
+    //         showpinfo: !this.data.showpinfo
+    //     })
+    // },
 
-    togainfo: function () {
-        this.setData({
-            showminfo: false,
-            showpinfo: false,
-            showainfo: !this.data.showainfo
-        })
-    },
+    // togainfo: function () {
+    //     this.setData({
+    //         showminfo: false,
+    //         showpinfo: false,
+    //         showainfo: !this.data.showainfo
+    //     })
+    // },
     playother: function (e) {
         var type = e.currentTarget.dataset.other;
         //this.setData(defaultdata);
@@ -97,6 +81,7 @@ Page({
         });
     },
     playshuffle: function () {
+        //切换播放顺序
         var shuffle = this.data.shuffle;
         shuffle++;
         shuffle = shuffle > 3 ? 1 : shuffle;
@@ -118,10 +103,8 @@ Page({
             title: msg,
             duration: 2000
         })
+        //根据不同的播放顺序去生成想要的播放列表
         app.shuffleplay(shuffle);
-    },
-    songheart: function () {
-        common.songheart(this, app, 0, this.data.music.st)
     },
     pospl: function (e) {
         //播放列表中单曲播放
@@ -147,35 +130,16 @@ Page({
         })
     },
     museek: function (e) {
-        //歌曲定位播放
+        //进度条歌曲定位播放
         var nextime = e.detail.value
         var that = this
         nextime = app.globalData.curplay.dt * nextime / 100000;
-        app.globalData.currentPosition = nextime
-        app.seekmusic(1, app.globalData.currentPosition, function () {
+        app.globalData.currentPosition = nextime;               //计算下次进度条百分比
+        app.seekmusic(3, app.globalData.currentPosition, function () {
             that.setData({
                 percent: e.detail.value
             })
         });
-    },
-    onShow: function () {
-        var that = this;
-        app.globalData.playtype = 1;
-        nt.addNotification("music_next", this.music_next, this);
-        common.playAlrc(that, app);
-
-    },
-    onUnload: function () {
-        clearInterval(seek);
-        nt.removeNotification("music_next", this)
-    },
-    onHide: function () {
-        clearInterval(seek)
-        nt.removeNotification("music_next", this)
-    },
-    music_next: function (r) {
-        var that = this
-
     },
     onLoad: function (options) {
         var that = this;
@@ -218,6 +182,26 @@ Page({
         //     }
         // });
     },
+    onShow: function () {
+        var that = this;
+        app.globalData.playtype = 1;
+        // nt.addNotification("music_next", this.music_next, this);
+        common.playAlrc(that, app);
+
+    },
+    onUnload: function () {
+        clearInterval(seek);
+        nt.removeNotification("music_next", this)
+    },
+    onHide: function () {
+        clearInterval(seek)
+        nt.removeNotification("music_next", this)
+    },
+    music_next: function (r) {
+        var that = this
+
+    },
+
     trackstpl: function (e) {
         var pid = e.currentTarget.dataset.pid;
         var that = this;
@@ -267,7 +251,8 @@ Page({
         })
     },
     playingtoggle: function (event) {
-        common.toggleplay(this, app, function () {
-        })
+        console.log('---------- index.js.playingtoggle()  line:262()  event='); console.dir(event);
+        // common.toggleplay(this, app, function () {
+        // })
     }
 })

@@ -89,10 +89,10 @@ App({
 
         //播放列表中下一首
         this.preplay();
-        if (this.globalData.playtype == 2) {
-            this.nextfm();
-            return;
-        }
+        // if (this.globalData.playtype == 2) {
+        //     this.nextfm();
+        //     return;
+        // }
         var list = this.globalData.playtype == 1 ? this.globalData.list_am : this.globalData.list_dj;
         var index = this.globalData.playtype == 1 ? this.globalData.index_am : this.globalData.index_dj;
         if (t == 1) {
@@ -127,38 +127,27 @@ App({
         this.globalData.globalStop = true;
         this.globalData.backgroundAudioManager.pause();
     },
-    getfm: function () {
-        var that = this;
-        wx.request({
-            url: bsurl + 'fm',
-            success: function (res) {
-                that.globalData.list_fm = res.data.data;
-                that.globalData.index_fm = 0;
-                that.globalData.curplay = res.data.data[0];
-                if (that.globalData.staredlist.indexOf(that.globalData.curplay.id) != -1) {
-                    that.globalData.curplay.starred = true;
-                    that.globalData.curplay.st = true;
-                }
-                that.seekmusic(2);
-                nt.postNotificationName("music_next", {
-                    music: that.globalData.curplay,
-                    playtype: 2,
-                    index: 0
-                });
-            }
-        })
-    },
+
     stopmusic: function (type, cb) {
+        //停止音乐
+        //参数是
         this.globalData.backgroundAudioManager.pause();
     },
     seekmusic: function (type, seek, cb) {
+        //音乐跳转
+        //参数是类型、位置
+        console.log('---------- app.js.seekmusic()  line:137()  type='); console.dir(type);
+        console.log('---------- app.js.seekmusic()  line:138()  seek='); console.dir(seek);
+        console.log('---------- app.js.seekmusic()  line:139()  cb='); console.dir(cb);
         var that = this;
         var m = this.globalData.curplay;
         if (!m.id) return;
         this.globalData.playtype = type;
         if (cb || this.globalData.playtype == 3) {
+            //直接跳转歌曲
             this.playing(type, cb, seek);
         } else {
+            //获取url之后再播放歌曲
             this.geturl(function () {
                 that.playing(type, cb, seek);
             })
@@ -167,21 +156,23 @@ App({
     playing: function (type, cb, seek) {
         var that = this;
         var m = that.globalData.curplay;
-        that.globalData.backgroundAudioManager.src = type == 1 ? m.url : m.mp3Url;
-        that.globalData.backgroundAudioManager.title = m.name;
+        if(type == 1){
+            that.globalData.backgroundAudioManager.src = m.url;
+            that.globalData.backgroundAudioManager.title = m.name;
+        }
+        // that.globalData.backgroundAudioManager.src = type == 1 ? m.url : m.mp3Url;
+        // that.globalData.backgroundAudioManager.title = m.name;
         if (seek != undefined) {
-            var temp = that.globalData.backgroundAudioManager.seek(seek);
-            console.log('---------- app.js.playing()  line:214()  temp=');
-            console.dir(temp);
+            that.globalData.backgroundAudioManager.seek(seek);
         }
         that.globalData.globalStop = false;
         that.globalData.playtype = type;
-        that.globalData.playing = true;
-        nt.postNotificationName("music_toggle", {
-            playing: true,
-            music: that.globalData.curplay,
-            playtype: that.globalData.playtype
-        });
+        that.globalData.playing = true;     //正在播放
+        // nt.postNotificationName("music_toggle", {
+        //     playing: true,
+        //     music: that.globalData.curplay,
+        //     playtype: that.globalData.playtype
+        // });
         cb && cb();
 
         // wx.playBackgroundAudio({
@@ -211,13 +202,15 @@ App({
         // })
     },
     geturl: function (suc, err, cb) {
+        //获取歌曲的url
+        //参数suc成功函数、err失败函数
         var that = this;
         var m = that.globalData.curplay
         wx.request({
             url: bsurl + 'song/url',
             data: {
                 id: m.id,
-                br: m.duration ? ((m.hMusic && m.hMusic.bitrate) || (m.mMusic && m.mMusic.bitrate) || (m.lMusicm && m.lMusic.bitrate) || (m.bMusic && m.bMusic.bitrate)) : (m.privilege ? m.privilege.maxbr : ((m.h && m.h.br) || (m.m && m.m.br) || (m.l && m.l.br) || (m.b && m.b.br))),
+                // br: m.duration ? ((m.hMusic && m.hMusic.bitrate) || (m.mMusic && m.mMusic.bitrate) || (m.lMusicm && m.lMusic.bitrate) || (m.bMusic && m.bMusic.bitrate)) : (m.privilege ? m.privilege.maxbr : ((m.h && m.h.br) || (m.m && m.m.br) || (m.l && m.l.br) || (m.b && m.b.br))),
                 br: 128000
             },
             success: function (a) {
@@ -226,7 +219,7 @@ App({
                     err && err()
                 } else {
                     that.globalData.curplay.url = a.url;
-                    that.globalData.curplay.getutime = (new Date()).getTime()
+                    that.globalData.curplay.getutime = (new Date()).getTime();      //?
                     if (that.globalData.staredlist.indexOf(that.globalData.curplay.id) != -1) {
                         that.globalData.curplay.starred = true;
                         that.globalData.curplay.st = true;
@@ -264,13 +257,14 @@ App({
         openid: '',
         id: '',
         playing: false,
-        playtype: 1,
-        curplay: {},
+        playtype: 1,            //切换新歌曲  3:跳转原歌曲
+        curplay: {id:''},       //当前播放歌曲
         shuffle: 1,
-        list_am: [],
-        list_sf: [],
+        list_am: [],        //播放列表 隐藏的真正的播放列表
+        list_sf: [],        //播放列表 显示出来的
         staredlist: [],
         loved_music: [[], []],
         backgroundAudioManager: {},
+        index_am:'',    //正在播放的歌曲对应隐藏的真正的播放列表中的下标
     }
 })

@@ -23,25 +23,25 @@
                 </view>
             </view>
 
-            <!--newsongs-->
-            <view class="st_title">
-                最新音乐
-            </view>
-            <view class='flex-boxlist'>
-                <view class="tl_cnt" wx:for-items="{{rec.re[1]}}" wx:for-index="idx" wx:if="{{idx<6}}" wx:for-item="re"
-                      wx:key="{{re.id}}">
-                    <navigator url="../playing/index?id={{re.id}}&br={{re.song.privilege.maxbr}}">
-                        <view class="cover">
-                            <image src="{{re.song.album.picUrl}}?param=100y100" class="music_cover"/>
-                            <text>{{re.playcount}}</text>
-                        </view>
-                        <view class="tl_info">
-                            <view>{{re.name}}</view>
-                            <view class="tli_des">{{re.song.artists[0].name}}</view>
-                        </view>
-                    </navigator>
-                </view>
-            </view>
+            <!--&lt;!&ndash;newsongs&ndash;&gt;-->
+            <!--<view class="st_title">-->
+                <!--最新音乐-->
+            <!--</view>-->
+            <!--<view class='flex-boxlist'>-->
+                <!--<view class="tl_cnt" wx:for-items="{{rec.re[1]}}" wx:for-index="idx" wx:if="{{idx<6}}" wx:for-item="re"-->
+                      <!--wx:key="{{re.id}}">-->
+                    <!--<navigator url="../playing/index?id={{re.id}}&br={{re.song.privilege.maxbr}}">-->
+                        <!--<view class="cover">-->
+                            <!--<image src="{{re.song.album.picUrl}}?param=100y100" class="music_cover"/>-->
+                            <!--<text>{{re.playcount}}</text>-->
+                        <!--</view>-->
+                        <!--<view class="tl_info">-->
+                            <!--<view>{{re.name}}</view>-->
+                            <!--<view class="tli_des">{{re.song.artists[0].name}}</view>-->
+                        <!--</view>-->
+                    <!--</navigator>-->
+                <!--</view>-->
+            <!--</view>-->
 
         </view>
     </view>

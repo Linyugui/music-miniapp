@@ -1,8 +1,8 @@
 {
   "pages":[
-    "pages/search/index",
-    "pages/index/index",
 
+    "pages/index/index",
+    "pages/search/index",
 
     "pages/me/index",
     "pages/playlist/index",

@@ -4,6 +4,7 @@
 	<view class="music_cover blurbg" style="background-image:url({{result.album.picUrl}})" id="plh-filterbg"></view>
 	<view id="plh-main">
 		<view id="plh-cover">
+			<image src="../../images/a82.png" id="plh-cover-album" mode="aspectFill" />
 			<image class="music_cover" mode="aspectFit" src="{{result.album.picUrl}}?param=200y200" />
 		</view>
 		<view id="plh-cnt">

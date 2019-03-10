@@ -64,7 +64,7 @@ Page({
             },
             success: function (res) {
                 var canplay = [];
-                // console.log('---------- index.js.success()  line:68()  res.data='); console.dir(res.data);
+                console.log('---------- index.js.success()  line:68()  res.data='); console.dir(res.data);
                 for (let i = 0; i < res.data.playlist.tracks.length; i++) {
                     if (res.data.privileges[i].st >= 0) {
                         canplay.push(res.data.playlist.tracks[i])
@@ -74,8 +74,7 @@ Page({
                     list: res.data,
                     canplay: canplay,
                     toplist: (options.from == 'stoplist' ? true : false),
-                    cover: res.data.playlist.coverImgUrl+'?param=100y100',
-                    // cover: id2Url.id2Url('' + (res.data.playlist.coverImgId_str || res.data.playlist.coverImgId))
+                    cover: id2Url.id2Url('' + (res.data.playlist.coverImgId_str || res.data.playlist.coverImgId))
                 });
 
                 wx.setNavigationBarTitle({

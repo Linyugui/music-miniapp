@@ -13,7 +13,7 @@
 	"compileType": "miniprogram",
 	"libVersion": "2.5.2",
 	"appid": "wxc4198d13b64acdd7",
-	"projectname": "netmusic-miniapp",
+	"projectname": "music-miniapp",
 	"debugOptions": {
 		"hidedInDevtools": []
 	},

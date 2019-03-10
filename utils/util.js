@@ -83,9 +83,9 @@ function playAlrc(that, app) {
     if (that.data.music.id != app.globalData.curplay.id) {
         that.setData({
             music: app.globalData.curplay,
-            lrc: [],
-            showlrc: false,
-            lrcindex: 0,
+            //lrc: [],
+            //showlrc: false,
+            //lrcindex: 0,
             duration: formatduration(app.globalData.curplay.duration || app.globalData.curplay.dt)
         });
         wx.setNavigationBarTitle({title: app.globalData.curplay.name});
