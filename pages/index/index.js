@@ -38,18 +38,8 @@ Page({
         })
     },
     onLoad: function (options) {
-        if (options.share == 1) {
-            var url = '../' + options.st + '/index?id=' + options.id
-            // console.log(url, options.st, options.id)
-            wx.navigateTo({
-                url: url,
-                success: function () {
-                    // console.log("tiaozhuan chenggong")
-                }
-            })
-            return;
-        }
-        ;
+
+
     },
     onHide: function () {
         nt.removeNotification("music_next", this)
@@ -73,6 +63,8 @@ Page({
         var that = this;
         var rec = this.data.rec;
         //个性推荐内容,歌单，新歌，mv，电台
+        app.lovemusic();
+        app.lovealbum();
         async.map(['v1/personalized', 'v1/personalized/newsong'], function (item, callback) {
             wx.request({
                 url: asurl + item,

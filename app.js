@@ -93,8 +93,16 @@ App({
         //     this.nextfm();
         //     return;
         // }
-        var list = this.globalData.playtype == 1 ? this.globalData.list_am : this.globalData.list_dj;
-        var index = this.globalData.playtype == 1 ? this.globalData.index_am : this.globalData.index_dj;
+        // var list = this.globalData.playtype == 1 ? this.globalData.list_am : this.globalData.list_dj;
+        // var index = this.globalData.playtype == 1 ? this.globalData.index_am : this.globalData.index_dj;
+        console.log('---------- app.js.nextplay()  line:98()  t='); console.dir(t);
+        console.log('---------- app.js.nextplay()  line:99()  cb='); console.dir(cb);
+        console.log('---------- app.js.nextplay()  line:100()  pos='); console.dir(pos);
+        console.log('---------- app.js.nextplay()  line:99()  this.globalData.list_am='); console.dir(this.globalData.list_am);
+        console.log('---------- app.js.nextplay()  line:100()  this.globalData.index_am='); console.dir(this.globalData.index_am);
+        var list = this.globalData.list_am;
+        var index = this.globalData.index_am;
+
         if (t == 1) {
             index++;
         } else {
@@ -102,21 +110,27 @@ App({
         }
         index = index > list.length - 1 ? 0 : (index < 0 ? list.length - 1 : index);
         index = pos != undefined ? pos : index;
-        this.globalData.curplay = (this.globalData.playtype == 1 ? list[index] : list[index].mainSong) || this.globalData.curplay;
-        if (this.globalData.staredlist.indexOf(this.globalData.curplay.id) != -1) {
-            this.globalData.curplay.starred = true;
-            this.globalData.curplay.st = true;
-        }
-        if (this.globalData.playtype == 1) {
-            this.globalData.index_am = index;
-        } else {
-            this.globalData.index_dj = index;
-        }
+        // this.globalData.curplay = (this.globalData.playtype == 1 ? list[index] : list[index].mainSong) || this.globalData.curplay;
+
+        this.globalData.curplay = list[index];
+        console.log('---------- app.js.nextplay()  line:116()  this.globalData.staredlist='); console.dir(this.globalData.staredlist);
+        console.log('---------- app.js.nextplay()  line:117()  this.globalData.curplay='); console.dir(this.globalData.curplay);
+        // if (this.globalData.staredlist.indexOf(this.globalData.curplay.id) != -1) {
+        //     this.globalData.curplay.starred = true;
+        //     this.globalData.curplay.st = true;
+        // }
+        // if (this.globalData.playtype == 1) {
+        //     this.globalData.index_am = index;
+        // } else {
+        //     this.globalData.index_dj = index;
+        // }
+        this.globalData.index_am = index;
         nt.postNotificationName("music_next", {
             music: this.globalData.curplay,
             playtype: this.globalData.playtype,
-            p: this.globalData.playtype == 1 ? [] : list[index],
-            index: this.globalData.playtype == 1 ? this.globalData.index_am : this.globalData.index_dj
+            index: this.globalData.index_am,
+            // p: this.globalData.playtype == 1 ? [] : list[index],
+            // index: this.globalData.playtype == 1 ? this.globalData.index_am : this.globalData.index_dj
         });
         this.seekmusic(this.globalData.playtype);
         cb && cb();
@@ -135,10 +149,10 @@ App({
     },
     seekmusic: function (type, seek, cb) {
         //音乐跳转
-        //参数是类型、位置
-        console.log('---------- app.js.seekmusic()  line:137()  type='); console.dir(type);
-        console.log('---------- app.js.seekmusic()  line:138()  seek='); console.dir(seek);
-        console.log('---------- app.js.seekmusic()  line:139()  cb='); console.dir(cb);
+        //参数是类型、位置、
+        // console.log('---------- app.js.seekmusic()  line:137()  type='); console.dir(type);
+        // console.log('---------- app.js.seekmusic()  line:138()  seek='); console.dir(seek);
+        // console.log('---------- app.js.seekmusic()  line:139()  cb='); console.dir(cb);
         var that = this;
         var m = this.globalData.curplay;
         if (!m.id) return;
@@ -158,8 +172,8 @@ App({
         var m = that.globalData.curplay;
         if(type == 1){
             that.globalData.backgroundAudioManager.src = m.url;
-            that.globalData.backgroundAudioManager.title = m.name;
         }
+        that.globalData.backgroundAudioManager.title = m.name;
         // that.globalData.backgroundAudioManager.src = type == 1 ? m.url : m.mp3Url;
         // that.globalData.backgroundAudioManager.title = m.name;
         if (seek != undefined) {

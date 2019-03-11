@@ -16,9 +16,9 @@ Page({
         toplist: false,
         user: wx.getStorageSync('user') || {}
     },
-    toggleplay: function () {
-        common.toggleplay(this, app);
-    },
+    // toggleplay: function () {
+    //     common.toggleplay(this, app);
+    // },
     playnext: function (e) {
         app.nextplay(e.currentTarget.dataset.pt)
     },
@@ -64,8 +64,16 @@ Page({
             },
             success: function (res) {
                 var canplay = [];
-                // console.log('---------- index.js.success()  line:68()  res.data='); console.dir(res.data);
-                for (let i = 0; i < res.data.playlist.tracks.length; i++) {
+                var love_song = app.globalData.loved_music[0];
+               // console.log('---------- index.js.success()  line:68()  res.data='); console.dir(res.data);
+                var length = res.data.playlist.tracks.length;
+                for (let i = 0; i < length; i++) {
+                    if (love_song.indexOf(res.data.playlist.tracks[i].id) != -1) {
+                        res.data.playlist.tracks[i].love = 1;
+                    }
+                    else {
+                        res.data.playlist.tracks[i].love = 0;
+                    }
                     if (res.data.privileges[i].st >= 0) {
                         canplay.push(res.data.playlist.tracks[i])
                     }
@@ -124,5 +132,71 @@ Page({
         }
         music = this.data.list.playlist.tracks[music];
         this.setplaylist(music, event.currentTarget.dataset.idx)
-    }
+    },
+    lovesong: function (e) {
+
+        var that = this;
+        var curtab = this.data.list;
+        wx.showLoading({
+            title: '正在收藏...',
+        });
+        var song = e.currentTarget.dataset.re;
+        var idx = e.currentTarget.dataset.idx;
+        console.log('---------- index.js.lovesong()  line:145()  song='); console.dir(song);
+        console.log('---------- index.js.lovesong()  line:146()  idx='); console.dir(idx);
+        var data = {
+            user_id: app.globalData.id,
+            song_id: song.id,
+            album_name: song.album.name,
+            artist_name: song.artists[0].name,
+            song_name: song.name
+        };
+        wx.request({
+            url: asurl + "song/add-love-song",
+            method: "GET",
+            data: data,
+            success: function (res) {
+                app.globalData.loved_music[index].push(song.id);
+                // console.log('---------- index.js.success()  line:291()  curtab.relist='); console.dir(curtab.relist);
+                curtab.playlist.tracks[idx].love = 1;
+                that.setData({
+                    list:curtab
+                })
+            },
+            complete:function () {
+                wx.hideLoading();
+            }
+        })
+
+    },
+    cancellovesong: function (e) {
+        var that = this;
+        var curtab = this.data.list;
+        wx.showLoading({
+            title: '取消收藏...',
+        });
+        var song = e.currentTarget.dataset.re;
+        var idx = e.currentTarget.dataset.idx;
+        var data = {
+            user_id: app.globalData.id,
+            song_id: song.id,
+        };
+        wx.request({
+            url: asurl + "song/del-love-song",
+            method: "GET",
+            data: data,
+            success: function (res) {
+                app.globalData.loved_music[index].splice(idx,1);
+                curtab.playlist.tracks[idx].love = 0;
+                // curtab.relist.songs[idx].love = 0;
+                that.setData({
+                    list:curtab
+                })
+            },
+            complete:function () {
+                wx.hideLoading();
+            }
+        })
+
+    },
 });

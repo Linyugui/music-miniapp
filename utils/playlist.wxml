@@ -40,11 +40,12 @@
                             </view>
                             <view class="relistdes">{{re.ar[0].name}}-{{re.al.name}}</view>
                         </view>
-                        <view class="flexact" wx-if="{{re.mv!=0}}">
-                            <view catchtap="mv" data-mvid="{{re.mv}}" class="fa_list fa_mv">
-                                <navigator url="../mv/index?id={{re.mv}}">
-                                    <image src="../../images/music_like.png" mode="widthFix"/>
-                                </navigator>
+                        <view class="flexact">
+                            <view catchtap="lovesong" data-re="{{re}}" data-idx="{{idx}}" class="fa_list fa_mv" hidden="{{re.love==1}}">
+                                <image src="../../images/music_like.png" mode="widthFix"/>
+                            </view>
+                            <view catchtap="cancellovesong" data-re="{{re}}" data-idx="{{idx}}" class="fa_list fa_mv" hidden="{{re.love==0}}">
+                                <image src="../../images/music_liked.png" mode="widthFix"/>
                             </view>
                         </view>
                     </view>
@@ -73,11 +74,12 @@
                             </view>
                             <view class="relistdes">{{re.ar[0].name}}-{{re.al.name}}</view>
                         </view>
-                        <view class="flexact" wx-if="{{re.mv!=0}}">
-                            <view catchtap="mv" data-mvid="{{re.mv}}" class="fa_list fa_mv">
-                                <navigator url="../mv/index?id={{re.mv}}">
-                                    <image src="../../images/music_like.png" mode="widthFix"/>
-                                </navigator>
+                        <view class="flexact">
+                            <view catchtap="lovesong" data-re="{{re}}" data-idx="{{idx}}" class="fa_list fa_mv" hidden="{{re.love==1}}">
+                                <image src="../../images/music_like.png" mode="widthFix"/>
+                            </view>
+                            <view catchtap="cancellovesong" data-re="{{re}}" data-idx="{{idx}}" class="fa_list fa_mv" hidden="{{re.love==0}}">
+                                <image src="../../images/music_liked.png" mode="widthFix"/>
                             </view>
                         </view>
                     </view>

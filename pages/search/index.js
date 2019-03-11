@@ -15,8 +15,7 @@ Page({
     onLoad: function (options) {
         var v = options.key;
         v && this.search(v);
-        app.lovemusic();
-        app.lovealbum();
+
     },
     inputext: function (e) {
         var name = e.detail.value;

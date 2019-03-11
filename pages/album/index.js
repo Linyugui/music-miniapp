@@ -10,17 +10,17 @@ Page({
         playing: false,
         playtype: 1,
         loading: true,
-        music: {},
-        playing: false,
-        playtype: 1,
-        share: {
-            title: "一起来听",
-            des: ""
-        }
+        // music: {},
+        // playing: false,
+        // playtype: 1,
+        // share: {
+        //     title: "一起来听",
+        //     des: ""
+        // }
     },
-    toggleplay: function () {
-        common.toggleplay(this, app);
-    },
+    // toggleplay: function () {
+    //     common.toggleplay(this, app);
+    // },
     playnext: function (e) {
         app.nextplay(e.currentTarget.dataset.pt)
     },
@@ -32,6 +32,7 @@ Page({
         })
     },
     music_toggle: function (r) {
+        console.log('---------- index.js.music_toggle()  line:35()  r='); console.dir(r);
         this.setData({
             playing: r.playing,
             music: r.music,

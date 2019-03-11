@@ -103,6 +103,10 @@ function playAlrc(that, app) {
             playing: playing,
             downloadPercent: downloadPercent
         })
+        //console.log('---------- util.js.()  line:106()  res='); console.dir(res);
+    });
+    app.globalData.backgroundAudioManager.onEnded(function () {
+        app.nextplay(1);
     });
     // wx.getBackgroundAudioPlayerState({
     //     complete: function (res) {

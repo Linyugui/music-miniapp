@@ -32,7 +32,7 @@
         <template is="playlist" data="{{list:list.playlist.tracks,privileges:list.privileges,curplay:curplay}}"/>
 
     </block>
-    <block wx:if="{{!list.playlist.tracks.length}}">
+    <block wx:if="{{!list.playlist.tracks.length}}" >
         <view class="cntloading">加载中...
             <view>
                 <text class="cl1"></text>

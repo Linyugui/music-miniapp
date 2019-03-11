@@ -4,9 +4,9 @@ var asurl = require('../../utils/bsurl.js');
 var nt = require('../../utils/nt.js');
 let app = getApp();
 let seek = 0;
-let defaultdata = {
-
-};
+// let defaultdata = {
+//
+// };
 
 Page({
     data: {
@@ -51,14 +51,14 @@ Page({
     //         showminfo: !this.data.showminfo
     //     })
     // },
-    // togpinfo: function () {
-    //     this.setData({
-    //         showminfo: false,
-    //         showainfo: false,
-    //         showpinfo: !this.data.showpinfo
-    //     })
-    // },
-
+    togpinfo: function () {
+        this.setData({
+           // showminfo: false,
+            // showainfo: false,
+            showpinfo: !this.data.showpinfo
+        })
+    },
+    //
     // togainfo: function () {
     //     this.setData({
     //         showminfo: false,
@@ -70,15 +70,24 @@ Page({
         var type = e.currentTarget.dataset.other;
         //this.setData(defaultdata);
         var that = this;
-        app.nextplay(type, function () {
-            that.setData({
-                share: {
-                    id: app.globalData.curplay.id,
-                    title: app.globalData.curplay.name,
-                    des: (app.globalData.curplay.ar || app.globalData.curplay.artists)[0].name
-                }
-            })
+        that.setData({
+            playing: false,
+            music: {},
+            playtime: '00:00',  //当前时间
+            duration: '00:00',  //播放时间
+            percent: 0,
+            downloadPercent: 0, //已缓存百分比
         });
+        app.nextplay(type);
+        // app.nextplay(type, function () {
+        //     that.setData({
+        //         share: {
+        //             id: app.globalData.curplay.id,
+        //             title: app.globalData.curplay.name,
+        //             des: (app.globalData.curplay.ar || app.globalData.curplay.artists)[0].name
+        //         }
+        //     })
+        // });
     },
     playshuffle: function () {
         //切换播放顺序
@@ -135,7 +144,7 @@ Page({
         var that = this
         nextime = app.globalData.curplay.dt * nextime / 100000;
         app.globalData.currentPosition = nextime;               //计算下次进度条百分比
-        app.seekmusic(3, app.globalData.currentPosition, function () {
+        app.seekmusic(1, app.globalData.currentPosition, function () {
             that.setData({
                 percent: e.detail.value
             })
@@ -185,9 +194,8 @@ Page({
     onShow: function () {
         var that = this;
         app.globalData.playtype = 1;
-        // nt.addNotification("music_next", this.music_next, this);
+        nt.addNotification("music_next", this.music_next, this);
         common.playAlrc(that, app);
-
     },
     onUnload: function () {
         clearInterval(seek);
@@ -198,7 +206,11 @@ Page({
         nt.removeNotification("music_next", this)
     },
     music_next: function (r) {
-        var that = this
+        var that = this;
+        console.log('---------- index.js.music_next()  line:211()  r='); console.dir(r);
+        that.setData({
+            music: r.music
+        })
 
     },
 
