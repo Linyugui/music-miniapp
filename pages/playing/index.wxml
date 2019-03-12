@@ -2,14 +2,14 @@
 
 <view id="playingpage" class=" {{playing?'playing':''}}">
     <image src="../../images/cm2_default_play_bg-ip6@2x.jpg" id="coverbg"/>
-    <image id="playing-bg" class="blurbg" mode="aspectFill"
+    <image id="playing-bg" class="blurbg" mode="aspectFill" wx:if="{{music.al.picUrl||music.album.picUrl}}"
            src="{{music.al.picUrl||music.album.picUrl}}?param=400y400"/>
     <view id="playing-zz">
         <image src="../../images/aag.png"/>
     </view>
     <view id="playing-main">
         <image id="playingmainbg" src="../../images/play.png"/>
-        <image src="{{music.al.picUrl||music.album.picUrl}}?param=200y200" id="pmaincover"/>
+        <image wx:if="{{music.al.picUrl||music.album.picUrl}}" src="{{music.al.picUrl||music.album.picUrl}}?param=200y200" id="pmaincover"/>
     </view>
 
     <view id="playing-actwrap">
@@ -63,27 +63,27 @@
     </view>
 </view>
 
-<!-- 歌单列表 -->
-<view class="pp_overlay" hidden="{{!showainfo}}" bindtap="togainfo"></view>
-<view class="pp_main" hidden="{{!showainfo}}">
-    <view class='ppm_header'>收藏到歌单</view>
-    <view class='ppm_content'>
-        <scroll-view scroll-y="true">
-            <view class="flexlist flex-image" bindtap="trackstpl" data-pid="{{item.id}}" wx:for-items="{{playlist}}"
-                  wx:key="{{item.id}}">
-                <view class="flexlist">
-                    <view class="flexleft fl-image">
-                        <image src="{{item.coverImgUrl}}?param=100y100"/>
-                    </view>
-                    <view class="flexmain">
-                        <view>{{item.name}}</view>
-                        <view class="relistdes">{{item.trackCount}}首</view>
-                    </view>
-                </view>
-            </view>
-        </scroll-view>
-    </view>
-</view>
+<!--&lt;!&ndash; 歌单列表 &ndash;&gt;-->
+<!--<view class="pp_overlay" hidden="{{!showainfo}}" bindtap="togainfo"></view>-->
+<!--<view class="pp_main" hidden="{{!showainfo}}">-->
+    <!--<view class='ppm_header'>收藏到歌单</view>-->
+    <!--<view class='ppm_content'>-->
+        <!--<scroll-view scroll-y="true">-->
+            <!--<view class="flexlist flex-image" bindtap="trackstpl" data-pid="{{item.id}}" wx:for-items="{{playlist}}"-->
+                  <!--wx:key="{{item.id}}">-->
+                <!--<view class="flexlist">-->
+                    <!--<view class="flexleft fl-image">-->
+                        <!--<image src="{{item.coverImgUrl}}?param=100y100"/>-->
+                    <!--</view>-->
+                    <!--<view class="flexmain">-->
+                        <!--<view>{{item.name}}</view>-->
+                        <!--<view class="relistdes">{{item.trackCount}}首</view>-->
+                    <!--</view>-->
+                <!--</view>-->
+            <!--</view>-->
+        <!--</scroll-view>-->
+    <!--</view>-->
+<!--</view>-->
 
 <!-- 播放列表 -->
 <view class="pp_overlay" hidden="{{!showpinfo}}" bindtap="togpinfo"></view>
@@ -92,16 +92,16 @@
         <view bindtap="playshuffle" class="pph_cnt">
             {{(shuffle==1?'列表循环':(shuffle==2?'单曲循环':'随机播放'))}}（{{curpl.length}}）
         </view>
-        <view class="pph_cnt">
-            <view bindtap="togainfo">
-                <template is="image" data="{{src:'../../images/cm2_btmlay_btn_fav_dis@2x.png',width:40}}"/>
-                收藏
-            </view>
-            <view bindtap="del_all">
-                <template is="image" data="{{src:'../../images/cm2_btmlay_btn_dlt_dis@2x.png',width:40}}"/>
-                清空
-            </view>
-        </view>
+        <!--<view class="pph_cnt">-->
+            <!--<view bindtap="togainfo">-->
+                <!--<template is="image" data="{{src:'../../images/cm2_btmlay_btn_fav_dis@2x.png',width:40}}"/>-->
+                <!--收藏-->
+            <!--</view>-->
+            <!--<view bindtap="del_all">-->
+                <!--<template is="image" data="{{src:'../../images/cm2_btmlay_btn_dlt_dis@2x.png',width:40}}"/>-->
+                <!--清空-->
+            <!--</view>-->
+        <!--</view>-->
     </view>
     <view class='ppm_content'>
         <scroll-view scroll-y="true">
@@ -116,9 +116,18 @@
                             <text>{{item.ar[0].name||item.artists[0].name}}</text>
                         </view>
                     </view>
-                    <view class="flexact" catchtap="del_curpl" data-index="{{idx}}">
-                        <template is="image" data="{{src:'../../images/cm2_playlist_icn_dlt@2x.png',width:60}}"/>
+                    <view class="flexact">
+                        <view catchtap="lovesong" data-re="{{item}}" data-idx="{{idx}}" class="fa_list fa_mv" hidden="{{item.love==1}}">
+                            <image src="../../images/music_like.png" mode="widthFix"/>
+                        </view>
+                        <view catchtap="cancellovesong" data-re="{{item}}" data-idx="{{idx}}" class="fa_list fa_mv" hidden="{{item.love==0}}">
+                            <image src="../../images/music_liked.png" mode="widthFix"/>
+                        </view>
                     </view>
+                    <!--<view class="flexact" catchtap="del_curpl" data-index="{{idx}}">-->
+                        <!--<template is="image" data="{{src:'../../images/cm2_playlist_icn_dlt@2x.png',width:60}}"/>-->
+                    <!--</view>-->
+
                 </view>
             </view>
         </scroll-view>

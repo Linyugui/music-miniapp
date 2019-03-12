@@ -1,5 +1,6 @@
 var app = getApp();
 var bsurl = require('../../utils/csurl.js');
+var asurl = require('../../utils/bsurl.js');
 var nt = require("../../utils/nt.js");
 var id2Url = require('../../utils/base64md5.js');
 var common = require('../../utils/util.js');
@@ -147,8 +148,8 @@ Page({
         var data = {
             user_id: app.globalData.id,
             song_id: song.id,
-            album_name: song.album.name,
-            artist_name: song.artists[0].name,
+            album_name: song.al.name,
+            artist_name: song.ar[0].name,
             song_name: song.name
         };
         wx.request({
@@ -156,7 +157,7 @@ Page({
             method: "GET",
             data: data,
             success: function (res) {
-                app.globalData.loved_music[index].push(song.id);
+                app.globalData.loved_music[0].push(song.id);
                 // console.log('---------- index.js.success()  line:291()  curtab.relist='); console.dir(curtab.relist);
                 curtab.playlist.tracks[idx].love = 1;
                 that.setData({

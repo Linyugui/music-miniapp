@@ -266,5 +266,71 @@ Page({
         console.log('---------- index.js.playingtoggle()  line:262()  event='); console.dir(event);
         // common.toggleplay(this, app, function () {
         // })
-    }
+    },
+    lovesong: function (e) {
+
+        var that = this;
+        var curtab = this.data.curpl;
+        wx.showLoading({
+            title: '正在收藏...',
+        });
+        var song = e.currentTarget.dataset.re;
+        var idx = e.currentTarget.dataset.idx;
+        console.log('---------- index.js.lovesong()  line:145()  song='); console.dir(song);
+        console.log('---------- index.js.lovesong()  line:146()  idx='); console.dir(idx);
+        var data = {
+            user_id: app.globalData.id,
+            song_id: song.id,
+            album_name: song.al.name,
+            artist_name: song.ar[0].name,
+            song_name: song.name
+        };
+        wx.request({
+            url: asurl + "song/add-love-song",
+            method: "GET",
+            data: data,
+            success: function (res) {
+                app.globalData.loved_music[0].push(song.id);
+                // console.log('---------- index.js.success()  line:291()  curtab.relist='); console.dir(curtab.relist);
+                curtab.playlist.tracks[idx].love = 1;
+                that.setData({
+                    list:curtab
+                })
+            },
+            complete:function () {
+                wx.hideLoading();
+            }
+        })
+
+    },
+    cancellovesong: function (e) {
+        var that = this;
+        var curtab = this.data.list;
+        wx.showLoading({
+            title: '取消收藏...',
+        });
+        var song = e.currentTarget.dataset.re;
+        var idx = e.currentTarget.dataset.idx;
+        var data = {
+            user_id: app.globalData.id,
+            song_id: song.id,
+        };
+        wx.request({
+            url: asurl + "song/del-love-song",
+            method: "GET",
+            data: data,
+            success: function (res) {
+                app.globalData.loved_music[index].splice(idx,1);
+                curtab.playlist.tracks[idx].love = 0;
+                // curtab.relist.songs[idx].love = 0;
+                that.setData({
+                    list:curtab
+                })
+            },
+            complete:function () {
+                wx.hideLoading();
+            }
+        })
+
+    },
 })
