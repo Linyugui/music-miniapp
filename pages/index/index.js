@@ -39,7 +39,6 @@ Page({
     },
     onLoad: function (options) {
 
-
     },
     onHide: function () {
         nt.removeNotification("music_next", this)

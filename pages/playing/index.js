@@ -16,9 +16,9 @@ Page({
         duration: '00:00',  //播放时间
         percent: 0,
         downloadPercent: 0, //已缓存百分比
-        // showminfo: false,
-        // showpinfo: false,
-        // showainfo: false,
+        showminfo: false,
+        showpinfo: false,
+        showainfo: false,
         playlist: [],
         curpl: [],      //播放列表
     },
@@ -53,19 +53,19 @@ Page({
     // },
     togpinfo: function () {
         this.setData({
-           // showminfo: false,
-            // showainfo: false,
+            showminfo: false,
+            showainfo: false,
             showpinfo: !this.data.showpinfo
         })
     },
     //
-    // togainfo: function () {
-    //     this.setData({
-    //         showminfo: false,
-    //         showpinfo: false,
-    //         showainfo: !this.data.showainfo
-    //     })
-    // },
+    togainfo: function () {
+        this.setData({
+            showminfo: false,
+            showpinfo: false,
+            showainfo: !this.data.showainfo
+        })
+    },
     playother: function (e) {
         var type = e.currentTarget.dataset.other;
         //this.setData(defaultdata);

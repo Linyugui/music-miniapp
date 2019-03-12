@@ -4,13 +4,13 @@ var bsurl = require('utils/csurl.js');
 var nt = require('utils/nt.js');
 App({
     onLaunch: function () {
-        var id = wx.getStorageSync('id');
-        var userInfo = wx.getStorageSync('userInfo');
+        var id = wx.getStorageSync('id')||'';
+        var userInfo = wx.getStorageSync('userInfo')||{};
         var that = this;
         that.globalData.backgroundAudioManager = wx.getBackgroundAudioManager();
-        console.log('---------- app.js.onLaunch()  line:11()  that.globalData.backgroundAudioManager=');
-        console.dir(that.globalData.backgroundAudioManager);
-        if (userInfo) {
+        console.log('---------- app.js.onLaunch()  line:11()  id='); console.dir(id);
+        if (id) {
+            console.log('---------- app.js.onLaunch()  line:13()  id='); console.dir(id);
             that.globalData.id = id;
             that.globalData.userInfo = userInfo;
 
@@ -18,6 +18,7 @@ App({
             //登录
             wx.login({
                 success: res => {
+                    console.log('---------- app.js.success()  line:21()  res='); console.dir(res);
                     wx.request({
                         url: asurl + 'user/login',
                         data: {
@@ -27,6 +28,7 @@ App({
                             'content-type': 'application/json'
                         },
                         success: function (res) {
+                            console.log('---------- app.js.success()  line:31()  res='); console.dir(res);
                             that.globalData.id = res.data.data.id;
                             that.globalData.openid = res.data.data.openid;
                             wx.setStorageSync('id', res.data.data.id);
