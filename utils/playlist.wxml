@@ -13,24 +13,6 @@
                         </block>
                         <block wx:else>
                             <text class="{{toplist&&idx<3?'topindex':''}}">{{idx+1}}</text>
-                            <block wx:if="{{toplist}}">
-                                <view class="ftp" wx:if="{{item.ratio!=undefined}}">
-                                    <image src="../../images/xv.png"/>
-                                    {{item.ratio}}%
-                                </view>
-                                <view class="ftp" wx:if="{{item.ratio==undefined&&item.lastRank!=undefined}}">
-                                    <image src="../../images/wu.png" wx:if="{{idx>item.lastRank}}"/>
-                                    <image src="../../images/xu.png" wx:if="{{item.lastRank>idx}}"/>
-                                    <image src="../../images/xr.png" wx:if="{{item.lastRank==idx}}"/>
-                                    <text>{{item.lastRank
-                                        <idx
-                                        ?(idx-item.lastRank):(item.lastRank-idx)}}
-                                    </text>
-                                </view>
-                                <view class="ftp" wx:if="{{item.ratio==undefined&&item.lastRank==undefined}}">
-                                    <image src="../../../image/xy.png" mode="widthFix" class="tpnew"/>
-                                </view>
-                            </block>
                         </block>
                     </view>
                     <view class="flexlist">

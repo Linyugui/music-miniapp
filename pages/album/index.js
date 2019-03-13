@@ -44,12 +44,10 @@ Page({
         nt.removeNotification("music_next", this)
         nt.removeNotification("music_toggle", this)
     },
-    lovesong: function () {
-        common.songheart(this, app, 0, (this.data.playtype == 1 ? this.data.music.st : this.data.music.starred));
-    },
     onLoad: function (options) {
 
         var that = this;
+        var curloved_music = app.globalData.loved_music[0];
         wx.request({
             url: bsurl + 'album/detail',
             data: {
@@ -59,8 +57,15 @@ Page({
                 var re = res.data;
                 re.album.publishTime = common.formatTime(re.album.publishTime, 3);
                 var canplay = [];
-                for (var i = 0; i < res.data.songs.length; i++) {
-                    var r = res.data.songs[i]
+                var length = res.data.songs.length;
+                for (var i = 0; i < length; i++) {
+                    var r = res.data.songs[i];
+                    if (curloved_music.indexOf(r.id) != -1) {
+                        r.love = 1;
+                    }
+                    else {
+                        r.love = 0;
+                    }
                     if (r.privilege.st > -1) {
                         canplay.push(r)
                     }

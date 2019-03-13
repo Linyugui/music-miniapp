@@ -1,3 +1,5 @@
+var asurl = require('bsurl.js');
+
 function formatTime(date, type) {
     type = type || 1;
     //type 1,完成输出年月日时分秒，2对比当前时间输出日期，或时分;
@@ -141,9 +143,119 @@ function playAlrc(that, app) {
     // });
 }
 
+function lovesong(that, app, song, idx, list, cb) {
+
+    // console.log('---------- util.js.lovesong()  line:148()  song='); console.dir(song);
+    // console.log('---------- util.js.lovesong()  line:149()  idx='); console.dir(idx);
+    // console.log('---------- util.js.lovesong()  line:150()  list='); console.dir(list);
+    wx.showLoading({
+        title: '正在收藏...',
+    });
+    var data = {
+        user_id: app.globalData.id,
+        song_id: song.id,
+        album_name: (song.album) ? song.album.name : song.al.name,
+        artist_name: (song.artists) ? song.artists[0].name : song.ar[0].name,
+        song_name: song.name
+    };
+    wx.request({
+        url: asurl + "song/add-love-song",
+        method: "GET",
+        data: data,
+        success: function (res) {
+            app.globalData.loved_music[0].push(song.id);
+            list[idx].love = 1;
+            cb && cb();
+        },
+        complete: function () {
+            wx.hideLoading();
+        }
+    })
+}
+
+function cancellovesong(that, app, song, idx, list, cb) {
+
+    wx.showLoading({
+        title: '取消收藏...',
+    });
+    var data = {
+        user_id: app.globalData.id,
+        song_id: song.id,
+    };
+    wx.request({
+        url: asurl + "song/del-love-song",
+        method: "GET",
+        data: data,
+        success: function (res) {
+            app.globalData.loved_music[0].splice(idx, 1);
+            list[idx].love = 0;
+            cb && cb();
+        },
+        complete: function () {
+            wx.hideLoading();
+        }
+    })
+}
+
+function lovealbum(that, app, album, idx, list, cb) {
+    console.log('---------- util.js.lovesong()  line:148()  album='); console.dir(album);
+    console.log('---------- util.js.lovesong()  line:149()  idx='); console.dir(idx);
+    console.log('---------- util.js.lovesong()  line:150()  list='); console.dir(list);
+    wx.showLoading({
+        title: '正在收藏...',
+    });
+    var data = {
+        user_id: app.globalData.id,
+        album_id: album.id,
+        album_name: album.name,
+        album_picurl: album.picUrl,
+        artist_name: (album.artists) ? album.artists[0].name : album.ar[0].name
+    };
+    wx.request({
+        url: asurl + "album/add-love-album",
+        method: "GET",
+        data: data,
+        success: function (res) {
+            app.globalData.loved_music[1].push(album.id);
+            list[idx].love = 1;
+            cb && cb();
+        },
+        complete: function () {
+            wx.hideLoading();
+        }
+    })
+}
+
+function cancellovealbum(that, app, album, idx, list, cb){
+    wx.showLoading({
+        title: '取消收藏...',
+    });
+    var data = {
+        user_id: app.globalData.id,
+        album_id: album.id,
+    };
+    wx.request({
+        url: asurl + "album/del-love-album",
+        method: "GET",
+        data: data,
+        success: function (res) {
+            app.globalData.loved_music[1].splice(idx,1);
+            list[idx].love = 0;
+            cb && cb();
+        },
+        complete:function () {
+            wx.hideLoading();
+        }
+    })
+}
+
 module.exports = {
     formatTime: formatTime,
     formatduration: formatduration,
     toggleplay: toggleplay,
     playAlrc: playAlrc,
+    lovesong: lovesong,
+    cancellovesong: cancellovesong,
+    lovealbum: lovealbum,
+    cancellovealbum: cancellovealbum,
 }

@@ -38,7 +38,6 @@ Page({
         })
     },
     onLoad: function (options) {
-
     },
     onHide: function () {
         nt.removeNotification("music_next", this)
@@ -64,7 +63,8 @@ Page({
         //个性推荐内容,歌单，新歌，mv，电台
         app.lovemusic();
         app.lovealbum();
-        async.map(['v1/personalized', 'v1/personalized/newsong'], function (item, callback) {
+        // async.map(['v1/personalized', 'v1/personalized/newsong'], function (item, callback) {
+        async.map(['v1/personalized'], function (item, callback) {
             wx.request({
                 url: asurl + item,
                 data: {

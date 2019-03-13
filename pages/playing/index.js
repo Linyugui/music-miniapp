@@ -207,10 +207,10 @@ Page({
     },
     music_next: function (r) {
         var that = this;
-        console.log('---------- index.js.music_next()  line:211()  r='); console.dir(r);
         that.setData({
             music: r.music
-        })
+        });
+        wx.setNavigationBarTitle({title: app.globalData.curplay.name});
 
     },
 

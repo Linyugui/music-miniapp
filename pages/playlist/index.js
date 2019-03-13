@@ -3,7 +3,7 @@ var bsurl = require('../../utils/csurl.js');
 var asurl = require('../../utils/bsurl.js');
 var nt = require("../../utils/nt.js");
 var id2Url = require('../../utils/base64md5.js');
-var common = require('../../utils/util.js');
+var util = require('../../utils/util.js');
 Page({
     data: {
         list: [],
@@ -18,7 +18,7 @@ Page({
         user: wx.getStorageSync('user') || {}
     },
     // toggleplay: function () {
-    //     common.toggleplay(this, app);
+    //     util.toggleplay(this, app);
     // },
     playnext: function (e) {
         app.nextplay(e.currentTarget.dataset.pt)
@@ -52,9 +52,7 @@ Page({
         nt.removeNotification("music_next", this)
         nt.removeNotification("music_toggle", this)
     },
-    lovesong: function () {
-        common.songheart(this, app, 0, (this.data.playtype == 1 ? this.data.music.st : this.data.music.starred));
-    },
+
     onLoad: function (options) {
         var that = this
         wx.request({
@@ -66,13 +64,12 @@ Page({
             success: function (res) {
                 var canplay = [];
                 var love_song = app.globalData.loved_music[0];
-               // console.log('---------- index.js.success()  line:68()  res.data='); console.dir(res.data);
+                // console.log('---------- index.js.success()  line:68()  res.data='); console.dir(res.data);
                 var length = res.data.playlist.tracks.length;
                 for (let i = 0; i < length; i++) {
                     if (love_song.indexOf(res.data.playlist.tracks[i].id) != -1) {
                         res.data.playlist.tracks[i].love = 1;
-                    }
-                    else {
+                    } else {
                         res.data.playlist.tracks[i].love = 0;
                     }
                     if (res.data.privileges[i].st >= 0) {
@@ -83,7 +80,7 @@ Page({
                     list: res.data,
                     canplay: canplay,
                     toplist: (options.from == 'stoplist' ? true : false),
-                    cover: res.data.playlist.coverImgUrl+'?param=100y100',
+                    cover: res.data.playlist.coverImgUrl + '?param=100y100',
                     // cover: id2Url.id2Url('' + (res.data.playlist.coverImgId_str || res.data.playlist.coverImgId))
                 });
 
@@ -120,7 +117,8 @@ Page({
         app.globalData.globalStop = false;
     },
     playmusic: function (event) {
-        console.log('---------- index.js.playmusic()  line:113()  event='); console.dir(event);
+        console.log('---------- index.js.playmusic()  line:113()  event=');
+        console.dir(event);
         let music = event.currentTarget.dataset.idx;
         let st = event.currentTarget.dataset.st;
         if (st * 1 < 0) {
@@ -135,68 +133,28 @@ Page({
         this.setplaylist(music, event.currentTarget.dataset.idx)
     },
     lovesong: function (e) {
-
         var that = this;
-        var curtab = this.data.list;
-        wx.showLoading({
-            title: '正在收藏...',
-        });
+        var list = that.data.list;
+        var playlist = list.playlist.tracks;
         var song = e.currentTarget.dataset.re;
         var idx = e.currentTarget.dataset.idx;
-        console.log('---------- index.js.lovesong()  line:145()  song='); console.dir(song);
-        console.log('---------- index.js.lovesong()  line:146()  idx='); console.dir(idx);
-        var data = {
-            user_id: app.globalData.id,
-            song_id: song.id,
-            album_name: song.al.name,
-            artist_name: song.ar[0].name,
-            song_name: song.name
-        };
-        wx.request({
-            url: asurl + "song/add-love-song",
-            method: "GET",
-            data: data,
-            success: function (res) {
-                app.globalData.loved_music[0].push(song.id);
-                // console.log('---------- index.js.success()  line:291()  curtab.relist='); console.dir(curtab.relist);
-                curtab.playlist.tracks[idx].love = 1;
-                that.setData({
-                    list:curtab
-                })
-            },
-            complete:function () {
-                wx.hideLoading();
-            }
+        util.lovesong(that, app, song, idx, playlist, function () {
+            that.setData({
+                list: list
+            })
         })
 
     },
     cancellovesong: function (e) {
         var that = this;
-        var curtab = this.data.list;
-        wx.showLoading({
-            title: '取消收藏...',
-        });
+        var list = that.data.list;
+        var playlist = list.playlist.tracks;
         var song = e.currentTarget.dataset.re;
         var idx = e.currentTarget.dataset.idx;
-        var data = {
-            user_id: app.globalData.id,
-            song_id: song.id,
-        };
-        wx.request({
-            url: asurl + "song/del-love-song",
-            method: "GET",
-            data: data,
-            success: function (res) {
-                app.globalData.loved_music[index].splice(idx,1);
-                curtab.playlist.tracks[idx].love = 0;
-                // curtab.relist.songs[idx].love = 0;
-                that.setData({
-                    list:curtab
-                })
-            },
-            complete:function () {
-                wx.hideLoading();
-            }
+        util.cancellovesong(that, app, song, idx, playlist, function () {
+            that.setData({
+                list: list
+            })
         })
 
     },
