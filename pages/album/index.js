@@ -1,6 +1,6 @@
 var app = getApp();
 var bsurl = require('../../utils/csurl.js');
-var common = require('../../utils/util.js');
+var util = require('../../utils/util.js');
 var nt = require("../../utils/nt.js");
 Page({
     data: {
@@ -19,7 +19,7 @@ Page({
         // }
     },
     // toggleplay: function () {
-    //     common.toggleplay(this, app);
+    //     util.toggleplay(this, app);
     // },
     playnext: function (e) {
         app.nextplay(e.currentTarget.dataset.pt)
@@ -55,7 +55,7 @@ Page({
             },
             success: function (res) {
                 var re = res.data;
-                re.album.publishTime = common.formatTime(re.album.publishTime, 3);
+                re.album.publishTime = util.formatTime(re.album.publishTime, 3);
                 var canplay = [];
                 var length = res.data.songs.length;
                 for (var i = 0; i < length; i++) {
@@ -150,5 +150,30 @@ Page({
         }
         music = this.data.result.songs[music];
         that.setplaylist(music, event.currentTarget.dataset.idx)
-    }
+    },
+    lovesong: function (e) {
+        var that = this;
+        var result = that.data.result;
+        var list = result.songs;
+        var song = e.currentTarget.dataset.re;
+        var idx = e.currentTarget.dataset.idx;
+        util.lovesong(that,app,song,idx,list,function () {
+            that.setData({
+                result:result
+            })
+        });
+    },
+    cancellovesong: function (e) {
+        var that = this;
+        var result = that.data.result;
+        var list = result.songs;
+        var song = e.currentTarget.dataset.re;
+        var idx = e.currentTarget.dataset.idx;
+        util.cancellovesong(that,app,song,idx,list,function () {
+            that.setData({
+                result:result
+            })
+        })
+
+    },
 });

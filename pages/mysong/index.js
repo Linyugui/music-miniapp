@@ -1,8 +1,7 @@
 var app = getApp();
 var bsurl = require('../../utils/csurl.js');
 var nt = require("../../utils/nt.js");
-var id2Url = require('../../utils/base64md5.js');
-var common = require('../../utils/util.js');
+var util = require('../../utils/util.js');
 Page({
     data: {
         list: [],
@@ -14,10 +13,9 @@ Page({
         playtype: 1,
         loading: true,
         toplist: false,
-        user: wx.getStorageSync('user') || {}
     },
     toggleplay: function () {
-        common.toggleplay(this, app);
+        util.toggleplay(this, app);
     },
     playnext: function (e) {
         app.nextplay(e.currentTarget.dataset.pt)
@@ -51,9 +49,7 @@ Page({
         nt.removeNotification("music_next", this)
         nt.removeNotification("music_toggle", this)
     },
-    lovesong: function () {
-        common.songheart(this, app, 0, (this.data.playtype == 1 ? this.data.music.st : this.data.music.starred));
-    },
+
     onLoad: function (options) {
         var that = this
         wx.request({
@@ -64,8 +60,15 @@ Page({
             },
             success: function (res) {
                 var canplay = [];
-                console.log('---------- index.js.success()  line:68()  res.data='); console.dir(res.data);
-                for (let i = 0; i < res.data.playlist.tracks.length; i++) {
+                var love_song = app.globalData.loved_music[0];
+                // console.log('---------- index.js.success()  line:68()  res.data='); console.dir(res.data);
+                var length = res.data.playlist.tracks.length;
+                for (let i = 0; i < length; i++) {
+                    if (love_song.indexOf(res.data.playlist.tracks[i].id) != -1) {
+                        res.data.playlist.tracks[i].love = 1;
+                    } else {
+                        res.data.playlist.tracks[i].love = 0;
+                    }
                     if (res.data.privileges[i].st >= 0) {
                         canplay.push(res.data.playlist.tracks[i])
                     }
@@ -74,7 +77,8 @@ Page({
                     list: res.data,
                     canplay: canplay,
                     toplist: (options.from == 'stoplist' ? true : false),
-                    cover: id2Url.id2Url('' + (res.data.playlist.coverImgId_str || res.data.playlist.coverImgId))
+                    cover: res.data.playlist.coverImgUrl + '?param=100y100',
+                    // cover: id2Url.id2Url('' + (res.data.playlist.coverImgId_str || res.data.playlist.coverImgId))
                 });
 
                 wx.setNavigationBarTitle({
@@ -86,13 +90,6 @@ Page({
                 })
             }
         });
-    },
-
-    userplaylist: function (e) {
-        var userid = e.currentTarget.dataset.userid;
-        wx.redirectTo({
-            url: '../user/index?id=' + userid
-        })
     },
     playall: function (event) {
         this.setplaylist(this.data.canplay[0], 0);
@@ -110,7 +107,8 @@ Page({
         app.globalData.globalStop = false;
     },
     playmusic: function (event) {
-        console.log('---------- index.js.playmusic()  line:113()  event='); console.dir(event);
+        console.log('---------- index.js.playmusic()  line:113()  event=');
+        console.dir(event);
         let music = event.currentTarget.dataset.idx;
         let st = event.currentTarget.dataset.st;
         if (st * 1 < 0) {
@@ -123,5 +121,31 @@ Page({
         }
         music = this.data.list.playlist.tracks[music];
         this.setplaylist(music, event.currentTarget.dataset.idx)
-    }
+    },
+    lovesong: function (e) {
+        var that = this;
+        var list = that.data.list;
+        var playlist = list.playlist.tracks;
+        var song = e.currentTarget.dataset.re;
+        var idx = e.currentTarget.dataset.idx;
+        util.lovesong(that, app, song, idx, playlist, function () {
+            that.setData({
+                list: list
+            })
+        })
+
+    },
+    cancellovesong: function (e) {
+        var that = this;
+        var list = that.data.list;
+        var playlist = list.playlist.tracks;
+        var song = e.currentTarget.dataset.re;
+        var idx = e.currentTarget.dataset.idx;
+        util.cancellovesong(that, app, song, idx, playlist, function () {
+            that.setData({
+                list: list
+            })
+        })
+
+    },
 });

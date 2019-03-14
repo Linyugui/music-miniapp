@@ -1,8 +1,6 @@
 var app = getApp();
 var bsurl = require('../../utils/csurl.js');
-var asurl = require('../../utils/bsurl.js');
 var nt = require("../../utils/nt.js");
-var id2Url = require('../../utils/base64md5.js');
 var util = require('../../utils/util.js');
 Page({
     data: {
@@ -17,9 +15,9 @@ Page({
         toplist: false,
         user: wx.getStorageSync('user') || {}
     },
-    // toggleplay: function () {
-    //     util.toggleplay(this, app);
-    // },
+    toggleplay: function () {
+        util.toggleplay(this, app);
+    },
     playnext: function (e) {
         app.nextplay(e.currentTarget.dataset.pt)
     },
@@ -93,13 +91,6 @@ Page({
                 })
             }
         });
-    },
-
-    userplaylist: function (e) {
-        var userid = e.currentTarget.dataset.userid;
-        wx.redirectTo({
-            url: '../user/index?id=' + userid
-        })
     },
     playall: function (event) {
         this.setplaylist(this.data.canplay[0], 0);

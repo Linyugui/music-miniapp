@@ -265,42 +265,7 @@ Page({
         })
         wx.setStorageSync('recent', this.data.recent)
     },
-    // lovesong: function (e) {
-    //     var that = this;
-    //     var index = that.data.tab.index;
-    //     var tl = that.data.tabs;
-    //     var curtab = tl[index];
-    //     wx.showLoading({
-    //         title: '正在收藏...',
-    //     });
-    //     var song = e.currentTarget.dataset.re;
-    //     var idx = e.currentTarget.dataset.idx;
-    //     var data = {
-    //         user_id: app.globalData.id,
-    //         song_id: song.id,
-    //         album_name: song.album.name,
-    //         artist_name: song.artists[0].name,
-    //         song_name: song.name
-    //     };
-    //     wx.request({
-    //         url: asurl + "song/add-love-song",
-    //         method: "GET",
-    //         data: data,
-    //         success: function (res) {
-    //             app.globalData.loved_music[index].push(song.id);
-    //             // console.log('---------- index.js.success()  line:291()  curtab.relist='); console.dir(curtab.relist);
-    //             curtab.relist.songs[idx].love = 1;
-    //             tl[index] = curtab;
-    //             that.setData({
-    //                 tabs:tl
-    //             })
-    //         },
-    //         complete:function () {
-    //             wx.hideLoading();
-    //         }
-    //     })
-    //
-    // },
+
     lovesong: function (e) {
         var that = this;
         var index = that.data.tab.index;
@@ -314,38 +279,6 @@ Page({
             })
         });
     },
-    // cancellovesong: function (e) {
-    //     var that = this;
-    //     var index = this.data.tab.index;
-    //     var tl = this.data.tabs;
-    //     var curtab = tl[index];
-    //     wx.showLoading({
-    //         title: '取消收藏...',
-    //     });
-    //     var song = e.currentTarget.dataset.re;
-    //     var idx = e.currentTarget.dataset.idx;
-    //     var data = {
-    //         user_id: app.globalData.id,
-    //         song_id: song.id,
-    //     };
-    //     wx.request({
-    //         url: asurl + "song/del-love-song",
-    //         method: "GET",
-    //         data: data,
-    //         success: function (res) {
-    //             app.globalData.loved_music[index].splice(idx,1);
-    //             curtab.relist.songs[idx].love = 0;
-    //             tl[index] = curtab;
-    //             that.setData({
-    //                 tabs:tl
-    //             })
-    //         },
-    //         complete:function () {
-    //             wx.hideLoading();
-    //         }
-    //     })
-    //
-    // },
     cancellovesong: function (e) {
         var that = this;
         var index = that.data.tab.index;

@@ -116,14 +116,14 @@
                             <text>{{item.ar[0].name||item.artists[0].name}}</text>
                         </view>
                     </view>
-                    <view class="flexact">
-                        <view catchtap="lovesong" data-re="{{item}}" data-idx="{{idx}}" class="fa_list fa_mv" hidden="{{item.love==1}}">
-                            <image src="../../images/music_like.png" mode="widthFix"/>
-                        </view>
-                        <view catchtap="cancellovesong" data-re="{{item}}" data-idx="{{idx}}" class="fa_list fa_mv" hidden="{{item.love==0}}">
-                            <image src="../../images/music_liked.png" mode="widthFix"/>
-                        </view>
-                    </view>
+                    <!--<view class="flexact">-->
+                        <!--<view catchtap="lovesong" data-re="{{item}}" data-idx="{{idx}}" class="fa_list fa_mv" hidden="{{item.love==1}}">-->
+                            <!--<image src="../../images/music_like.png" mode="widthFix"/>-->
+                        <!--</view>-->
+                        <!--<view catchtap="cancellovesong" data-re="{{item}}" data-idx="{{idx}}" class="fa_list fa_mv" hidden="{{item.love==0}}">-->
+                            <!--<image src="../../images/music_liked.png" mode="widthFix"/>-->
+                        <!--</view>-->
+                    <!--</view>-->
                     <!--<view class="flexact" catchtap="del_curpl" data-index="{{idx}}">-->
                         <!--<template is="image" data="{{src:'../../images/cm2_playlist_icn_dlt@2x.png',width:60}}"/>-->
                     <!--</view>-->
