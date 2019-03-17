@@ -129,7 +129,8 @@ Page({
         var playlist = list.playlist.tracks;
         var song = e.currentTarget.dataset.re;
         var idx = e.currentTarget.dataset.idx;
-        util.lovesong(that, app, song, idx, playlist, function () {
+        var st = list.privileges[idx].st;
+        util.lovesong(that, app, song, st, idx, playlist, function () {
             that.setData({
                 list: list
             })

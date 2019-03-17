@@ -1,5 +1,6 @@
 var app = getApp();
 var bsurl = require('../../utils/csurl.js');
+var asurl = require('../../utils/bsurl.js');
 var nt = require("../../utils/nt.js");
 var util = require('../../utils/util.js');
 Page({
@@ -53,15 +54,14 @@ Page({
     onLoad: function (options) {
         var that = this
         wx.request({
-            url: bsurl + 'playlist/detail',
+            url: asurl + 'song/love-song-detail',
             data: {
-                id: options.pid,
+                user_id: app.globalData.id,
                 limit: 1000
             },
             success: function (res) {
                 var canplay = [];
                 var love_song = app.globalData.loved_music[0];
-                // console.log('---------- index.js.success()  line:68()  res.data='); console.dir(res.data);
                 var length = res.data.playlist.tracks.length;
                 for (let i = 0; i < length; i++) {
                     if (love_song.indexOf(res.data.playlist.tracks[i].id) != -1) {
@@ -128,7 +128,8 @@ Page({
         var playlist = list.playlist.tracks;
         var song = e.currentTarget.dataset.re;
         var idx = e.currentTarget.dataset.idx;
-        util.lovesong(that, app, song, idx, playlist, function () {
+        var st = list.playlist.privileges[idx].st;
+        util.lovesong(that, app, song, st, idx, playlist, function () {
             that.setData({
                 list: list
             })

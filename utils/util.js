@@ -143,11 +143,12 @@ function playAlrc(that, app) {
     // });
 }
 
-function lovesong(that, app, song, idx, list, cb) {
+function lovesong(that, app, song, st, idx, list, cb) {
 
-    // console.log('---------- util.js.lovesong()  line:148()  song='); console.dir(song);
-    // console.log('---------- util.js.lovesong()  line:149()  idx='); console.dir(idx);
-    // console.log('---------- util.js.lovesong()  line:150()  list='); console.dir(list);
+    console.log('---------- util.js.lovesong()  line:148()  song=');console.dir(song);
+    console.log('---------- util.js.lovesong()  line:149()  idx='); console.dir(idx);
+    console.log('---------- util.js.lovesong()  line:150()  list='); console.dir(list);
+    console.log('---------- util.js.lovesong()  line:151()  st='); console.dir(st);
     wx.showLoading({
         title: '正在收藏...',
     });
@@ -156,7 +157,8 @@ function lovesong(that, app, song, idx, list, cb) {
         song_id: song.id,
         album_name: (song.album) ? song.album.name : song.al.name,
         artist_name: (song.artists) ? song.artists[0].name : song.ar[0].name,
-        song_name: song.name
+        song_name: song.name,
+        st: st
     };
     wx.request({
         url: asurl + "song/add-love-song",
@@ -198,9 +200,12 @@ function cancellovesong(that, app, song, idx, list, cb) {
 }
 
 function lovealbum(that, app, album, idx, list, cb) {
-    console.log('---------- util.js.lovesong()  line:148()  album='); console.dir(album);
-    console.log('---------- util.js.lovesong()  line:149()  idx='); console.dir(idx);
-    console.log('---------- util.js.lovesong()  line:150()  list='); console.dir(list);
+    console.log('---------- util.js.lovesong()  line:148()  album=');
+    console.dir(album);
+    console.log('---------- util.js.lovesong()  line:149()  idx=');
+    console.dir(idx);
+    console.log('---------- util.js.lovesong()  line:150()  list=');
+    console.dir(list);
     wx.showLoading({
         title: '正在收藏...',
     });
@@ -226,7 +231,7 @@ function lovealbum(that, app, album, idx, list, cb) {
     })
 }
 
-function cancellovealbum(that, app, album, idx, list, cb){
+function cancellovealbum(that, app, album, idx, list, cb) {
     wx.showLoading({
         title: '取消收藏...',
     });
@@ -239,11 +244,11 @@ function cancellovealbum(that, app, album, idx, list, cb){
         method: "GET",
         data: data,
         success: function (res) {
-            app.globalData.loved_music[1].splice(idx,1);
+            app.globalData.loved_music[1].splice(idx, 1);
             list[idx].love = 0;
             cb && cb();
         },
-        complete:function () {
+        complete: function () {
             wx.hideLoading();
         }
     })

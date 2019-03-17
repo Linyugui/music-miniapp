@@ -157,7 +157,8 @@ Page({
         var list = result.songs;
         var song = e.currentTarget.dataset.re;
         var idx = e.currentTarget.dataset.idx;
-        util.lovesong(that,app,song,idx,list,function () {
+        var st = song.st;
+        util.lovesong(that,app,song,st,idx,list,function () {
             that.setData({
                 result:result
             })
