@@ -5,6 +5,8 @@
     "pages/search/index",
 
     "pages/me/index",
+    "pages/mysong/index",
+    "pages/myalbum/index",
     "pages/playlist/index",
     "pages/playing/index",
     "pages/authorize/index",

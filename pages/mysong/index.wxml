@@ -1,4 +1,3 @@
-<import src="../../utils/playlist.wxml"/>
 
 <view id="plist-header">
     <view class="blurbg" style="background-image:url({{cover}})" id="plh-filterbg"></view>
@@ -8,31 +7,58 @@
 
         </view>
         <view id="plh-cnt">
-            <text id="music_h_name">{{list.playlist.name||" "}}</text>
-            <view data-userid="{{list.playlist.creator.userId}}" wx:if="{{list}}">
-                <image id="user_ava" class="user_avator" src="{{list.playlist.creator.avatarUrl}}"/>
-                <text>{{list.playlist.creator.nickname||" "}}</text>
+            <text id="music_h_name">收藏的单曲</text>
+            <view>
+                <image id="user_ava" class="user_avator" src="{{userInfo.avatarUrl}}"/>
+                <text>{{userInfo.nickName||" "}}</text>
             </view>
         </view>
     </view>
 
 </view>
 <view class="plist-detail page_pp">
-    <block wx:if="{{list.playlist.tracks.length}}">
+    <block wx:if="{{list.length}}">
         <view id="playall" bindtap="playall" class="flexlist flex-center">
             <view class="flexleft flexnum">
                 <image src="../../images/pl-playall.png" mode="widthFix" />
             </view>
             <view class="flexlist">
-                <text id="pa-count">播放全部 <text> (共{{list.playlist.trackCount}}首)</text>
+                <text id="pa-count">播放全部 <text> (共{{list.length}}首)</text>
                 </text>
             </view>
         </view>
 
-        <template is="playlist" data="{{list:list.playlist.tracks,privileges:list.privileges,curplay:curplay}}"/>
+        <block wx:for-items="{{list}}"  wx:for-index="idx"  wx:for-item="re" wx:key="{{re.id}}">
+            <view class="songs {{re.id===curplay?'cur':''}} {{re.st==-1?'disabled':''}} {{re.id}}">
+                <navigator hover-class="{{re.st==-1?'none':''}}"
+                           bindtap="playmusic" data-idx="{{idx}}" data-st="{{re.st}}">
+                    <view class="flexlist flex-center">
+                        <view class="flexleft flexnum ">
+                            <block wx:if="{{re.id===curplay}}">
+                                <template is="image" data="{{src:'../../images/aal.png',width:36}}"/>
+                            </block>
+                            <block wx:else>
+                                <text class="{{toplist&&idx<3?'topindex':''}}">{{idx+1}}</text>
+                            </block>
+                        </view>
+                        <view class="flexlist">
+                            <view class="flexmain">
+                                <view>{{re.song_name}}</view>
+                                <view class="relistdes">{{re.artist_name}}-{{re.album_name}}</view>
+                            </view>
+                            <view class="flexact">
+                                <view catchtap="cancellovesong" data-re="{{re}}" data-idx="{{idx}}" class="fa_list fa_mv">
+                                    <image src="../../images/music_liked.png" mode="widthFix"/>
+                                </view>
+                            </view>
+                        </view>
+                    </view>
+                </navigator>
+            </view>
+        </block>
 
     </block>
-    <block wx:if="{{!list.playlist.tracks.length}}" >
+    <block wx:if="{{!list.length}}" >
         <view class="cntloading">加载中...
             <view>
                 <text class="cl1"></text>

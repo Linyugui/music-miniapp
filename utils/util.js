@@ -184,12 +184,15 @@ function cancellovesong(that, app, song, idx, list, cb) {
         user_id: app.globalData.id,
         song_id: song.id,
     };
+    console.log('---------- util.js.cancellovesong()  line:187()  song.id='); console.dir(song.id);
     wx.request({
         url: asurl + "song/del-love-song",
         method: "GET",
         data: data,
         success: function (res) {
+            console.log('---------- util.js.success()  line:193()  idx='); console.dir(idx);
             app.globalData.loved_music[0].splice(idx, 1);
+            console.log('---------- util.js.success()  line:193()  app.globalData.loved_music[0]='); console.dir(app.globalData.loved_music[0]);
             list[idx].love = 0;
             cb && cb();
         },

@@ -13,7 +13,7 @@
     </view>
 
     <view class="menu">
-        <navigator url="../cloud/index" class="mn_list">
+        <navigator url="../mysong/index" class="mn_list">
             <view class="mn_ico">
                 <template is="image" data="{{src:'../../images/cm2_list_icn_rdi_new@2x.png',width:60}}"/>
             </view>
@@ -22,7 +22,7 @@
                 <view class="arrow"></view>
             </view>
         </navigator>
-        <view class="mn_list">
+        <navigator url="../myalbum/index" class="mn_list">
             <view class="mn_ico">
                 <template is="image" data="{{src:'../../images/cm4_my_icn_fav@2x.png',width:60}}"/>
             </view>
@@ -30,8 +30,8 @@
             <view class="rdes">
                 <view class="arrow"></view>
             </view>
-        </view>
-        <view class="mn_list">
+        </navigator>
+        <navigator url="../mylike/index" class="mn_list">
             <view class="mn_ico">
                 <template is="image" data="{{src:'../../images/cm2_lay_icn_similar_new@2x.png',width:60}}"/>
             </view>
@@ -39,7 +39,7 @@
             <view class="rdes">
                 <view class="arrow"></view>
             </view>
-        </view>
+        </navigator>
     </view>
 
 </view>
