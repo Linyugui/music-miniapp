@@ -29,6 +29,7 @@ Page({
                 ids: id
             },
             success: function (res) {
+                console.log('---------- index.js.success()  line:32()  res.data.songs[0]='); console.dir(res.data.songs[0]);
                 app.globalData.curplay = res.data.songs[0];
                 !app.globalData.list_am.length && (app.globalData.list_am.push(res.data.songs[0]));         //list_am？
                 !app.globalData.list_sf.length && (app.globalData.list_sf.push(res.data.songs[0]));          //list_sf？
@@ -210,55 +211,6 @@ Page({
         });
         wx.setNavigationBarTitle({title: app.globalData.curplay.name});
 
-    },
-
-    trackstpl: function (e) {
-        var pid = e.currentTarget.dataset.pid;
-        var that = this;
-        wx.showToast({
-            title: "请稍后",
-            icon: "loading",
-            mask: true
-        })
-        wx.request({
-            url: bsurl + 'playlist/tracks',
-            data: {
-                op: 'add',
-                pid: pid,
-                tracks: this.data.music.id,
-                cookie: app.globalData.cookie
-            },
-            success: function (res) {
-                wx.hideToast();
-                if (res.data.code == 200) {
-                    wx.showToast({
-                        title: "已添加至歌单！",
-                        duration: 1000
-                    });
-                    var pl = that.data.playlist.map(function (i) {
-                        if (i.id == pid) {
-                            i.trackCount = res.data.count;
-                        }
-                        return i
-                    })
-
-                    that.setData({
-                        playlist: pl
-                    })
-                }
-                else if (res.data.code == 301) {
-                    wx.navigateTo({
-                        url: '../login/index?t=1'
-                    })
-                }
-                else {
-                    wx.showToast({
-                        title: res.data.code == 502 ? "歌曲已存在" : "添加失败，请稍后再试！",
-                        duration: 1000
-                    })
-                }
-            }
-        })
     },
     playingtoggle: function (event) {
         console.log('---------- index.js.playingtoggle()  line:262()  event='); console.dir(event);

@@ -101,10 +101,8 @@ Page({
         app.globalData.globalStop = false;
     },
     playmusic: function (event) {
-        console.log('---------- index.js.playmusic()  line:113()  event=');
-        console.dir(event);
-        let music = event.currentTarget.dataset.idx;
-        let st = event.currentTarget.dataset.st;
+        var idx = event.currentTarget.dataset.idx;
+        var st = event.currentTarget.dataset.st;
         if (st * 1 < 0) {
             wx.showToast({
                 title: '歌曲已下架',
@@ -113,8 +111,11 @@ Page({
             });
             return;
         }
-        music = this.data.list.playlist.tracks[music];
-        this.setplaylist(music, event.currentTarget.dataset.idx)
+        var song = this.data.list[idx];
+        this.setplaylist(song, idx);
+        wx.navigateTo({
+            url:'../playing/index?id='+song.id+'&br=128000'
+        })
     },
 
     cancellovesong: function (e) {
@@ -130,29 +131,40 @@ Page({
                     console.log('用户点击了取消');
                     return ;
                 }
+                else{
+                    wx.showLoading({
+                        title: '取消收藏...',
+                    });
+                    var data = {
+                        user_id: app.globalData.id,
+                        song_id: song.song_id,
+                    };
+                    wx.request({
+                        url: asurl + "song/del-love-song",
+                        method: "GET",
+                        data: data,
+                        success: function () {
+                            wx.showToast({
+                                title: '取消成功',//提示文字
+                                duration:1000,//显示时长
+                                icon:'success',
+                            })
+                            app.globalData.loved_music[0].splice(app.globalData.loved_music[0].indexOf(song.song_id), 1);
+                            list.splice(idx,1);
+                            that.setData({
+                                list: list
+                            })
+                        },
+                        complete: function () {
+                            wx.hideLoading();
+
+                        }
+                    })
+                }
             }
         });
 
-        wx.showLoading({
-            title: '取消收藏...',
-        });
-        var data = {
-            user_id: app.globalData.id,
-            song_id: song.id,
-        };
-        wx.request({
-            url: asurl + "song/del-love-song",
-            method: "GET",
-            data: data,
-            success: function (res) {
-                app.globalData.loved_music[0].splice(idx, 1);
-                list[idx].love = 0;
-                cb && cb();
-            },
-            complete: function () {
-                wx.hideLoading();
-            }
-        })
+
 
     },
 });

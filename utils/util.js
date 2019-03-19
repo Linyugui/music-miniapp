@@ -90,7 +90,7 @@ function playAlrc(that, app) {
             //lrcindex: 0,
             duration: formatduration(app.globalData.curplay.duration || app.globalData.curplay.dt)
         });
-        wx.setNavigationBarTitle({title: app.globalData.curplay.name});
+       // wx.setNavigationBarTitle({title: app.globalData.curplay.name});
     }
     app.globalData.backgroundAudioManager.onTimeUpdate(function () {
         var res = app.globalData.backgroundAudioManager;
@@ -145,10 +145,6 @@ function playAlrc(that, app) {
 
 function lovesong(that, app, song, st, idx, list, cb) {
 
-    console.log('---------- util.js.lovesong()  line:148()  song=');console.dir(song);
-    console.log('---------- util.js.lovesong()  line:149()  idx='); console.dir(idx);
-    console.log('---------- util.js.lovesong()  line:150()  list='); console.dir(list);
-    console.log('---------- util.js.lovesong()  line:151()  st='); console.dir(st);
     wx.showLoading({
         title: '正在收藏...',
     });
@@ -165,12 +161,18 @@ function lovesong(that, app, song, st, idx, list, cb) {
         method: "GET",
         data: data,
         success: function (res) {
+            wx.showToast({
+                title: '收藏成功',//提示文字
+                duration:1000,//显示时长
+                icon:'success',
+            })
             app.globalData.loved_music[0].push(song.id);
             list[idx].love = 1;
             cb && cb();
         },
         complete: function () {
             wx.hideLoading();
+
         }
     })
 }
@@ -184,15 +186,17 @@ function cancellovesong(that, app, song, idx, list, cb) {
         user_id: app.globalData.id,
         song_id: song.id,
     };
-    console.log('---------- util.js.cancellovesong()  line:187()  song.id='); console.dir(song.id);
     wx.request({
         url: asurl + "song/del-love-song",
         method: "GET",
         data: data,
         success: function (res) {
-            console.log('---------- util.js.success()  line:193()  idx='); console.dir(idx);
-            app.globalData.loved_music[0].splice(idx, 1);
-            console.log('---------- util.js.success()  line:193()  app.globalData.loved_music[0]='); console.dir(app.globalData.loved_music[0]);
+            wx.showToast({
+                title: '取消成功',//提示文字
+                duration:1000,//显示时长
+                icon:'success',
+            })
+            app.globalData.loved_music[0].splice(app.globalData.loved_music[0].indexOf(song.id), 1);
             list[idx].love = 0;
             cb && cb();
         },
@@ -203,12 +207,6 @@ function cancellovesong(that, app, song, idx, list, cb) {
 }
 
 function lovealbum(that, app, album, idx, list, cb) {
-    console.log('---------- util.js.lovesong()  line:148()  album=');
-    console.dir(album);
-    console.log('---------- util.js.lovesong()  line:149()  idx=');
-    console.dir(idx);
-    console.log('---------- util.js.lovesong()  line:150()  list=');
-    console.dir(list);
     wx.showLoading({
         title: '正在收藏...',
     });
@@ -247,7 +245,7 @@ function cancellovealbum(that, app, album, idx, list, cb) {
         method: "GET",
         data: data,
         success: function (res) {
-            app.globalData.loved_music[1].splice(idx, 1);
+            app.globalData.loved_music[1].splice(app.globalData.loved_music[1].indexOf(album.id), 1);
             list[idx].love = 0;
             cb && cb();
         },

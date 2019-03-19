@@ -45,12 +45,12 @@ Page({
     },
     onShow: function () {
         nt.addNotification("music_next", this.music_next, this);
-        nt.addNotification("music_toggle", this.music_toggle, this)
+        nt.addNotification("music_toggle", this.music_toggle, this);
         this.setData({
             music: app.globalData.curplay,
             playing: app.globalData.playing,
             playtype: app.globalData.playtype,
-        })
+        });
         // var user = wx.getStorageSync('user');
         // console.log('---------- index.js.onShow()  line:85()  user='); console.dir(user);
         this.init() && this.data.rec.loading;

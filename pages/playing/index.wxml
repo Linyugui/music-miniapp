@@ -113,7 +113,8 @@
                     </view>
                     <view class="flexmain">
                         <view>{{item.name}} -
-                            <text>{{item.ar[0].name||item.artists[0].name}}</text>
+                            <text>{{item.ar[0].name||item.artists[0].name||item.artist_name}}</text>
+                            <text>{{item.ar[0].name||item.artists[0].name||item.artist_name}}</text>
                         </view>
                     </view>
                     <!--<view class="flexact">-->

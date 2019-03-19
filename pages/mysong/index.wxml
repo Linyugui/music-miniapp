@@ -1,4 +1,4 @@
-
+<import src="../../utils/image.wxml"/>
 <view id="plist-header">
     <view class="blurbg" style="background-image:url({{cover}})" id="plh-filterbg"></view>
     <view id="plh-main">
@@ -29,8 +29,8 @@
         </view>
 
         <block wx:for-items="{{list}}"  wx:for-index="idx"  wx:for-item="re" wx:key="{{re.id}}">
-            <view class="songs {{re.id===curplay?'cur':''}} {{re.st==-1?'disabled':''}} {{re.id}}">
-                <navigator hover-class="{{re.st==-1?'none':''}}"
+            <view class="songs {{re.id===curplay?'cur':''}} {{re.st<0?'view-disable':''}} {{re.id}}">
+                <view hover-class="view-hover"
                            bindtap="playmusic" data-idx="{{idx}}" data-st="{{re.st}}">
                     <view class="flexlist flex-center">
                         <view class="flexleft flexnum ">
@@ -43,7 +43,7 @@
                         </view>
                         <view class="flexlist">
                             <view class="flexmain">
-                                <view>{{re.song_name}}</view>
+                                <view>{{re.name}}</view>
                                 <view class="relistdes">{{re.artist_name}}-{{re.album_name}}</view>
                             </view>
                             <view class="flexact">
@@ -53,7 +53,7 @@
                             </view>
                         </view>
                     </view>
-                </navigator>
+                </view>
             </view>
         </block>
 
