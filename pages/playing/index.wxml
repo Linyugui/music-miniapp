@@ -2,14 +2,14 @@
 
 <view id="playingpage" class=" {{playing?'playing':''}}">
     <image src="../../images/cm2_default_play_bg-ip6@2x.jpg" id="coverbg"/>
-    <image id="playing-bg" class="blurbg" mode="aspectFill" wx:if="{{music.al.picUrl||music.album.picUrl}}"
-           src="{{music.al.picUrl||music.album.picUrl}}?param=400y400"/>
+    <image id="playing-bg" class="blurbg" mode="aspectFill" wx:if="{{music.al.picUrl||music.album.picUrl||music.picUrl}}"
+           src="{{music.al.picUrl||music.album.picUrl||music.picUrl}}?param=400y400"/>
     <view id="playing-zz">
         <image src="../../images/aag.png"/>
     </view>
     <view id="playing-main">
         <image id="playingmainbg" src="../../images/play.png"/>
-        <image wx:if="{{music.al.picUrl||music.album.picUrl}}" src="{{music.al.picUrl||music.album.picUrl}}?param=200y200" id="pmaincover"/>
+        <image wx:if="{{music.al.picUrl||music.album.picUrl||music.picUrl}}" src="{{music.al.picUrl||music.album.picUrl||music.picUrl}}?param=200y200" id="pmaincover"/>
     </view>
 
     <view id="playing-actwrap">

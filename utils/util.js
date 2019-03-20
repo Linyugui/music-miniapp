@@ -144,7 +144,7 @@ function playAlrc(that, app) {
 }
 
 function lovesong(that, app, song, st, idx, list, cb) {
-
+    console.log('---------- util.js.lovesong()  line:147()  song='); console.dir(song);
     wx.showLoading({
         title: '正在收藏...',
     });
@@ -154,13 +154,15 @@ function lovesong(that, app, song, st, idx, list, cb) {
         album_name: (song.album) ? song.album.name : song.al.name,
         artist_name: (song.artists) ? song.artists[0].name : song.ar[0].name,
         song_name: song.name,
-        st: st
+        st: st,
+        picUrl:(song.album) ? song.album.picUrl : song.al.picUrl,
     };
     wx.request({
         url: asurl + "song/add-love-song",
         method: "GET",
         data: data,
         success: function (res) {
+            wx.hideLoading();
             wx.showToast({
                 title: '收藏成功',//提示文字
                 duration:1000,//显示时长
@@ -170,9 +172,8 @@ function lovesong(that, app, song, st, idx, list, cb) {
             list[idx].love = 1;
             cb && cb();
         },
-        complete: function () {
+        fail: function () {
             wx.hideLoading();
-
         }
     })
 }
@@ -191,16 +192,17 @@ function cancellovesong(that, app, song, idx, list, cb) {
         method: "GET",
         data: data,
         success: function (res) {
+            wx.hideLoading();
             wx.showToast({
                 title: '取消成功',//提示文字
                 duration:1000,//显示时长
                 icon:'success',
-            })
+            });
             app.globalData.loved_music[0].splice(app.globalData.loved_music[0].indexOf(song.id), 1);
             list[idx].love = 0;
             cb && cb();
         },
-        complete: function () {
+        fail: function () {
             wx.hideLoading();
         }
     })
@@ -214,7 +216,7 @@ function lovealbum(that, app, album, idx, list, cb) {
         user_id: app.globalData.id,
         album_id: album.id,
         album_name: album.name,
-        album_picurl: album.picUrl,
+        picurl: album.picUrl,
         artist_name: (album.artists) ? album.artists[0].name : album.ar[0].name
     };
     wx.request({
