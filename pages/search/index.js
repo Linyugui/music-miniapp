@@ -53,7 +53,6 @@ Page({
         tl = this.data.tabs;
         this.httpsearch(name, curtab.offset, this.data.tab.tab, curloved_music,function (res) {
             var resultarry = res.songs || res.albums || [];
-
             curtab.relist = res;
             curtab.loading = true;
             curtab.offset = resultarry.length;
@@ -93,6 +92,7 @@ Page({
         this.search(e.detail.value.name)
     },
     onReachBottom: function (e) {
+        console.log('---------- index.js.onReachBottom()  line:95()  e='); console.dir(e);
         var index = this.data.tab.index;
         var tl = this.data.tabs,
             that = this;
@@ -108,8 +108,6 @@ Page({
         })
         this.httpsearch(this.data.prevalue, curtab.offset, this.data.tab.tab,curloved_music, function (res) {
             var resultarry = res.songs || res.albums || [];
-            console.log('---------- index.js.()  line:126()  resultarry=');
-            console.dir(resultarry);
             var size = res.songCount || res.albumCount;
             size = size ? size : 0;
             var length = resultarry.length;
@@ -117,6 +115,7 @@ Page({
             curtab.offset = curtab.offset + length;
             curtab.none = curtab.offset >= size ? true : false;
             curtab.relist.songs = curtab.relist.songs ? curtab.relist.songs.concat(resultarry) : null;
+            curtab.relist.privileges =curtab.relist.songs ?curtab.relist.privileges.concat(res.privileges):null;
             curtab.relist.albums = curtab.relist.albums ? curtab.relist.albums.concat(resultarry) : null;
             tl[that.data.tab.index] = curtab
             that.setData({
@@ -142,8 +141,6 @@ Page({
             },
             method: 'GET',
             success: function (res) {
-                console.log('---------- index.js.success()  line:160()  res.data.result=');
-                console.dir(res.data.result);
                 if(type == 1){
                     var songs = res.data.result.songs;
                     var list = new Array();
@@ -157,7 +154,7 @@ Page({
                         },
                         method: 'GET',
                         success:function (res) {
-                            console.log('---------- index.js.success()  line:160()  res='); console.dir(res);
+                            console.log('---------- index.js.success()  line:160()  res.data='); console.dir(res.data);
                             var songs = res.data.songs;
                             for (var i = 0, len = songs.length; i < len; i++) {
                                 if (love.indexOf(songs[i].id) != -1) {
@@ -211,7 +208,6 @@ Page({
                 size = size ? size : 0;
                 curtab.none = curtab.offset >= size ? true : false;
                 console.log(size, curtab.offset)
-
                 tl[index] = curtab;
                 that.setData({
                     tabs: tl

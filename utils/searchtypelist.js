@@ -1,14 +1,14 @@
 module.exports=[{
             type:1,
             name:"单曲",
-            relist:[],
+            relist:{},
             klass:'songs',
             offset:0,
             limit:20
         },{
             type:10,
             name:"专辑",
-            relist:[],
+            relist:{},
             klass:'album',
             offset:0,
             limit:20

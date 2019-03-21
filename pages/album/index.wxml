@@ -32,6 +32,7 @@
 			</view>
 		</view>
 		<template is="playlist" data="{{list:result.songs,curplay:curplay}}" />
+		<!--<template is="playlist" data="{{list:list.playlist.tracks,privileges:list.privileges,curplay:curplay}}"/>-->
 	</block>
 	<template is="loading" wx:else></template>
 </view>
