@@ -141,8 +141,9 @@ Page({
             },
             method: 'GET',
             success: function (res) {
-                if(type == 1){
+                if(type == 1&&res.data.result.songCount>0){
                     var songs = res.data.result.songs;
+                    var songCount = res.data.result.songCount;
                     var list = new Array();
                     for (var i = 0, len = songs.length; i < len; i++) {
                         list.push(songs[i].id);
@@ -155,6 +156,7 @@ Page({
                         method: 'GET',
                         success:function (res) {
                             console.log('---------- index.js.success()  line:160()  res.data='); console.dir(res.data);
+                            res.data.songCount = songCount;
                             var songs = res.data.songs;
                             for (var i = 0, len = songs.length; i < len; i++) {
                                 if (love.indexOf(songs[i].id) != -1) {
