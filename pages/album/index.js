@@ -32,7 +32,7 @@ Page({
         })
     },
     music_toggle: function (r) {
-        console.log('---------- index.js.music_toggle()  line:35()  r='); console.dir(r);
+        //console.log('---------- index.js.music_toggle()  line:35()  r='); //console.dir(r);
         this.setData({
             playing: r.playing,
             music: r.music,
@@ -49,7 +49,7 @@ Page({
         var that = this;
         var curloved_music = app.globalData.loved_music[0];
         wx.request({
-            url: bsurl + 'album/detail',
+            url: bsurl + 'album ',
             data: {
                 id: options.pid
             },
@@ -129,12 +129,6 @@ Page({
         app.globalData.list_sf = this.data.canplay; //this.data.list.tracks;
         app.shuffleplay(shuffle);
         app.globalData.globalStop = false;
-    },
-    mv: function (e) {
-        var id = e.currentTarget.dataset.mvid;
-        wx.navigateTo({
-            url: '../mv/index?id=' + id
-        })
     },
     playmusic: function (event) {
         var that = this;

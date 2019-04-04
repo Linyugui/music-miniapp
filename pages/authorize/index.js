@@ -29,8 +29,8 @@ Page({
         if (e.detail.userInfo) {
             //用户按了允许授权按钮
             var that = this;
-            console.log('---------- index.js.bindGetUserInfo()  line:32()  e.detail.userInfo=');
-            console.dir(e.detail.userInfo);
+            //console.log('---------- index.js.bindGetUserInfo()  line:32()  e.detail.userInfo=');
+            //console.dir(e.detail.userInfo);
             app.globalData.userInfo = e.detail.userInfo;
             wx.setStorageSync('userInfo',e.detail.userInfo);
             //插入登录的用户的相关信息到数据库
@@ -48,7 +48,7 @@ Page({
                     'content-type': 'application/json'
                 },
                 success: function (res) {
-                    console.log("插入小程序登录用户信息成功！");
+                    //console.log("插入小程序登录用户信息成功！");
                 }
             });
             //授权成功后，跳转进入小程序首页
@@ -64,7 +64,7 @@ Page({
                 confirmText: '返回授权',
                 success: function (res) {
                     if (res.confirm) {
-                        console.log('用户点击了“返回授权”')
+                        //console.log('用户点击了“返回授权”')
                     }
                 }
             })
@@ -81,8 +81,8 @@ Page({
                 'content-type': 'application/json'
             },
             success: function (res) {
-                console.log('---------- index.js.success()  line:83()  res=');
-                console.dir(res);
+                //console.log('---------- index.js.success()  line:83()  res=');
+                //console.dir(res);
                 var userInfo = {
                     nickName: res.data.nickName,
                     avatarUrl: res.data.avatarUrl,

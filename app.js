@@ -8,9 +8,9 @@ App({
         var userInfo = wx.getStorageSync('userInfo')||{};
         var that = this;
         that.globalData.backgroundAudioManager = wx.getBackgroundAudioManager();
-        console.log('---------- app.js.onLaunch()  line:11()  id='); console.dir(id);
+        //console.log('---------- app.js.onLaunch()  line:11()  id='); //console.dir(id);
         if (id) {
-            console.log('---------- app.js.onLaunch()  line:13()  id='); console.dir(id);
+            //console.log('---------- app.js.onLaunch()  line:13()  id='); //console.dir(id);
             that.globalData.id = id;
             that.globalData.userInfo = userInfo;
 
@@ -18,7 +18,7 @@ App({
             //登录
             wx.login({
                 success: res => {
-                    console.log('---------- app.js.success()  line:21()  res='); console.dir(res);
+                    //console.log('---------- app.js.success()  line:21()  res='); //console.dir(res);
                     wx.request({
                         url: asurl + 'user/login',
                         data: {
@@ -28,7 +28,7 @@ App({
                             'content-type': 'application/json'
                         },
                         success: function (res) {
-                            console.log('---------- app.js.success()  line:31()  res='); console.dir(res);
+                            //console.log('---------- app.js.success()  line:31()  res='); //console.dir(res);
                             that.globalData.id = res.data.data.id;
                             that.globalData.openid = res.data.data.openid;
                             wx.setStorageSync('id', res.data.data.id);
@@ -97,11 +97,11 @@ App({
         // }
         // var list = this.globalData.playtype == 1 ? this.globalData.list_am : this.globalData.list_dj;
         // var index = this.globalData.playtype == 1 ? this.globalData.index_am : this.globalData.index_dj;
-        console.log('---------- app.js.nextplay()  line:98()  t='); console.dir(t);
-        console.log('---------- app.js.nextplay()  line:99()  cb='); console.dir(cb);
-        console.log('---------- app.js.nextplay()  line:100()  pos='); console.dir(pos);
-        console.log('---------- app.js.nextplay()  line:99()  this.globalData.list_am='); console.dir(this.globalData.list_am);
-        console.log('---------- app.js.nextplay()  line:100()  this.globalData.index_am='); console.dir(this.globalData.index_am);
+        //console.log('---------- app.js.nextplay()  line:98()  t='); //console.dir(t);
+        //console.log('---------- app.js.nextplay()  line:99()  cb='); //console.dir(cb);
+        //console.log('---------- app.js.nextplay()  line:100()  pos='); //console.dir(pos);
+        //console.log('---------- app.js.nextplay()  line:99()  this.globalData.list_am='); //console.dir(this.globalData.list_am);
+        //console.log('---------- app.js.nextplay()  line:100()  this.globalData.index_am='); //console.dir(this.globalData.index_am);
         var list = this.globalData.list_am;
         var index = this.globalData.index_am;
 
@@ -115,8 +115,8 @@ App({
         // this.globalData.curplay = (this.globalData.playtype == 1 ? list[index] : list[index].mainSong) || this.globalData.curplay;
 
         this.globalData.curplay = list[index];
-        console.log('---------- app.js.nextplay()  line:116()  this.globalData.staredlist='); console.dir(this.globalData.staredlist);
-        console.log('---------- app.js.nextplay()  line:117()  this.globalData.curplay='); console.dir(this.globalData.curplay);
+        //console.log('---------- app.js.nextplay()  line:116()  this.globalData.staredlist='); //console.dir(this.globalData.staredlist);
+        //console.log('---------- app.js.nextplay()  line:117()  this.globalData.curplay='); //console.dir(this.globalData.curplay);
         // if (this.globalData.staredlist.indexOf(this.globalData.curplay.id) != -1) {
         //     this.globalData.curplay.starred = true;
         //     this.globalData.curplay.st = true;
@@ -152,9 +152,9 @@ App({
     seekmusic: function (type, seek, cb) {
         //音乐跳转
         //参数是类型、位置、
-        // console.log('---------- app.js.seekmusic()  line:137()  type='); console.dir(type);
-        // console.log('---------- app.js.seekmusic()  line:138()  seek='); console.dir(seek);
-        // console.log('---------- app.js.seekmusic()  line:139()  cb='); console.dir(cb);
+        // //console.log('---------- app.js.seekmusic()  line:137()  type='); //console.dir(type);
+        // //console.log('---------- app.js.seekmusic()  line:138()  seek='); //console.dir(seek);
+        // //console.log('---------- app.js.seekmusic()  line:139()  cb='); //console.dir(cb);
         var that = this;
         var m = this.globalData.curplay;
         if (!m.id) return;
@@ -221,7 +221,7 @@ App({
         //获取歌曲的url
         //参数suc成功函数、err失败函数
         var that = this;
-        var m = that.globalData.curplay
+        var m = that.globalData.curplay;
         wx.request({
             url: bsurl + 'song/url',
             data: {
@@ -276,11 +276,13 @@ App({
         playtype: 1,            //切换新歌曲  3:跳转原歌曲
         curplay: {id:''},       //当前播放歌曲
         shuffle: 1,
-        list_am: [],        //播放列表 隐藏的真正的播放列表
-        list_sf: [],        //播放列表 显示出来的
+        list_am: [],            //播放列表 隐藏的真正的播放列表
+        list_sf: [],            //播放列表 显示出来的
         staredlist: [],
         loved_music: [[], []],
         backgroundAudioManager: {},
-        index_am:'',    //正在播放的歌曲对应隐藏的真正的播放列表中的下标
+        index_am:'',            //正在播放的歌曲对应隐藏的真正的播放列表中的下标
+        order:  0,                            //0代表降序
+        field_name:"created_at"            //0收藏时间 1歌曲名称
     }
 })

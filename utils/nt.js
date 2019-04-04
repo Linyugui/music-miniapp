@@ -23,9 +23,9 @@ var isDebug = true;
 function addNotification(name, selector, observer) {
     if (name && selector) {
         if(!observer){
-            console.log("addNotification Warning: no observer will can't remove notice");
+            //console.log("addNotification Warning: no observer will can't remove notice");
         }
-        console.log("addNotification:" + name);
+        //console.log("addNotification:" + name);
         var newNotice = {
             name: name,
             selector: selector,
@@ -35,7 +35,7 @@ function addNotification(name, selector, observer) {
         addNotices(newNotice);
 
     } else {
-        console.log("addNotification error: no selector or name");
+        //console.log("addNotification error: no selector or name");
     }
 }
 
@@ -93,7 +93,7 @@ function addNotices(newNotice) {
  */
 
 function removeNotification(name,observer) {
-    console.log("removeNotification:" + name);
+    //console.log("removeNotification:" + name);
     for (var i = 0; i < __notices.length; i++){
       var notice = __notices[i];
       if(notice.name === name){
@@ -117,9 +117,9 @@ function removeNotification(name,observer) {
  */
 
 function postNotificationName(name, info) {
-    console.log("postNotificationName:" + name);
+    //console.log("postNotificationName:" + name);
     if(__notices.length == 0){
-      console.log("postNotificationName error: u hadn't add any notice.");
+      //console.log("postNotificationName error: u hadn't add any notice.");
       return;
     }
 

@@ -1,26 +1,14 @@
 var app = getApp();
-var bsurl = require('../../utils/csurl.js');
+var asurl = require('../../utils/bsurl.js');
 var nt = require("../../utils/nt.js");
 var id2Url = require('../../utils/base64md5.js');
-var common = require('../../utils/util.js');
+var util = require('../../utils/util.js');
 Page({
     data: {
         list: [],
-        curplay: {},
-        pid: 0,
         cover: '',
-        music: {},
-        playing: false,
-        playtype: 1,
         loading: true,
-        toplist: false,
-        user: wx.getStorageSync('user') || {}
-    },
-    toggleplay: function () {
-        common.toggleplay(this, app);
-    },
-    playnext: function (e) {
-        app.nextplay(e.currentTarget.dataset.pt)
+        userInfo: app.globalData.userInfo,
     },
     music_next: function (r) {
         this.setData({
@@ -51,35 +39,25 @@ Page({
         nt.removeNotification("music_next", this)
         nt.removeNotification("music_toggle", this)
     },
-    lovesong: function () {
-        common.songheart(this, app, 0, (this.data.playtype == 1 ? this.data.music.st : this.data.music.starred));
-    },
-    onLoad: function (options) {
-        var that = this
+    onLoad: function () {
+        var that = this;
         wx.request({
-            url: bsurl + 'playlist/detail',
+            url: asurl + 'album/love-album',
             data: {
-                id: options.pid,
+                user_id: app.globalData.id,
                 limit: 1000
             },
             success: function (res) {
-                var canplay = [];
-                console.log('---------- index.js.success()  line:68()  res.data='); console.dir(res.data);
-                for (let i = 0; i < res.data.playlist.tracks.length; i++) {
-                    if (res.data.privileges[i].st >= 0) {
-                        canplay.push(res.data.playlist.tracks[i])
-                    }
-                }
+                //console.log('---------- index.js.success()  line:63()  res=');
+                //console.dir(res);
+                var list = res.data.data;
                 that.setData({
-                    list: res.data,
-                    canplay: canplay,
-                    toplist: (options.from == 'stoplist' ? true : false),
-                    cover: id2Url.id2Url('' + (res.data.playlist.coverImgId_str || res.data.playlist.coverImgId))
+                    loading: false,
+                    list: list,
                 });
+                //console.log('---------- index.js.success()  line:84()  list=');
+                //console.dir(list);
 
-                wx.setNavigationBarTitle({
-                    title: res.data.playlist.name
-                })
             }, fail: function (res) {
                 wx.navigateBack({
                     delta: 1
@@ -87,41 +65,51 @@ Page({
             }
         });
     },
-
-    userplaylist: function (e) {
-        var userid = e.currentTarget.dataset.userid;
-        wx.redirectTo({
-            url: '../user/index?id=' + userid
-        })
-    },
-    playall: function (event) {
-        this.setplaylist(this.data.canplay[0], 0);
-        app.seekmusic(1)
-
-    },
-    setplaylist: function (music, index) {
-        //设置播放列表，设置当前播放音乐，设置当前音乐在列表中位置
-        app.globalData.curplay = app.globalData.curplay.id != music.id ? music : app.globalData.curplay;
-        app.globalData.index_am = index;//event.currentTarget.dataset.idx;
-        app.globalData.playtype = 1;
-        var shuffle = app.globalData.shuffle;
-        app.globalData.list_sf = this.data.canplay;//this.data.list.tracks;
-        app.shuffleplay(shuffle);
-        app.globalData.globalStop = false;
-    },
-    playmusic: function (event) {
-        console.log('---------- index.js.playmusic()  line:113()  event='); console.dir(event);
-        let music = event.currentTarget.dataset.idx;
-        let st = event.currentTarget.dataset.st;
-        if (st * 1 < 0) {
-            wx.showToast({
-                title: '歌曲已下架',
-                icon: 'success',
-                duration: 2000
-            });
-            return;
-        }
-        music = this.data.list.playlist.tracks[music];
-        this.setplaylist(music, event.currentTarget.dataset.idx)
+    cancellovealbum: function (e) {
+        var that = this;
+        var list = that.data.list;
+        var re = e.currentTarget.dataset.re;
+        var idx = e.currentTarget.dataset.idx;
+        wx.showModal({
+            title: '提示',
+            content: '是否要删除收藏的专辑',
+            success: function (res) {
+                if (res.cancel) {
+                    //console.log('用户点击了取消');
+                    return;
+                } else {
+                    wx.showLoading({
+                        title: '取消收藏...',
+                    });
+                    var data = {
+                        user_id: app.globalData.id,
+                        album_id: re.id,
+                    };
+                    wx.request({
+                        url: asurl + "album/del-love-album",
+                        method: "GET",
+                        data: data,
+                        success: function () {
+                            wx.hideLoading();
+                            wx.showToast({
+                                title: '取消成功',//提示文字
+                                duration: 1000,//显示时长
+                                icon: 'success',
+                            })
+                            app.globalData.loved_music[1].splice(app.globalData.loved_music[1].indexOf(re.id), 1);
+                            list.splice(idx, 1);
+                            that.setData({
+                                list: list,
+                            })
+                        },
+                        fail: function () {
+                            wx.hideLoading();
+                        }
+                    })
+                }
+            }
+        });
     }
+
+
 });

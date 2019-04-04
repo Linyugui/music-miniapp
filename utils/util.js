@@ -57,12 +57,14 @@ function toggleplay(that, app, cb) {
     if (that.data.disable) {
         return;
     }
+    console.log('---------- util.js.toggleplay()  line:60()  that.data.playing='); console.dir(that.data.playing);
     if (that.data.playing) {
-        console.log("暂停播放");
+        //console.log("暂停播放");
         that.setData({playing: false});
+
         app.stopmusic(1);
     } else {
-        console.log("继续播放")
+        //console.log("继续播放")
         that.setData({
             playing: true
         });
@@ -105,7 +107,7 @@ function playAlrc(that, app) {
             playing: playing,
             downloadPercent: downloadPercent
         })
-        //console.log('---------- util.js.()  line:106()  res='); console.dir(res);
+        //console.log('---------- util.js.()  line:106()  res='); //console.dir(res);
     });
     app.globalData.backgroundAudioManager.onEnded(function () {
         app.nextplay(1);
@@ -144,7 +146,7 @@ function playAlrc(that, app) {
 }
 
 function lovesong(that, app, song, st, idx, list, cb) {
-    console.log('---------- util.js.lovesong()  line:147()  song='); console.dir(song);
+    //console.log('---------- util.js.lovesong()  line:147()  song='); //console.dir(song);
     wx.showLoading({
         title: '正在收藏...',
     });

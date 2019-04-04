@@ -1,39 +1,56 @@
-<import src="../../utils/playlist.wxml"/>
-<import src="../../utils/pageplay.wxml"/>
-<template is="pp" data="{{music:music,playing:playing,playtype:playtype}}"/>
+<import src="../../utils/image.wxml"/>
 <view id="plist-header">
-    <view class="blurbg" style="background-image:url({{cover}})" id="plh-filterbg"></view>
+    <view class="blurbg" style="background-image:url({{list.length?list[0].picUrl+'?param=100y100':''}})" id="plh-filterbg"></view>
     <view id="plh-main">
         <view id="plh-cover">
-            <image class="music_cover" src="{{cover}}"/>
+            <image class="music_cover" src="{{list.length?list[0].picUrl+'?param=100y100':''}}"/>
 
         </view>
         <view id="plh-cnt">
-            <text id="music_h_name">{{list.playlist.name||" "}}</text>
-            <view data-userid="{{list.playlist.creator.userId}}" wx:if="{{list}}">
-                <image id="user_ava" class="user_avator" src="{{list.playlist.creator.avatarUrl}}"/>
-                <text>{{list.playlist.creator.nickname||" "}}</text>
+            <text id="music_h_name">收藏的专辑</text>
+            <view>
+                <image id="user_ava" class="user_avator" src="{{userInfo.avatarUrl||''}}"/>
+                <text>{{userInfo.nickName||""}}</text>
             </view>
         </view>
     </view>
 
 </view>
 <view class="plist-detail page_pp">
-    <block wx:if="{{list.playlist.tracks.length}}">
-        <view id="playall" bindtap="playall" class="flexlist flex-center">
+    <block wx:if="{{list.length}}">
+        <view id="playall" class="flexlist flex-center">
             <view class="flexleft flexnum">
                 <image src="../../images/pl-playall.png" mode="widthFix" />
             </view>
             <view class="flexlist">
-                <text id="pa-count">播放全部 <text> (共{{list.playlist.trackCount}}首)</text>
+                <text id="pa-count">共{{list.length}}张专辑
                 </text>
             </view>
         </view>
-
-        <template is="playlist" data="{{list:list.playlist.tracks,privileges:list.privileges,curplay:curplay}}"/>
-
+        <view wx:for="{{list}}" class="albums" wx:for-item="re" wx:for-index="idx" wx:key="{{re.id}}">
+            <navigator url="../album/index?pid={{re.id}}&from=album" class="flexlist flex-image">
+                <view class="flexleft fl-image">
+                    <image src="{{re.picUrl}}?param=100y100" class="album_cover"/>
+                    <image class="albums_cover" src="../../images/a6l.png"/>
+                </view>
+                <view class="flexlist">
+                    <view class="flexmain">
+                        <view>{{re.name}}</view>
+                        <view class="relistdes">{{re.artist_name}}</view>
+                    </view>
+                    <view class="flexact">
+                        <view catchtap="cancellovealbum" data-re="{{re}}" data-idx="{{idx}}" class="fa_list fa_mv">
+                            <image src="../../images/music_liked.png" mode="widthFix"/>
+                        </view>
+                    </view>
+                </view>
+            </navigator>
+        </view>
     </block>
-    <block wx:if="{{!list.playlist.tracks.length}}">
+    <block wx:else>
+        <view class="cntloading">暂无数据</view>
+    </block>
+    <block wx:if="{{loading}}">
         <view class="cntloading">加载中...
             <view>
                 <text class="cl1"></text>

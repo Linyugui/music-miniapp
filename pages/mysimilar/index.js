@@ -1,20 +1,19 @@
 var app = getApp();
 var bsurl = require('../../utils/csurl.js');
+var asurl = require('../../utils/bsurl.js');
 var nt = require("../../utils/nt.js");
 var util = require('../../utils/util.js');
 Page({
     data: {
         list: [],
         curplay: {},
-        pid: 0,
         cover: '',
         music: {},
         playing: false,
         playtype: 1,
         loading: true,
         toplist: false,
-        user: wx.getStorageSync('user') || {},
-        canplay:[],
+        userInfo: app.globalData.userInfo,
     },
     toggleplay: function () {
         util.toggleplay(this, app);
@@ -48,44 +47,36 @@ Page({
         })
     },
     onHide: function () {
-        nt.removeNotification("music_next", this)
+        nt.removeNotification("music_next", this);
         nt.removeNotification("music_toggle", this)
     },
 
     onLoad: function (options) {
-        var that = this
+        var that = this;
         wx.request({
-            url: bsurl + 'playlist/detail',
+            url: asurl + 'similarsong/daily-similar-song',
             data: {
-                id: options.pid,
-                limit: 1000
+                user_id: app.globalData.id,
             },
             success: function (res) {
                 var canplay = [];
-                var love_song = app.globalData.loved_music[0];
-                // //console.log('---------- index.js.success()  line:68()  res.data='); //console.dir(res.data);
-                var length = res.data.playlist.tracks.length;
+                var list = res.data.data;
+                var length = list.length;
                 for (let i = 0; i < length; i++) {
-                    if (love_song.indexOf(res.data.playlist.tracks[i].id) != -1) {
-                        res.data.playlist.tracks[i].love = 1;
-                    } else {
-                        res.data.playlist.tracks[i].love = 0;
-                    }
-                    if (res.data.privileges[i].st >= 0) {
-                        canplay.push(res.data.playlist.tracks[i])
+                    if (list[i].st >= 0) {
+                        canplay.push(list[i])
                     }
                 }
                 that.setData({
-                    list: res.data,
+                    loading:false,
+                    list: list,
                     canplay: canplay,
-                    toplist: (options.from == 'stoplist' ? true : false),
-                    cover: res.data.playlist.coverImgUrl + '?param=100y100',
+                    cover:list.length?list[0].picUrl+"?param=100y100":"",
+                    // cover: res.data[0].coverImgUrl + '',
                     // cover: id2Url.id2Url('' + (res.data.playlist.coverImgId_str || res.data.playlist.coverImgId))
                 });
+                //console.log('---------- index.js.success()  line:84()  list='); //console.dir(list);
 
-                wx.setNavigationBarTitle({
-                    title: res.data.playlist.name
-                })
             }, fail: function (res) {
                 wx.navigateBack({
                     delta: 1
@@ -109,10 +100,8 @@ Page({
         app.globalData.globalStop = false;
     },
     playmusic: function (event) {
-        //console.log('---------- index.js.playmusic()  line:113()  event=');
-        //console.dir(event);
-        let music = event.currentTarget.dataset.idx;
-        let st = event.currentTarget.dataset.st;
+        var idx = event.currentTarget.dataset.idx;
+        var st = event.currentTarget.dataset.st;
         if (st * 1 < 0) {
             wx.showToast({
                 title: '歌曲已下架',
@@ -121,34 +110,59 @@ Page({
             });
             return;
         }
-        music = this.data.list.playlist.tracks[music];
-        this.setplaylist(music, event.currentTarget.dataset.idx)
-    },
-    lovesong: function (e) {
-        var that = this;
-        var list = that.data.list;
-        var playlist = list.playlist.tracks;
-        var song = e.currentTarget.dataset.re;
-        var idx = e.currentTarget.dataset.idx;
-        var st = list.privileges[idx].st;
-        util.lovesong(that, app, song, st, idx, playlist, function () {
-            that.setData({
-                list: list
-            })
+        var song = this.data.list[idx];
+        this.setplaylist(song, idx);
+        wx.navigateTo({
+            url:'../playing/index?id='+song.id+'&br=128000'
         })
-
     },
+
     cancellovesong: function (e) {
         var that = this;
         var list = that.data.list;
-        var playlist = list.playlist.tracks;
-        var song = e.currentTarget.dataset.re;
+        var re = e.currentTarget.dataset.re;
         var idx = e.currentTarget.dataset.idx;
-        util.cancellovesong(that, app, song, idx, playlist, function () {
-            that.setData({
-                list: list
-            })
-        })
+        wx.showModal({
+            title: '提示',
+            content: '是否要删除收藏的歌曲',
+            success: function (res) {
+                if (res.cancel) {
+                    //console.log('用户点击了取消');
+                    return ;
+                }
+                else{
+                    wx.showLoading({
+                        title: '取消收藏...',
+                    });
+                    var data = {
+                        user_id: app.globalData.id,
+                        song_id: re.id,
+                    };
+                    wx.request({
+                        url: asurl + "song/del-love-song",
+                        method: "GET",
+                        data: data,
+                        success: function () {
+                            wx.hideLoading();
+                            wx.showToast({
+                                title: '取消成功',//提示文字
+                                duration:1000,//显示时长
+                                icon:'success',
+                            })
+                            app.globalData.loved_music[0].splice(app.globalData.loved_music[0].indexOf(re.id), 1);
+                            list.splice(idx,1);
+                            that.setData({
+                                list: list
+                            })
+                        },
+                        fail: function () {
+                            wx.hideLoading();
+                        }
+                    })
+                }
+            }
+        });
+
 
     },
 });

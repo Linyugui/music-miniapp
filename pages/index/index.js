@@ -52,7 +52,7 @@ Page({
             playtype: app.globalData.playtype,
         });
         // var user = wx.getStorageSync('user');
-        // console.log('---------- index.js.onShow()  line:85()  user='); console.dir(user);
+        // //console.log('---------- index.js.onShow()  line:85()  user='); //console.dir(user);
         this.init() && this.data.rec.loading;
     },
 
@@ -71,12 +71,12 @@ Page({
                     limit: 6
                 },
                 success: function (res) {
-                    // console.log('---------- index.js.success()  line:218()  res='); console.dir(res);
+                    // //console.log('---------- index.js.success()  line:218()  res='); //console.dir(res);
                     callback(null, res.data.result)
                 }
             })
         }, function (err, results) {
-            // console.log(err);
+            // //console.log(err);
             rec.loading = true;
             rec.re = results;
             that.setData({

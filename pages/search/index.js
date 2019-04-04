@@ -92,7 +92,7 @@ Page({
         this.search(e.detail.value.name)
     },
     onReachBottom: function (e) {
-        console.log('---------- index.js.onReachBottom()  line:95()  e='); console.dir(e);
+        //console.log('---------- index.js.onReachBottom()  line:95()  e='); //console.dir(e);
         var index = this.data.tab.index;
         var tl = this.data.tabs,
             that = this;
@@ -155,7 +155,7 @@ Page({
                         },
                         method: 'GET',
                         success:function (res) {
-                            console.log('---------- index.js.success()  line:160()  res.data='); console.dir(res.data);
+                            //console.log('---------- index.js.success()  line:160()  res.data='); //console.dir(res.data);
                             res.data.songCount = songCount;
                             var songs = res.data.songs;
                             for (var i = 0, len = songs.length; i < len; i++) {
@@ -209,7 +209,7 @@ Page({
                 var size = res.songCount || res.albumCount;
                 size = size ? size : 0;
                 curtab.none = curtab.offset >= size ? true : false;
-                console.log(size, curtab.offset)
+                //console.log(size, curtab.offset)
                 tl[index] = curtab;
                 that.setData({
                     tabs: tl
@@ -250,8 +250,8 @@ Page({
                         q: res.result,
                     },
                     success(res) {
-                        console.log('---------- index.js.success()  line:205()  res=');
-                        console.dir(res);
+                        //console.log('---------- index.js.success()  line:205()  res=');
+                        //console.dir(res);
                         if (res.data.length != 0) {
                             that.setData({
                                 value: res.data[0].title,

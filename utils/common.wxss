@@ -116,11 +116,12 @@ background-image:linear-gradient(rgba(0,0,0,0),rgba(0,0,0,.5));opacity: .5}
 .tl_info .tli_des{color: #888;font-size: 24rpx}
 
 .flexlist .flexlist{flex: 1;padding:10rpx 10rpx 10rpx 0;margin:0;align-items: center;margin-left: 0; box-sizing: border-box;overflow: hidden;line-height: 1.5;position: relative;border-bottom:1rpx solid #e1e2e3}
-
+.flexbutton {padding:10rpx 15rpx;margin:0;align-items: center;margin-left: 0; box-sizing: border-box;overflow: hidden;line-height: 1.5;position: relative;border-bottom:1rpx solid #e1e2e3}
+.flexbutton image{padding-top: 5rpx}
 .cur,.cur .fm_tdes,.cur .flexmain view text,.cur .relistdes,.cur .flexnum{color:#28A173 !important }
 .flexlist{display: flex;align-items: stretch;}
 .flexlist .flexlist .flexleft{padding-right: 10rpx}
-.flexleft image{vertical-align: middle}
+.flexleft image{vertical-align: middle;width: 42rpx;height: 42rpx;}
 .flex-center{align-items: center}
 .flexnum{flex: 0 0 80rpx;font-size: 30rpx;color: #999; text-align: center}
 .flexact{ text-align: right;font-size: 24rpx;color: #999;display: flex}
@@ -156,7 +157,7 @@ background-image: linear-gradient(90deg, rgba(0,0,0,0),rgba(0,0,0,.2));max-width
 
 
 #playall{line-height: 36rpx;}
-#playall image{width: 36rpx;height: 36rpx;vertical-align: top}
+#playall image{width: 42rpx;height: 42rpx;vertical-align: top}
 #playall .flexnum{padding:20rpx 0}
 #pa-count text{color: #888;font-size: 24rpx}
 

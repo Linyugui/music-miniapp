@@ -1,18 +1,20 @@
 {
-  "pages":[
+  "pages": [
 
     "pages/index/index",
     "pages/search/index",
-
     "pages/me/index",
     "pages/mysong/index",
+    "pages/mysimilar/index",
     "pages/myalbum/index",
     "pages/playlist/index",
     "pages/playing/index",
     "pages/authorize/index",
     "pages/album/index"
   ],
-  "requiredBackgroundModes": ["audio"],
+  "requiredBackgroundModes": [
+    "audio"
+  ],
   "window": {
     "navigationBarTextStyle": "white",
     "navigationBarTitleText": "Music",
@@ -30,10 +32,11 @@
         "iconPath": "images/cm2_btm_icn_discovery.png",
         "selectedIconPath": "images/cm2_btm_icn_discovery_prs.png",
         "text": "首页"
-      },{
+      },
+      {
         "pagePath": "pages/search/index",
-        "iconPath": "images/cm2_btm_icn_discovery.png",
-        "selectedIconPath": "images/cm2_btm_icn_discovery_prs.png",
+        "iconPath": "images/cm2_btm_icn_find.png",
+        "selectedIconPath": "images/cm2_btm_icn_find_prs.png",
         "text": "搜索"
       },
       {
@@ -50,5 +53,6 @@
     "uploadFile": 10000,
     "downloadFile": 10000
   },
-  "debug": true
+  "debug": true,
+  "sitemapLocation": "sitemap.json"
 }

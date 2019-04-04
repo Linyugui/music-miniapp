@@ -31,7 +31,7 @@
                 <view class="arrow"></view>
             </view>
         </navigator>
-        <navigator url="../mylike/index" class="mn_list">
+        <navigator url="../mysimilar/index" class="mn_list">
             <view class="mn_ico">
                 <template is="image" data="{{src:'../../images/cm2_lay_icn_similar_new@2x.png',width:60}}"/>
             </view>

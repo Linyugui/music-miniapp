@@ -9,8 +9,8 @@
         <view id="plh-cnt">
             <text id="music_h_name">收藏的单曲</text>
             <view>
-                <image id="user_ava" class="user_avator" src="{{userInfo.avatarUrl}}"/>
-                <text>{{userInfo.nickName||" "}}</text>
+                <image id="user_ava" class="user_avator" src="{{userInfo.avatarUrl||''}}"/>
+                <text>{{userInfo.nickName||""}}</text>
             </view>
         </view>
     </view>
@@ -18,36 +18,73 @@
 </view>
 <view class="plist-detail page_pp">
     <block wx:if="{{list.length}}">
-        <view id="playall" bindtap="playall" class="flexlist flex-center">
-            <view class="flexleft flexnum">
+        <view id="playall"  class="flexlist flex-center">
+            <view class="flexleft flexnum" hidden="{{more}}" bindtap="playall">
                 <image src="../../images/pl-playall.png" mode="widthFix" />
             </view>
-            <view class="flexlist">
+            <view class="flexleft flexnum" hidden="{{!more||selectall}}" catchtap="selectall">
+                <image src="../../images/pl-radio.png" mode="widthFix" />
+            </view>
+            <view class="flexleft flexnum" hidden="{{!more||!selectall}}" catchtap="selectall">
+                <image src="../../images/pl-radio-selected.png" mode="widthFix" />
+            </view>
+            <view class="flexlist" hidden="{{more}}" bindtap="playall">
                 <text id="pa-count">播放全部 <text> (共{{list.length}}首)</text>
                 </text>
             </view>
+            <view class="flexlist" hidden="{{!more||selectall}}" catchtap="selectall">
+                <text id="pa-count">全选</text>
+            </view>
+            <view class="flexlist" hidden="{{!more||!selectall}}" catchtap="selectall">
+                <text id="pa-count">全不选</text>
+            </view>
+
+
+            <view class="flexbutton" catchtap="orderby" hidden="{{more}}">
+                <image src="../../images/pl-more.png" mode="widthFix" />
+                <text>排序</text>
+            </view>
+            <view class="flexbutton" catchtap="selectmore" hidden="{{more}}">
+                <image src="../../images/pl-setting.png" mode="widthFix" />
+                <text>多选</text>
+            </view>
+            <view class="flexbutton" catchtap="cancellovesongs" hidden="{{!more}}">
+                <image src="../../images/pl-cancellove.png" mode="widthFix" />
+                <text>删除</text>
+            </view>
+            <view class="flexbutton" catchtap="selectmore" hidden="{{!more}}">
+                <image src="../../images/pl-cancel.png" mode="widthFix" />
+                <text>完成</text>
+            </view>
+
         </view>
 
         <block wx:for-items="{{list}}"  wx:for-index="idx"  wx:for-item="re" wx:key="{{re.id}}">
             <view class="songs {{re.id===curplay?'cur':''}} {{re.st*1<0?'view-disable':''}} {{re.id}}">
                 <view hover-class="view-hover"
-                           bindtap="playmusic" data-idx="{{idx}}" data-st="{{re.st}}">
+                           bindtap="selectmusic" data-idx="{{idx}}" data-st="{{re.st}}" data-id="{{re.id}}" data-pl="{{re.pl}}">
                     <view class="flexlist flex-center">
-                        <view class="flexleft flexnum ">
+                        <view class="flexleft flexnum" hidden="{{more}}">
                             <block wx:if="{{re.id===curplay}}">
                                 <template is="image" data="{{src:'../../images/aal.png',width:36}}"/>
                             </block>
                             <block wx:else>
-                                <text class="{{toplist&&idx<3?'topindex':''}}">{{idx+1}}</text>
+                                <text>{{idx+1}}</text>
                             </block>
+                        </view>
+                        <view class="flexleft flexnum"  hidden="{{!more||re.select}}">
+                            <image src="../../images/pl-radio.png" mode="widthFix"/>
+                        </view>
+                        <view class="flexleft flexnum" hidden="{{!more||!re.select}}">
+                            <image src="../../images/pl-radio-selected.png" mode="widthFix"/>
                         </view>
                         <view class="flexlist">
                             <view class="flexmain">
                                 <view>{{re.name}}</view>
                                 <view class="relistdes">{{re.artist_name}}-{{re.album_name}}</view>
                             </view>
-                            <view class="flexact">
-                                <view catchtap="cancellovesong" data-re="{{re}}" data-idx="{{idx}}" class="fa_list fa_mv">
+                            <view class="flexact" hidden="{{more}}">
+                                <view catchtap="cancellovesong" data-id="{{re.id}}" data-idx="{{idx}}" class="fa_list fa_mv">
                                     <image src="../../images/music_liked.png" mode="widthFix"/>
                                 </view>
                             </view>
@@ -58,7 +95,10 @@
         </block>
 
     </block>
-    <block wx:if="{{!list.length}}" >
+    <block wx:else>
+        <view class="cntloading">暂无数据</view>
+    </block>
+    <block wx:if="{{loading}}" >
         <view class="cntloading">加载中...
             <view>
                 <text class="cl1"></text>

@@ -2,8 +2,8 @@
 
 <template name="playlist">
     <block wx:if="{{privileges}}" wx:for-items="{{list}}" wx:for-index="idx" wx:key="{{item.id}}" wx:for-item="re">
-        <view class="songs {{re.id===curplay?'cur':''}} {{privileges[idx].st*1<0?'view-disable':''}}">
-            <navigator hover-class="{{privileges[idx].st<0?'none':''}}"
+        <view class="songs {{re.id===curplay?'cur':''}} {{privileges[idx].st*1<0||privileges[idx].pl==0?'view-disable':''}}">
+            <navigator hover-class="{{privileges[idx].st<0||privileges[idx].pl==0?'none':''}}"
                        url="{{privileges[idx].st>=0?'../playing/index?id='+re.id+'&br='+privileges.maxbr:''}}"
                        bindtap="playmusic" data-idx="{{idx}}" data-st="{{privileges[idx].st}}">
                 <view class="flexlist flex-center">

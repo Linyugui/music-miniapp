@@ -29,7 +29,7 @@ Page({
                 ids: id
             },
             success: function (res) {
-                console.log('---------- index.js.success()  line:32()  res.data.songs[0]='); console.dir(res.data.songs[0]);
+                //console.log('---------- index.js.success()  line:32()  res.data.songs[0]='); //console.dir(res.data.songs[0]);
                 app.globalData.curplay = res.data.songs[0];
                 !app.globalData.list_am.length && (app.globalData.list_am.push(res.data.songs[0]));         //list_am？
                 !app.globalData.list_sf.length && (app.globalData.list_sf.push(res.data.songs[0]));          //list_sf？
@@ -213,9 +213,9 @@ Page({
 
     },
     playingtoggle: function (event) {
-        console.log('---------- index.js.playingtoggle()  line:262()  event='); console.dir(event);
-        // common.toggleplay(this, app, function () {
-        // })
+        console.log('---------- index.js.playingtoggle()  line:262()  event='); //console.dir(event);
+        common.toggleplay(this, app, function () {
+        })
     },
 
 })
