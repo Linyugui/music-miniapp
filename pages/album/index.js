@@ -1,5 +1,5 @@
 var app = getApp();
-var bsurl = require('../../utils/csurl.js');
+var bsurl = require('../../utils/bsurl.js');
 var util = require('../../utils/util.js');
 var nt = require("../../utils/nt.js");
 Page({
@@ -47,42 +47,59 @@ Page({
     onLoad: function (options) {
 
         var that = this;
-        var curloved_music = app.globalData.loved_music[0];
+        var love = app.globalData.loved_music[0];
         wx.request({
-            url: bsurl + 'album ',
+            url: bsurl + 'v1/album',
             data: {
                 id: options.pid
             },
             success: function (res) {
                 var re = res.data;
                 re.album.publishTime = util.formatTime(re.album.publishTime, 3);
-                var canplay = [];
-                var length = res.data.songs.length;
-                for (var i = 0; i < length; i++) {
-                    var r = res.data.songs[i];
-                    if (curloved_music.indexOf(r.id) != -1) {
-                        r.love = 1;
-                    }
-                    else {
-                        r.love = 0;
-                    }
-                    if (r.privilege.st > -1) {
-                        canplay.push(r)
-                    }
+                var songs = res.data.songs;
+                var list = [];
+                for (var i = 0, len = songs.length; i < len; i++) {
+                    list.push(songs[i].id);
                 }
-                that.setData({
-                    result: res.data,
-                    loading: false,
-                    canplay: canplay,
-                    share: {
-                        id: options.id,
-                        title: res.data.album.name + '-' + res.data.album.artist.name,
-                        des: res.data.album.description
-                    }
-                });
                 wx.setNavigationBarTitle({
                     title: res.data.album.name
+                });
+                wx.request({
+                    url: bsurl + 'v1/song/detail',
+                    data: {
+                        ids: list.toString(),
+                    },
+                    method: 'GET',
+                    success: function (res) {
+                        var canplay = [];
+                        var songs = res.data.songs;
+                        var privileges = res.data.privileges;
+                        for (var i = 0, len = songs.length; i < len; i++) {
+                            if (love.indexOf(songs[i].id) != -1) {
+                                songs[i].love = 1;
+                            }
+                            else {
+                                songs[i].love = 0;
+                            }
+                            if (privileges[i].st * 1 > -1 && privileges[i].pl * 1 > 0) {
+                                canplay.push(songs[i]);
+                            }
+                        }
+                        re.songs = songs;
+                        re.privileges = privileges;
+                        that.setData({
+                            result: re,
+                            loading: false,
+                            canplay: canplay,
+                        });
+                    },
+                    fail: function () {
+                        wx.navigateBack({
+                            delta: 1
+                        })
+                    }
                 })
+
             },
             fail: function (res) {
                 wx.navigateBack({
@@ -131,10 +148,23 @@ Page({
         app.globalData.globalStop = false;
     },
     playmusic: function (event) {
-        var that = this;
-        var music = event.currentTarget.dataset.idx;
+        // var that = this;
+        // var music = event.currentTarget.dataset.idx;
+        // var st = event.currentTarget.dataset.st;
+        // if (st * 1 < 0) {
+        //     wx.showToast({
+        //         title: '歌曲已下架',
+        //         icon: 'success',
+        //         duration: 2000
+        //     });
+        //     return;
+        // }
+        // music = this.data.result.songs[music];
+        // that.setplaylist(music, event.currentTarget.dataset.idx);
+        var idx = event.currentTarget.dataset.idx;
         var st = event.currentTarget.dataset.st;
-        if (st * 1 < 0) {
+        var pl = event.currentTarget.dataset.pl;
+        if (st * 1 < 0 || pl * 1 == 0) {
             wx.showToast({
                 title: '歌曲已下架',
                 icon: 'success',
@@ -142,8 +172,11 @@ Page({
             });
             return;
         }
-        music = this.data.result.songs[music];
-        that.setplaylist(music, event.currentTarget.dataset.idx)
+        var song = this.data.result.songs[idx];
+        this.setplaylist(song, idx);
+        wx.navigateTo({
+            url: '../playing/index?id=' + song.id + '&br=128000'
+        })
     },
     lovesong: function (e) {
         var that = this;
@@ -151,10 +184,11 @@ Page({
         var list = result.songs;
         var song = e.currentTarget.dataset.re;
         var idx = e.currentTarget.dataset.idx;
-        var st = song.st;
-        util.lovesong(that,app,song,st,idx,list,function () {
+        var st = e.currentTarget.dataset.st;
+        var pl = e.currentTarget.dataset.pl;
+        util.lovesong(that, app, song, st, pl, idx, list, function () {
             that.setData({
-                result:result
+                result: result
             })
         });
     },
@@ -164,9 +198,9 @@ Page({
         var list = result.songs;
         var song = e.currentTarget.dataset.re;
         var idx = e.currentTarget.dataset.idx;
-        util.cancellovesong(that,app,song,idx,list,function () {
+        util.cancellovesong(that, app, song, idx, list, function () {
             that.setData({
-                result:result
+                result: result
             })
         })
 

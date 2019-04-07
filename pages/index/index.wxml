@@ -1,15 +1,23 @@
 <import src="../../utils/loading.wxml"/>
 <import src="../../utils/image.wxml"/>
+
 <view id="main" class="page_pp">
     <!--个性推荐 -->
     <view class="tab_cnt">
-        <view wx:if="{{!rec.loading}}" id="album_loading">
 
-            正在初始化页面...
+        <swiper indicator-dots="true" autoplay="true" circular="true">
+            <swiper-item wx:for-items="{{banner}}" wx:key="{{item.targetId}}">
+                <image src="{{item.imageUrl}}" class="slide-image" width="750" height="290"></image>
+            </swiper-item>
+        </swiper>
+        <view wx:if="{{!rec.loading}}" class="album_loading">
+            <image src="../../images/cm2_discover_icn_start_big@2x.png"></image>
+            正在为您生成个性化推荐...
         </view>
         <view wx:else>
             <!--playlist-->
             <view class="st_title">
+                <image width="30" mode="widthFix" src="../../images/cm2_discover_icn_recmd@2x.png"/>
                 推荐歌单
             </view>
             <view class='flex-boxlist'>
@@ -17,32 +25,15 @@
                     <navigator url="../playlist/index?pid={{item.id}}&from=toplist">
                         <view class="cover">
                             <image src="{{item.picUrl}}?param=100y100" class="music_cover"/>
+                            <view class="img_playcount">
+                                <image src="../../images/p0.png"/>
+                                {{item.playCount}}
+                            </view>
                         </view>
                         <text class="name">{{item.name}}</text>
                     </navigator>
                 </view>
             </view>
-
-            <!--&lt;!&ndash;newsongs&ndash;&gt;-->
-            <!--<view class="st_title">-->
-                <!--最新音乐-->
-            <!--</view>-->
-            <!--<view class='flex-boxlist'>-->
-                <!--<view class="tl_cnt" wx:for-items="{{rec.re[1]}}" wx:for-index="idx" wx:if="{{idx<6}}" wx:for-item="re"-->
-                      <!--wx:key="{{re.id}}">-->
-                    <!--<navigator url="../playing/index?id={{re.id}}&br={{re.song.privilege.maxbr}}">-->
-                        <!--<view class="cover">-->
-                            <!--<image src="{{re.song.album.picUrl}}?param=100y100" class="music_cover"/>-->
-                            <!--<text>{{re.playcount}}</text>-->
-                        <!--</view>-->
-                        <!--<view class="tl_info">-->
-                            <!--<view>{{re.name}}</view>-->
-                            <!--<view class="tli_des">{{re.song.artists[0].name}}</view>-->
-                        <!--</view>-->
-                    <!--</navigator>-->
-                <!--</view>-->
-            <!--</view>-->
-
         </view>
     </view>
 </view>

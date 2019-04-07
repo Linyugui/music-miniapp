@@ -76,7 +76,8 @@ Page({
     playmusic: function (event) {
         var idx = event.currentTarget.dataset.idx;
         var st = event.currentTarget.dataset.st;
-        if (st * 1 < 0) {
+        var pl = event.currentTarget.dataset.pl;
+        if (st * 1 < 0 || pl * 1 == 0) {
             wx.showToast({
                 title: '歌曲已下架',
                 icon: 'success',
@@ -272,9 +273,9 @@ Page({
                 var tapIndex = res.tapIndex;
                 var orderlist = ['created_at', 'song_name', 'artist_name'];
                 if (app.globalData.field_name == orderlist[tapIndex]) {
-                    if(app.globalData.order == 0){
+                    if (app.globalData.order == 0) {
                         app.globalData.order = 1;
-                    }else{
+                    } else {
                         app.globalData.order = 0;
                     }
                 } else {
@@ -292,7 +293,7 @@ Page({
             }
         });
     },
-    httpsearch:function () {
+    httpsearch: function () {
         var that = this;
         wx.request({
             url: asurl + 'song/love-song-detail',
@@ -308,7 +309,7 @@ Page({
                 var length = list.length;
                 for (let i = 0; i < length; i++) {
                     list[i].select = false;
-                    if (list[i].st >= 0) {
+                    if (list[i].st * 1 >= 0 && list[i].pl * 1 > 0) {
                         canplay.push(list[i])
                     }
                 }

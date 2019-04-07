@@ -124,7 +124,7 @@ checkbox, radio{
 #pp_action .pa-baction{padding: 0 5rpx;flex:0 0 auto}
 #pageplay #pp_next{width: 60rpx;height: 60rpx}
 
-.page_pp{padding-bottom:100rpx; }
+.page_pp{}
 .page_loading{text-align: center;padding: 20rpx;display: block}
 
 

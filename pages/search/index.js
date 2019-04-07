@@ -23,10 +23,23 @@ Page({
         this.setData({value: name});
     },
     playmusic: function (event) {
-        let that = this;
-        let music = event.currentTarget.dataset.idx;
-        let st = event.currentTarget.dataset.st;
-        if (st * 1 < 0) {
+        // let that = this;
+        // let music = event.currentTarget.dataset.idx;
+        // let st = event.currentTarget.dataset.st;
+        // if (st * 1 < 0) {
+        //     wx.showToast({
+        //         title: '歌曲已下架',
+        //         icon: 'success',
+        //         duration: 2000
+        //     });
+        //     return;
+        // }
+        // music = this.data.tabs[0].relist.songs[music];
+        // app.globalData.curplay = music
+        var idx = event.currentTarget.dataset.idx;
+        var st = event.currentTarget.dataset.st;
+        var pl = event.currentTarget.dataset.pl;
+        if (st * 1 < 0 || pl * 1 == 0) {
             wx.showToast({
                 title: '歌曲已下架',
                 icon: 'success',
@@ -34,8 +47,12 @@ Page({
             });
             return;
         }
-        music = this.data.tabs[0].relist.songs[music];
-        app.globalData.curplay = music
+        var song = this.data.tabs[0].relist.songs[idx];
+        app.globalData.curplay = song
+        wx.navigateTo({
+            url: '../playing/index?id=' + song.id + '&br=128000'
+        })
+
     },
     search: function (name) {
         if (!name || (name == this.data.prevalue)) return;
@@ -51,7 +68,7 @@ Page({
         var curloved_music = app.globalData.loved_music[index];
         var that = this;
         tl = this.data.tabs;
-        this.httpsearch(name, curtab.offset, this.data.tab.tab, curloved_music,function (res) {
+        this.httpsearch(name, curtab.offset, this.data.tab.tab, curloved_music, function (res) {
             var resultarry = res.songs || res.albums || [];
             curtab.relist = res;
             curtab.loading = true;
@@ -106,7 +123,7 @@ Page({
         this.setData({
             tabs: tl
         })
-        this.httpsearch(this.data.prevalue, curtab.offset, this.data.tab.tab,curloved_music, function (res) {
+        this.httpsearch(this.data.prevalue, curtab.offset, this.data.tab.tab, curloved_music, function (res) {
             var resultarry = res.songs || res.albums || [];
             var size = res.songCount || res.albumCount;
             size = size ? size : 0;
@@ -115,7 +132,7 @@ Page({
             curtab.offset = curtab.offset + length;
             curtab.none = curtab.offset >= size ? true : false;
             curtab.relist.songs = curtab.relist.songs ? curtab.relist.songs.concat(resultarry) : null;
-            curtab.relist.privileges =curtab.relist.songs ?curtab.relist.privileges.concat(res.privileges):null;
+            curtab.relist.privileges = curtab.relist.songs ? curtab.relist.privileges.concat(res.privileges) : null;
             curtab.relist.albums = curtab.relist.albums ? curtab.relist.albums.concat(resultarry) : null;
             tl[that.data.tab.index] = curtab
             that.setData({
@@ -141,7 +158,7 @@ Page({
             },
             method: 'GET',
             success: function (res) {
-                if(type == 1&&res.data.result.songCount>0){
+                if (type == 1 && res.data.result.songCount > 0) {
                     var songs = res.data.result.songs;
                     var songCount = res.data.result.songCount;
                     var list = new Array();
@@ -149,13 +166,12 @@ Page({
                         list.push(songs[i].id);
                     }
                     wx.request({
-                        url:asurl+'v1/song/detail',
-                        data:{
-                            ids:list.toString(),
+                        url: asurl + 'v1/song/detail',
+                        data: {
+                            ids: list.toString(),
                         },
                         method: 'GET',
-                        success:function (res) {
-                            //console.log('---------- index.js.success()  line:160()  res.data='); //console.dir(res.data);
+                        success: function (res) {
                             res.data.songCount = songCount;
                             var songs = res.data.songs;
                             for (var i = 0, len = songs.length; i < len; i++) {
@@ -168,13 +184,13 @@ Page({
                             }
                             cb && cb(res.data);
                         },
-                        fail:function () {
+                        fail: function () {
                             err && err();
                         }
 
                     })
                 }
-                else{
+                else {
                     var albums = res.data.result.albums || [];
                     for (var i = 0, len = albums.length; i < len; i++) {
                         if (love.indexOf(albums[i].id) != -1) {
@@ -201,7 +217,7 @@ Page({
         var that = this;
         var tl = that.data.tabs;
         if (!curtab.loading) {
-            this.httpsearch(this.data.prevalue, curtab.offset, type, curloved_music,function (res) {
+            this.httpsearch(this.data.prevalue, curtab.offset, type, curloved_music, function (res) {
                 var resultarry = res.songs || res.albums || [];
                 curtab.loading = true;
                 curtab.relist = res;
@@ -293,8 +309,10 @@ Page({
         var list = tabs[index].relist.songs;
         var song = e.currentTarget.dataset.re;
         var idx = e.currentTarget.dataset.idx;
-        var st = tabs[index].relist.privileges[idx].st;
-        util.lovesong(that, app, song, st, idx, list, function () {
+        var st = e.currentTarget.dataset.st;
+        var pl = e.currentTarget.dataset.pl;
+
+        util.lovesong(that, app, song, st, pl, idx, list, function () {
             that.setData({
                 tabs: tabs
             })
@@ -334,7 +352,7 @@ Page({
         var list = tabs[index].relist.albums;
         var album = e.currentTarget.dataset.re;
         var idx = e.currentTarget.dataset.idx;
-        util.cancellovesong(that, app, album, idx, list, function () {
+        util.cancellovealbum(that, app, album, idx, list, function () {
             that.setData({
                 tabs: tabs
             })

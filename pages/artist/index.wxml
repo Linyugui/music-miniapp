@@ -1,0 +1,65 @@
+<import src="../../utils/playlist.wxml"/>
+<import src="../../utils/loading.wxml"/>
+<view id="artist_header">
+    <image src="../../images/cm2_default_artist_banner@2x.jpg"/>
+    <image src="{{art.artist.picUrl}}?param=750y750"/>
+</view>
+<view id="artis_tab" class="tab">
+    <view class="tab-item {{tab==1?'tbi-cur':''}}" data-t="1" catchtap="tabtype">
+        <text class="tbi-text">热门50</text>
+    </view>
+    <view class="tab-item {{tab==2?'tbi-cur':''}}" data-t="2" catchtap="tabtype">
+        <text class="tbi-text">专辑</text>
+    </view>
+    <view class="tab-item {{tab==3?'tbi-cur':''}}" data-t="3" catchtap="tabtype">
+        <text class="tbi-text">歌手信息</text>
+    </view>
+</view>
+<view id="art_main">
+    <view class="tab_cnt" hidden="{{tab!=1}}">
+        <template is="playlist" data="{{list:art.songs,privileges:result.privileges}}"/>
+        <template is="loading" wx:if="{{!loading}}"></template>
+    </view>
+    <view class="tab_cnt " hidden="{{tab!=2}}">
+        <view wx:for="{{album.hotAlbums}}" class="albums" wx:for-item="re" wx:key="{{re}}">
+            <navigator url="../album/index?pid={{re.id}}&from=album">
+                <view class="flexlist flex-image">
+                    <view class="flexleft fl-image">
+                        <image src="{{re.picUrl}}?param=100y100" class="music_cover"/>
+                        <image class="albums_cover" src="../../images/a6l.png"/>
+                    </view>
+                    <view class="flexlist">
+                        <view class="flexmain">
+                            <view>{{re.name}}
+                                <text wx:if="{{re.alias[0]}}">({{re.alias[0]}})</text>
+                            </view>
+                            <view class="relistdes">{{re.artist.name}}
+                                <text wx:if="{{re.artist.alias[re.artist.alias.length-1]}}">
+                                    ({{re.artist.alias[re.artist.alias.length-1]}})
+                                </text>
+                            </view>
+                        </view>
+                    </view>
+                </view>
+            </navigator>
+        </view>
+        <template is="loading" wx:if="{{!album.loading}}"></template>
+    </view>
+    <view class="tab_cnt" hidden="{{tab!=3}}">
+        <view wx:if="{{loading}}">
+            <view class="listheader">
+                <text>歌手简介</text>
+            </view>
+            <text class="artist_des">{{desc.briefDesc}}
+            </text>
+            <block wx:for-items="{{desc.introduction}}">
+                <view class="listheader">
+                    <text>{{item.ti}}</text>
+                </view>
+                <text class="artist_des">{{item.txt}}
+                </text>
+            </block>
+        </view>
+        <template is="loading" wx:else></template>
+    </view>
+</view>

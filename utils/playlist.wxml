@@ -1,11 +1,14 @@
 <import src="image.wxml"/>
 
 <template name="playlist">
-    <block wx:if="{{privileges}}" wx:for-items="{{list}}" wx:for-index="idx" wx:key="{{item.id}}" wx:for-item="re">
-        <view class="songs {{re.id===curplay?'cur':''}} {{privileges[idx].st*1<0||privileges[idx].pl==0?'view-disable':''}}">
-            <navigator hover-class="{{privileges[idx].st<0||privileges[idx].pl==0?'none':''}}"
-                       url="{{privileges[idx].st>=0?'../playing/index?id='+re.id+'&br='+privileges.maxbr:''}}"
-                       bindtap="playmusic" data-idx="{{idx}}" data-st="{{privileges[idx].st}}">
+    <!--<block wx:if="{{privileges}}" wx:for-items="{{list}}" wx:for-index="idx" wx:key="{{item.id}}" wx:for-item="re">-->
+    <block wx:for-items="{{list}}" wx:for-index="idx" wx:key="{{item.id}}" wx:for-item="re">
+        <view class="songs {{re.id===curplay?'cur':''}} {{privileges[idx].st*1<0||privileges[idx].pl*1==0?'view-disable':''}}">
+            <!--<navigator hover-class="{{privileges[idx].st<0||privileges[idx].pl==0?'none':''}}"-->
+                       <!--url="{{privileges[idx].st>=0?'../playing/index?id='+re.id+'&br='+privileges.maxbr:''}}"-->
+                       <!--bindtap="playmusic" data-idx="{{idx}}" data-st="{{privileges[idx].st}}">-->
+            <view hover-class="view-hover"
+                      bindtap="playmusic" data-idx="{{idx}}" data-st="{{privileges[idx].st}}" data-id="{{re.id}}" data-pl="{{privileges[idx].pl}}">
                 <view class="flexlist flex-center">
                     <view class="flexleft flexnum ">
                         <block wx:if="{{re.id===curplay}}">
@@ -23,50 +26,51 @@
                             <view class="relistdes">{{re.ar[0].name}}-{{re.al.name}}</view>
                         </view>
                         <view class="flexact">
-                            <view catchtap="lovesong" data-re="{{re}}" data-idx="{{idx}}" class="fa_list fa_mv" hidden="{{re.love==1}}">
+                            <view catchtap="lovesong" data-re="{{re}}" data-idx="{{idx}}" data-st="{{privileges[idx].st}}" data-id="{{re.id}}" data-pl="{{privileges[idx].pl}}" class="fa_list fa_mv" hidden="{{re.love==1}}">
                                 <image src="../../images/music_like.png" mode="widthFix"/>
                             </view>
-                            <view catchtap="cancellovesong" data-re="{{re}}" data-idx="{{idx}}" class="fa_list fa_mv" hidden="{{re.love==0}}">
+                            <view catchtap="cancellovesong" data-re="{{re}}" data-idx="{{idx}}" data-id="{{re.id}}" class="fa_list fa_mv" hidden="{{re.love==0}}">
                                 <image src="../../images/music_liked.png" mode="widthFix"/>
                             </view>
                         </view>
                     </view>
                 </view>
-            </navigator>
+            </view>
+            <!--</navigator>-->
         </view>
     </block>
-    <block wx:if="{{!privileges}}" wx:for-items="{{list}}" wx:for-index="idx" wx:key="{{re.id}}" wx:for-item="re">
-        <view class="songs {{re.id===curplay?'cur':''}} {{re.privilege.st*1<0?'view-disable':''}} {{re.id}}">
-            <navigator hover-class="{{re.privilege.st==-1?'none':''}}"
-                       url="{{re.privilege.st!=-1?'../playing/index?id='+re.id+'&br=128000':''}}"
-                       bindtap="playmusic" data-idx="{{idx}}" data-st="{{re.privilege.st}}">
-                <view class="flexlist flex-center">
-                    <view class="flexleft flexnum ">
-                        <block wx:if="{{re.id===curplay}}">
-                            <template is="image" data="{{src:'../../images/aal.png',width:36}}"/>
-                        </block>
-                        <block wx:else>
-                            <text class="{{toplist&&idx<3?'topindex':''}}">{{idx+1}}</text>
-                        </block>
-                    </view>
-                    <view class="flexlist">
-                        <view class="flexmain">
-                            <view>{{re.name}}
-                                <text wx:if="{{re.alia.length}}">（{{re.alia[0]}}）</text>
-                            </view>
-                            <view class="relistdes">{{re.ar[0].name}}-{{re.al.name}}</view>
-                        </view>
-                        <view class="flexact">
-                            <view catchtap="lovesong" data-re="{{re}}" data-idx="{{idx}}" class="fa_list fa_mv" hidden="{{re.love==1}}">
-                                <image src="../../images/music_like.png" mode="widthFix"/>
-                            </view>
-                            <view catchtap="cancellovesong" data-re="{{re}}" data-idx="{{idx}}" class="fa_list fa_mv" hidden="{{re.love==0}}">
-                                <image src="../../images/music_liked.png" mode="widthFix"/>
-                            </view>
-                        </view>
-                    </view>
-                </view>
-            </navigator>
-        </view>
-    </block>
+    <!--<block wx:if="{{!privileges}}" wx:for-items="{{list}}" wx:for-index="idx" wx:key="{{re.id}}" wx:for-item="re">-->
+        <!--<view class="songs {{re.id===curplay?'cur':''}} {{re.privilege.st*1<0?'view-disable':''}} {{re.id}}">-->
+            <!--<navigator hover-class="{{re.privilege.st==-1?'none':''}}"-->
+                       <!--url="{{re.privilege.st!=-1?'../playing/index?id='+re.id+'&br=128000':''}}"-->
+                       <!--bindtap="playmusic" data-idx="{{idx}}" data-st="{{re.privilege.st}}">-->
+                <!--<view class="flexlist flex-center">-->
+                    <!--<view class="flexleft flexnum ">-->
+                        <!--<block wx:if="{{re.id===curplay}}">-->
+                            <!--<template is="image" data="{{src:'../../images/aal.png',width:36}}"/>-->
+                        <!--</block>-->
+                        <!--<block wx:else>-->
+                            <!--<text class="{{toplist&&idx<3?'topindex':''}}">{{idx+1}}</text>-->
+                        <!--</block>-->
+                    <!--</view>-->
+                    <!--<view class="flexlist">-->
+                        <!--<view class="flexmain">-->
+                            <!--<view>{{re.name}}-->
+                                <!--<text wx:if="{{re.alia.length}}">（{{re.alia[0]}}）</text>-->
+                            <!--</view>-->
+                            <!--<view class="relistdes">{{re.ar[0].name}}-{{re.al.name}}</view>-->
+                        <!--</view>-->
+                        <!--<view class="flexact">-->
+                            <!--<view catchtap="lovesong" data-re="{{re}}" data-idx="{{idx}}" class="fa_list fa_mv" hidden="{{re.love==1}}">-->
+                                <!--<image src="../../images/music_like.png" mode="widthFix"/>-->
+                            <!--</view>-->
+                            <!--<view catchtap="cancellovesong" data-re="{{re}}" data-idx="{{idx}}" class="fa_list fa_mv" hidden="{{re.love==0}}">-->
+                                <!--<image src="../../images/music_liked.png" mode="widthFix"/>-->
+                            <!--</view>-->
+                        <!--</view>-->
+                    <!--</view>-->
+                <!--</view>-->
+            <!--</navigator>-->
+        <!--</view>-->
+    <!--</block>-->
 </template>

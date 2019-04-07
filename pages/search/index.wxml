@@ -10,7 +10,7 @@
                         <icon type="search" size="16" color="#aaa"/>
                     </view>
                     <input type="text" auto-focus maxlength="20" name="name" bindinput="inputext"
-                           placeholder="搜索单曲、歌手、专辑等" value="{{value}}"/>
+                           placeholder="搜索单曲、专辑、歌手等" value="{{value}}"/>
                     <view class="sf_clear" hidden="{{!value}}" bindtap="clear_kw">
                         <image src="../../images/search_form_delete.png"/>
                     </view>
@@ -57,7 +57,7 @@
     </view>
     <view class="seare_list" hidden="{{tab.tab!=item.type||!loading||!value}}" wx:for-items="{{tabs}}" wx:index="idx">
         <template is="playlist" data="{{list:item.relist.songs,privileges:item.relist.privileges,curplay:curplay}}"/>
-        <!--<template is="playlist" data="{{list:list.playlist.tracks,privileges:list.privileges,curplay:curplay}}"/>-->
+
         <view wx:for="{{item.relist.albums}}" class="albums" wx:for-item="re" wx:for-index="idx" wx:key="{{item.id}}">
             <navigator url="../album/index?pid={{re.id}}&from=album" class="flexlist flex-image">
                 <view class="flexleft fl-image">
@@ -86,7 +86,20 @@
                 </view>
             </navigator>
         </view>
-
+        <view wx:for="{{item.relist.artists}}" class="artists " wx:for-item="re" wx:key="{{re}}">
+            <navigator url="../artist/index?id={{re.id}}" class="flexlist flex-image">
+                <view class="flexleft fl-image">
+                    <image src="{{re.img1v1Url}}?param=100y100" class="user_avator"/>
+                </view>
+                <view class="flexlist">
+                    <view class="flexmain">
+                        <view>{{re.name}}
+                            <text class="fm_tdes" wx:if="{{re.alias[0]}}">({{re.alias[0]}})</text>
+                        </view>
+                    </view>
+                </view>
+            </navigator>
+        </view>
         <view wx:if="{{item.loading}}">
             <view class="cntloading" wx:if="{{'1'==item.type&&!item.relist.songs.length}}">暂无结果</view>
             <view class="cntloading" wx:if="{{'10'==item.type&&!item.relist.albums.length}}">暂无结果</view>

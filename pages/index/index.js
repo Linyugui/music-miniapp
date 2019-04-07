@@ -1,5 +1,4 @@
-var asurl = require('../../utils/bsurl.js');
-// var bsurl = require('../../utils/csurl.js');
+var bsurl = require('../../utils/bsurl.js');
 var async = require('../../utils/async.js');
 var common = require('../../utils/util.js');
 var nt = require("../../utils/nt.js");
@@ -7,7 +6,7 @@ var app = getApp();
 Page({
     data: {
         rec: {
-            idx: 0, loading: true,
+            idx: 0, loading: false,
         },
         music: {},
         playing: false,
@@ -63,10 +62,19 @@ Page({
         //个性推荐内容,歌单，新歌，mv，电台
         app.lovemusic();
         app.lovealbum();
+        //banner，
+        wx.request({
+            url: bsurl + 'v1/banner',
+            success: function (res) {
+                that.setData({
+                    banner: res.data.banners
+                })
+            }
+        });
         // async.map(['v1/personalized', 'v1/personalized/newsong'], function (item, callback) {
         async.map(['v1/personalized'], function (item, callback) {
             wx.request({
-                url: asurl + item,
+                url: bsurl + item,
                 data: {
                     limit: 6
                 },

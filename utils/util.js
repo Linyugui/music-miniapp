@@ -57,7 +57,8 @@ function toggleplay(that, app, cb) {
     if (that.data.disable) {
         return;
     }
-    console.log('---------- util.js.toggleplay()  line:60()  that.data.playing='); console.dir(that.data.playing);
+    console.log('---------- util.js.toggleplay()  line:60()  that.data.playing=');
+    console.dir(that.data.playing);
     if (that.data.playing) {
         //console.log("暂停播放");
         that.setData({playing: false});
@@ -92,7 +93,7 @@ function playAlrc(that, app) {
             //lrcindex: 0,
             duration: formatduration(app.globalData.curplay.duration || app.globalData.curplay.dt)
         });
-       // wx.setNavigationBarTitle({title: app.globalData.curplay.name});
+        // wx.setNavigationBarTitle({title: app.globalData.curplay.name});
     }
     app.globalData.backgroundAudioManager.onTimeUpdate(function () {
         var res = app.globalData.backgroundAudioManager;
@@ -145,7 +146,7 @@ function playAlrc(that, app) {
     // });
 }
 
-function lovesong(that, app, song, st, idx, list, cb) {
+function lovesong(that, app, song, st, pl, idx, list, cb) {
     //console.log('---------- util.js.lovesong()  line:147()  song='); //console.dir(song);
     wx.showLoading({
         title: '正在收藏...',
@@ -157,7 +158,8 @@ function lovesong(that, app, song, st, idx, list, cb) {
         artist_name: (song.artists) ? song.artists[0].name : song.ar[0].name,
         song_name: song.name,
         st: st,
-        picUrl:(song.album) ? song.album.picUrl : song.al.picUrl,
+        pl: pl,
+        picUrl: (song.album) ? song.album.picUrl : song.al.picUrl,
     };
     wx.request({
         url: asurl + "song/add-love-song",
@@ -167,8 +169,8 @@ function lovesong(that, app, song, st, idx, list, cb) {
             wx.hideLoading();
             wx.showToast({
                 title: '收藏成功',//提示文字
-                duration:1000,//显示时长
-                icon:'success',
+                duration: 1000,//显示时长
+                icon: 'success',
             })
             app.globalData.loved_music[0].push(song.id);
             list[idx].love = 1;
@@ -197,8 +199,8 @@ function cancellovesong(that, app, song, idx, list, cb) {
             wx.hideLoading();
             wx.showToast({
                 title: '取消成功',//提示文字
-                duration:1000,//显示时长
-                icon:'success',
+                duration: 1000,//显示时长
+                icon: 'success',
             });
             app.globalData.loved_music[0].splice(app.globalData.loved_music[0].indexOf(song.id), 1);
             list[idx].love = 0;

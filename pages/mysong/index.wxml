@@ -60,7 +60,7 @@
         </view>
 
         <block wx:for-items="{{list}}"  wx:for-index="idx"  wx:for-item="re" wx:key="{{re.id}}">
-            <view class="songs {{re.id===curplay?'cur':''}} {{re.st*1<0?'view-disable':''}} {{re.id}}">
+            <view class="songs {{re.id===curplay?'cur':''}} {{re.st*1<0||re.pl*1==0?'view-disable':''}} {{re.id}}">
                 <view hover-class="view-hover"
                            bindtap="selectmusic" data-idx="{{idx}}" data-st="{{re.st}}" data-id="{{re.id}}" data-pl="{{re.pl}}">
                     <view class="flexlist flex-center">

@@ -9,25 +9,24 @@
 
 #lastsearch {
     /*line-height: 1;*/
-    padding-top: 20 rpx;
-    flex: 0 0 80 rpx;
+    padding-top: 20rpx;
+    flex: 0 0 80rpx;
 }
 
 swiper, swiper image {
-    width: 750 rpx;
-    height: 290 rpx;
+    width: 750rpx;
+    height: 290rpx;
 }
 
 #main {
-    min-height: 1200 rpx;
-    padding-top: 80 rpx;
+    min-height: 1000rpx;
 }
 
 #rec_nav {
     display: flex;
     text-align: center;
     width: 100%;
-    border-bottom: 1 rpx solid #eee
+    border-bottom: 1rpx solid #eee
 }
 
 #rec_nav view {
@@ -36,50 +35,50 @@ swiper, swiper image {
 }
 
 #rec_nav navigator {
-    padding: 25 rpx 0;
-    font-size: 26 rpx;
+    padding: 25rpx 0;
+    font-size: 26rpx;
 }
 
 .recn_ico {
-    width: 110 rpx;
-    height: 110 rpx;
-    line-height: 110 rpx;
-    font-size: 56 rpx;
+    width: 110rpx;
+    height: 110rpx;
+    line-height: 110rpx;
+    font-size: 56rpx;
     color: #BB2C08;
-    border: 1 rpx solid #BB2C08;
+    border: 1rpx solid #BB2C08;
     border-radius: 50%;
-    margin: 0 auto 20 rpx;
+    margin: 0 auto 20rpx;
     font-weight: 300
 }
 
 .recn_ico image {
-    width: 110 rpx;
-    height: 110 rpx;
+    width: 110rpx;
+    height: 110rpx;
 }
 
 .homepl .tl_cnt {
-    width: 168.75 rpx;
+    width: 168.75rpx;
 }
 
-#album_loading {
+.album_loading {
     text-align: center;
-    margin: 120 rpx auto 0;
+    margin: 120rpx auto 0;
     color: #999;
-    font-size: 28 rpx;
+    font-size: 28rpx;
 }
 
-#album_loading image {
-    width: 88 rpx;
-    height: 88 rpx;
+.album_loading image {
+    width: 88rpx;
+    height: 88rpx;
     animation: circle infinite 1.5s linear;
     display: block;
-    margin: 40 rpx auto;
+    margin: 40rpx auto;
     border-radius: 50%;
-    border: 1 rpx solid #999
+    border: 1rpx solid #999
 }
 
 #catewrap {
-    padding: 0 15 rpx;
+    padding: 0 15rpx;
     box-sizing: border-box;
     position: fixed;
     width: 100%;
@@ -91,45 +90,45 @@ swiper, swiper image {
 }
 
 #closecatelist {
-    margin: 15 rpx auto;
+    margin: 15rpx auto;
 }
 
 .catelist {
-    margin-bottom: 20 rpx;
+    margin-bottom: 20rpx;
     overflow: hidden;
-    padding-bottom: 2 rpx;
+    padding-bottom: 2rpx;
 }
 
 .cl_list {
-    width: 179 rpx;
-    border: 1 rpx solid #eee;
+    width: 179rpx;
+    border: 1rpx solid #eee;
     text-align: center;
-    height: 90 rpx;
-    font-size: 26 rpx;
-    line-height: 90 rpx;
+    height: 90rpx;
+    font-size: 26rpx;
+    line-height: 90rpx;
     overflow: hidden;
     position: relative;
     z-index: 1;
-    margin: 0 -1 rpx -1 rpx 0;
+    margin: 0 -1rpx -1rpx 0;
     float: left
 }
 
 .cl_ico {
-    height: 182 rpx;
+    height: 182rpx;
     line-height: 1
 }
 
 .cl_ico image {
-    width: 80 rpx;
-    height: 80 rpx;
-    margin: 35 rpx auto 15 rpx;
+    width: 80rpx;
+    height: 80rpx;
+    margin: 35rpx auto 15rpx;
     display: block;
 }
 
 #cateall {
     float: none;
     width: auto;
-    margin: 20 rpx auto;
+    margin: 20rpx auto;
 }
 
 .cl_ico_checked, .cl_ico_hot {
@@ -139,8 +138,8 @@ swiper, swiper image {
 
 .cl_ico_hot {
     background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAMAAACfWMssAAABTVBMVEXTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjFX1ZKxAAAAbnRSTlMAAQMEBggKCw0ODxATFBUnKSosLi8xP0tNT1JTVFVWV1laW11eX2FiZGVoaWptbnF0dXl6fn+AgYOGh4uMj5CSk5WXnJ2en6ChpKapq6ytr7K3uby9wMHCw8XIy83P0dTj5Obn6err7O7x+fv8/nzHVlgAAAGLSURBVEjH7dVJWxNBEIfxd0YYSEBQFEGWACqKgoIgsig7iixu4EIAFZXNYeb//Y8cmEA4YLrrTJ3q8nu6n6quarg8RnV5vLxyx/OpySUFBk3uHvlti+slv2Vw6SNYs7jHQONffzdA9LGZm3u+/ftMtKGDWzTt+7lE4+uS9pu4fejjnheS02TvBs1H7m4EejL5p5FFZzdKVS29mfw95+zGCNeKtTxMPes5Sbgqfa+hL/VyrwmXJelrRH/q4aYIl06zjYhnqfvcnsMvEU9TV/cp1ivCFUn6FvHE2b0LWmJNEK5Km6XiON3zVwN3Y41x7X0xl7XDcS/9vE77sV5QleNB4rXPtgI6E41At5+LW4HuREOFio6MfJiSFLfR8CbP/USVXQZ3q4NpJR3U/1Axx6wqu9KJC0Ew00XdjqTNztjBlaDmAy5s0UruDGo2YNjDncOyZ+riyuDZRDm5cqhJ7qSu7gLU23/ODr//73/Q0WF1WB1Wh9VhdVgdVofVYXVYHVaH1WF1WB1Wh9VhdScljLevgPOTYwAAAABJRU5ErkJggg==);
-    width: 56 rpx;
-    height: 56 rpx;
+    width: 56rpx;
+    height: 56rpx;
     left: 0;
     top: 0;
     background-size: 100% 100%
@@ -148,12 +147,12 @@ swiper, swiper image {
 
 .cl_ico_checked {
     background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAMAAABg3Am1AAAApVBMVEXTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHTOjHDeOSDAAAANnRSTlMAfwEDKfnqwQrZS9on3q6psZjw0I1Q/gxeeiAr8Y77QRDbavy7brg+E4CLHlvOM/WnFeOXTse/voMEAAAA7klEQVRIx+2WyU6DQQyDP/9dWQuUfS/Q0o0d8v6P1kMRMFRKZSROkOvYUiaxrRBm8QMCRv0T/ghBJkGmlmSKT6ZaZcpbph9kGkim42RaVKanZYaAzNSQGTMyc0lmkMlMPplRWeBX6vWNJYQCv7MOuzmhwF+vwsFaSij7P4JqM/1Die9Uyxw3f93abkRERLcNe/sZYY5vwWFERPMYTk6zsb730wLOIs4v4LKX7eGj/yuo3UQfaoNscZ//bdzCcASMs01/nU9zAsA0k0Y5z7s2cP+QEL7r7bHi6TkR36I+X17fErXKvARkng76pePEqxkbC7UpRDWM4wAAAABJRU5ErkJggg==);
-    width: 38 rpx;
-    height: 38 rpx;
+    width: 38rpx;
+    height: 38rpx;
     background-position: right bottom;
     right: 0;
     bottom: 0;
-    background-size: 48 rpx 48 rpx;
+    background-size: 48rpx 48rpx;
 }
 
 .checked {
@@ -163,14 +162,14 @@ swiper, swiper image {
 
 #catselectbtn {
     background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAALCAMAAACecocUAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAACdQTFRFiIiI+/z9vr6/xcXGnJyd9PX28/T1n5+fnp6ejIyMm5ub7e7v3t/gBUeqYAAAAEBJREFUeNpiYAABZgYI4GZj42LmYmPjBrJZGRlZmFkYGVnR2Bzs7JzMnOzsHAwMTCDAAyZRxHHqRTYfYS9AgAEAaTABl1/qO3QAAAAASUVORK5CYII=);
-    border: 1 rpx solid #eee;
+    border: 1rpx solid #eee;
     color: #999;
-    font-size: 24 rpx;
-    padding: 8 rpx 20 rpx 8 rpx 40 rpx;
-    background-position: 10 rpx center;
+    font-size: 24rpx;
+    padding: 8rpx 20rpx 8rpx 40rpx;
+    background-position: 10rpx center;
     float: right;
     background-repeat: no-repeat;
-    border-radius: 3 rpx;
+    border-radius: 3rpx;
 }
 
 #plc_header {
@@ -185,23 +184,23 @@ swiper, swiper image {
 
 .djcatelist {
     text-align: center;
-    font-size: 24 rpx;
-    flex: 0 0 187.5 rpx;
-    height: 145 rpx
+    font-size: 24rpx;
+    flex: 0 0 187.5rpx;
+    height: 145rpx
 }
 
 .djcatelist image {
-    width: 80 rpx;
-    height: 80 rpx;
-    margin-top: 20 rpx
+    width: 80rpx;
+    height: 80rpx;
+    margin-top: 20rpx
 }
 
 .flexlist .cover {
-    width: 230 rpx;
-    height: 230 rpx;
+    width: 230rpx;
+    height: 230rpx;
     padding: 0;
-    flex: 0 0 230 rpx;
-    margin: 10 rpx 20 rpx 10 rpx 10 rpx;
+    flex: 0 0 230rpx;
+    margin: 10rpx 20rpx 10rpx 10rpx;
 }
 
 .sort_fl_list {

@@ -14,7 +14,7 @@ Page({
         loading: true,
         toplist: false,
         user: wx.getStorageSync('user') || {},
-        canplay:[],
+        canplay: [],
     },
     toggleplay: function () {
         util.toggleplay(this, app);
@@ -71,7 +71,7 @@ Page({
                     } else {
                         res.data.playlist.tracks[i].love = 0;
                     }
-                    if (res.data.privileges[i].st >= 0) {
+                    if (res.data.privileges[i].st * 1 >= 0 && res.data.privileges[i].pl * 1 > 0) {
                         canplay.push(res.data.playlist.tracks[i])
                     }
                 }
@@ -109,11 +109,22 @@ Page({
         app.globalData.globalStop = false;
     },
     playmusic: function (event) {
-        //console.log('---------- index.js.playmusic()  line:113()  event=');
-        //console.dir(event);
-        let music = event.currentTarget.dataset.idx;
-        let st = event.currentTarget.dataset.st;
-        if (st * 1 < 0) {
+        // let music = event.currentTarget.dataset.idx;
+        // let st = event.currentTarget.dataset.st;
+        // if (st * 1 < 0) {
+        //     wx.showToast({
+        //         title: '歌曲已下架',
+        //         icon: 'success',
+        //         duration: 2000
+        //     });
+        //     return;
+        // }
+        // music = this.data.list.playlist.tracks[music];
+        // this.setplaylist(music, event.currentTarget.dataset.idx)
+        var idx = event.currentTarget.dataset.idx;
+        var st = event.currentTarget.dataset.st;
+        var pl = event.currentTarget.dataset.pl;
+        if (st * 1 < 0 || pl * 1 == 0) {
             wx.showToast({
                 title: '歌曲已下架',
                 icon: 'success',
@@ -121,8 +132,11 @@ Page({
             });
             return;
         }
-        music = this.data.list.playlist.tracks[music];
-        this.setplaylist(music, event.currentTarget.dataset.idx)
+        var song = this.data.list.playlist.tracks[idx];
+        this.setplaylist(song, idx);
+        wx.navigateTo({
+            url: '../playing/index?id=' + song.id + '&br=128000'
+        })
     },
     lovesong: function (e) {
         var that = this;
@@ -130,8 +144,9 @@ Page({
         var playlist = list.playlist.tracks;
         var song = e.currentTarget.dataset.re;
         var idx = e.currentTarget.dataset.idx;
-        var st = list.privileges[idx].st;
-        util.lovesong(that, app, song, st, idx, playlist, function () {
+        var st = e.currentTarget.dataset.st;
+        var pl = e.currentTarget.dataset.pl;
+        util.lovesong(that, app, song, st, pl, idx, playlist, function () {
             that.setData({
                 list: list
             })
@@ -149,6 +164,5 @@ Page({
                 list: list
             })
         })
-
     },
 });
