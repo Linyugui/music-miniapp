@@ -32,7 +32,7 @@
         <block wx:for-items="{{list}}" wx:for-index="idx" wx:for-item="re" wx:key="{{re.id}}">
             <view class="songs {{re.id===curplay?'cur':''}} {{re.st*1<0||re.pl*1==0?'view-disable':''}} {{re.id}}">
                 <view hover-class="view-hover"
-                      bindtap="playmusic" data-idx="{{idx}}" data-st="{{re.st}}" data-id="{{re.id}}" data-pl="{{re.pl}}">
+                      bindtap="playmusic" data-idx="{{idx}}" data-st="{{re.st}}" data-pl="{{re.pl}}">
                     <view class="flexlist flex-center">
                         <view class="flexleft flexnum ">
                             <block wx:if="{{re.id===curplay}}">
@@ -48,11 +48,11 @@
                                 <view class="relistdes">{{re.artist_name}}-{{re.album_name}}</view>
                             </view>
                             <view class="flexact">
-                                <view catchtap="lovesong" data-re="{{re}}" data-idx="{{idx}}" class="fa_list fa_mv"
+                                <view catchtap="lovesong" data-idx="{{idx}}" class="fa_list fa_mv"
                                       hidden="{{re.love==1}}">
                                     <image src="../../images/music_like.png" mode="widthFix"/>
                                 </view>
-                                <view catchtap="cancellovesong" data-re="{{re}}" data-idx="{{idx}}"
+                                <view catchtap="cancellovesong" data-idx="{{idx}}"
                                       class="fa_list fa_mv" hidden="{{re.love==0}}">
                                     <image src="../../images/music_liked.png" mode="widthFix"/>
                                 </view>

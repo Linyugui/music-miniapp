@@ -181,12 +181,11 @@ Page({
     lovesong: function (e) {
         var that = this;
         var result = that.data.result;
-        var list = result.songs;
-        var song = e.currentTarget.dataset.re;
         var idx = e.currentTarget.dataset.idx;
-        var st = e.currentTarget.dataset.st;
-        var pl = e.currentTarget.dataset.pl;
-        util.lovesong(that, app, song, st, pl, idx, list, function () {
+        var song = result.songs[idx];
+        var st = result.privileges[idx].st;
+        var pl = result.privileges[idx].pl;
+        util.lovesong(app, song, st, pl, function () {
             that.setData({
                 result: result
             })
@@ -195,10 +194,9 @@ Page({
     cancellovesong: function (e) {
         var that = this;
         var result = that.data.result;
-        var list = result.songs;
-        var song = e.currentTarget.dataset.re;
         var idx = e.currentTarget.dataset.idx;
-        util.cancellovesong(that, app, song, idx, list, function () {
+        var song = result.songs[idx];
+        util.cancellovesong(app, song, function () {
             that.setData({
                 result: result
             })

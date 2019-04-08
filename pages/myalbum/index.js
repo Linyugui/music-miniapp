@@ -48,15 +48,11 @@ Page({
                 limit: 1000
             },
             success: function (res) {
-                //console.log('---------- index.js.success()  line:63()  res=');
-                //console.dir(res);
                 var list = res.data.data;
                 that.setData({
                     loading: false,
                     list: list,
                 });
-                //console.log('---------- index.js.success()  line:84()  list=');
-                //console.dir(list);
 
             }, fail: function (res) {
                 wx.navigateBack({
@@ -64,6 +60,9 @@ Page({
                 })
             }
         });
+        wx.setNavigationBarTitle({
+            title: "收藏的专辑"
+        })
     },
     cancellovealbum: function (e) {
         var that = this;

@@ -16,7 +16,9 @@ Page({
     onLoad: function (options) {
         var v = options.key;
         v && this.search(v);
-
+        wx.setNavigationBarTitle({
+            title: "搜索"
+        })
     },
     inputext: function (e) {
         var name = e.detail.value;
@@ -306,13 +308,12 @@ Page({
         var that = this;
         var index = that.data.tab.index;
         var tabs = that.data.tabs;
-        var list = tabs[index].relist.songs;
-        var song = e.currentTarget.dataset.re;
+        var relist = tabs[index].relist;
         var idx = e.currentTarget.dataset.idx;
-        var st = e.currentTarget.dataset.st;
-        var pl = e.currentTarget.dataset.pl;
-
-        util.lovesong(that, app, song, st, pl, idx, list, function () {
+        var song = relist.songs[idx];
+        var st = relist.privileges[idx].st;
+        var pl = relist.privileges[idx].pl;
+        util.lovesong(app, song, st, pl, function () {
             that.setData({
                 tabs: tabs
             })
@@ -322,10 +323,10 @@ Page({
         var that = this;
         var index = that.data.tab.index;
         var tabs = that.data.tabs;
-        var list = tabs[index].relist.songs;
-        var song = e.currentTarget.dataset.re;
+        var relist = tabs[index].relist;
         var idx = e.currentTarget.dataset.idx;
-        util.cancellovesong(that, app, song, idx, list, function () {
+        var song = relist.songs[idx];
+        util.cancellovesong(app, song, function () {
             that.setData({
                 tabs: tabs
             })

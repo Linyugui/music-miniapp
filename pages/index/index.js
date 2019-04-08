@@ -91,5 +91,8 @@ Page({
                 rec: rec
             })
         });
+        wx.setNavigationBarTitle({
+            title: "首页"
+        })
     }
 })

@@ -63,7 +63,7 @@ Page({
             success: function (res) {
                 var canplay = [];
                 var love_song = app.globalData.loved_music[0];
-                // //console.log('---------- index.js.success()  line:68()  res.data='); //console.dir(res.data);
+                console.log('---------- index.js.success()  line:68()  res.data='); console.dir(res.data);
                 var length = res.data.playlist.tracks.length;
                 for (let i = 0; i < length; i++) {
                     if (love_song.indexOf(res.data.playlist.tracks[i].id) != -1) {
@@ -141,12 +141,13 @@ Page({
     lovesong: function (e) {
         var that = this;
         var list = that.data.list;
+        var privileges = list.privileges;
         var playlist = list.playlist.tracks;
-        var song = e.currentTarget.dataset.re;
         var idx = e.currentTarget.dataset.idx;
-        var st = e.currentTarget.dataset.st;
-        var pl = e.currentTarget.dataset.pl;
-        util.lovesong(that, app, song, st, pl, idx, playlist, function () {
+        var song = playlist[idx];
+        var st = privileges[idx].st;
+        var pl = privileges[idx].pl;
+        util.lovesong(app, song, st, pl, function () {
             that.setData({
                 list: list
             })
@@ -157,9 +158,9 @@ Page({
         var that = this;
         var list = that.data.list;
         var playlist = list.playlist.tracks;
-        var song = e.currentTarget.dataset.re;
         var idx = e.currentTarget.dataset.idx;
-        util.cancellovesong(that, app, song, idx, playlist, function () {
+        var song = playlist[idx];
+        util.cancellovesong(app, song, function () {
             that.setData({
                 list: list
             })

@@ -146,8 +146,7 @@ function playAlrc(that, app) {
     // });
 }
 
-function lovesong(that, app, song, st, pl, idx, list, cb) {
-    //console.log('---------- util.js.lovesong()  line:147()  song='); //console.dir(song);
+function lovesong(app, song, st, pl, cb) {
     wx.showLoading({
         title: '正在收藏...',
     });
@@ -171,9 +170,9 @@ function lovesong(that, app, song, st, pl, idx, list, cb) {
                 title: '收藏成功',//提示文字
                 duration: 1000,//显示时长
                 icon: 'success',
-            })
+            });
             app.globalData.loved_music[0].push(song.id);
-            list[idx].love = 1;
+            song.love = 1;
             cb && cb();
         },
         fail: function () {
@@ -182,7 +181,7 @@ function lovesong(that, app, song, st, pl, idx, list, cb) {
     })
 }
 
-function cancellovesong(that, app, song, idx, list, cb) {
+function cancellovesong(app, song, cb) {
 
     wx.showLoading({
         title: '取消收藏...',
@@ -203,7 +202,7 @@ function cancellovesong(that, app, song, idx, list, cb) {
                 icon: 'success',
             });
             app.globalData.loved_music[0].splice(app.globalData.loved_music[0].indexOf(song.id), 1);
-            list[idx].love = 0;
+            song.love = 0;
             cb && cb();
         },
         fail: function () {

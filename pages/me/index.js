@@ -12,6 +12,9 @@ Page({
         that.setData({
             userInfo: app.globalData.userInfo
         });
+        wx.setNavigationBarTitle({
+            title: "我的音乐"
+        })
 
     },
     onShow: function () {
