@@ -75,8 +75,10 @@ Page({
     },
     playmusic: function (event) {
         var idx = event.currentTarget.dataset.idx;
-        var st = event.currentTarget.dataset.st;
-        var pl = event.currentTarget.dataset.pl;
+        var list = this.data.list;
+        var song = list[idx];
+        var st = song.st;
+        var pl = song.pl;
         if (st * 1 < 0 || pl * 1 == 0) {
             wx.showToast({
                 title: '歌曲已下架',
@@ -85,7 +87,7 @@ Page({
             });
             return;
         }
-        var song = this.data.list[idx];
+
         this.setplaylist(song, idx);
         wx.navigateTo({
             url: '../playing/index?id=' + song.id + '&br=128000'
@@ -94,12 +96,13 @@ Page({
     selectmusic: function (event) {
         if (this.data.more) {
             var idx = event.currentTarget.dataset.idx;
-            var id = event.currentTarget.dataset.id;
+            var list = this.data.list;
+            var song = list[idx];
+            var id = song.id;
             var select = this.data.select;
             var select_idx = this.data.select_idx;
-            var list = this.data.list;
-            list[idx].select = !list[idx].select;
-            if (list[idx].select) {
+            song.select = !song.select;
+            if (song.select) {
                 select.push(id);
                 select_idx.push(idx);
             } else {
@@ -116,14 +119,13 @@ Page({
     cancellovesong: function (e) {
         var that = this;
         var list = that.data.list;
-        var id = e.currentTarget.dataset.id;
         var idx = e.currentTarget.dataset.idx;
+        var id = list[idx].id;
         wx.showModal({
             title: '提示',
             content: '是否要删除收藏的歌曲',
             success: function (res) {
                 if (res.cancel) {
-                    //console.log('用户点击了取消');
                     return;
                 } else {
                     wx.showLoading({
@@ -166,10 +168,6 @@ Page({
         var list = that.data.list;
         var select = that.data.select;
         var select_idx = that.data.select_idx;
-        console.log('---------- index.js.cancellovesongs()  line:200()  select=');
-        console.dir(select);
-        console.log('---------- index.js.cancellovesongs()  line:201()  select_idx=');
-        console.dir(select_idx);
         wx.showModal({
             title: '提示',
             content: '是否要删除这些收藏的歌曲',
@@ -194,7 +192,6 @@ Page({
                             for (var i = 0; i < length; i++) {
                                 app.globalData.loved_music[0].splice(app.globalData.loved_music[0].indexOf(select[i]), 1);
                                 list.splice(select_idx[length - 1 - i], 1);
-
                             }
                             that.selectmore();
                             that.setData({
