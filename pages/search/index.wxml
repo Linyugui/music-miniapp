@@ -103,6 +103,7 @@
         <view wx:if="{{item.loading}}">
             <view class="cntloading" wx:if="{{'1'==item.type&&!item.relist.songs.length}}">暂无结果</view>
             <view class="cntloading" wx:if="{{'10'==item.type&&!item.relist.albums.length}}">暂无结果</view>
+            <view class="cntloading" wx:if="{{'100'==item.type&&!item.relist.artists.length}}">暂无结果</view>
         </view>
         <template is="loading" wx:if="{{!item.loading||!item.none}}"/>
     </view>

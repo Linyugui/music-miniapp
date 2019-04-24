@@ -17,7 +17,7 @@
 </view>
 <view id="art_main">
     <view class="tab_cnt" hidden="{{tab!=1}}">
-        <template is="playlist" data="{{list:art.songs,privileges:result.privileges}}"/>
+        <template is="playlist" data="{{list:art.songs,privileges:art.privileges,curplay:curplay}}"/>
         <template is="loading" wx:if="{{!loading}}"></template>
     </view>
     <view class="tab_cnt " hidden="{{tab!=2}}">

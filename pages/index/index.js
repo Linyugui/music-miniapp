@@ -1,6 +1,6 @@
 var bsurl = require('../../utils/bsurl.js');
 var async = require('../../utils/async.js');
-var common = require('../../utils/util.js');
+var util = require('../../utils/util.js');
 var nt = require("../../utils/nt.js");
 var app = getApp();
 Page({
@@ -20,7 +20,7 @@ Page({
         },
     },
     toggleplay: function () {
-        common.toggleplay(this, app);
+        util.toggleplay(this, app);
     },
     playnext: function (e) {
         app.nextplay(e.currentTarget.dataset.pt)

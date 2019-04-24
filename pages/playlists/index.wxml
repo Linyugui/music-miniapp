@@ -1,0 +1,54 @@
+<import src="../../utils/loading.wxml"/>
+<import src="../../utils/image.wxml"/>
+
+<view id="main" class="page_pp">
+    <!--歌单 -->
+    <view class="tab_cnt">
+        <view class='listheader' id="plc_header">{{catelist.checked.name}}
+            <text bindtap="togglePtype" id="catselectbtn">选择分类</text>
+        </view>
+        <block wx:if="{{playlist.loading}}">
+            <view class='flex-boxlist flex-two'>
+                <view class="tl_cnt cateplaylist" wx:for-items="{{playlist.list.playlists}}" wx:key="{{item.id}}">
+                    <navigator url="../playlist/index?pid={{item.id}}&from=toplist">
+                        <view class="cover">
+                            <image src="{{item.coverImgUrl}}?param=200y200" class="music_cover"/>
+                            <view class="img_creator">
+                                <template is="image" data="{{src:'../../images/cm2_icn_userhead@2x.png',width:24}}"/>
+                                {{item.creator.nickname}}
+                            </view>
+                            <view class="img_playcount">
+                                <image src="../../images/p0.png"/>
+                                {{item.playCount}}
+                            </view>
+                        </view>
+                        <text class="name">{{item.name}}</text>
+                    </navigator>
+                </view>
+            </view>
+        </block>
+        <template wx:if="{{!playlist.loading||playlist.list.more}}" is="loading"/>
+    </view>
+</view>
+<scroll-view style="height:100%" id="catewrap" scroll-into-view="c2" scroll-y="true" hidden="{{!cateisShow}}">
+    <view class="close" bindtap="togglePtype" id="closecatelist"></view>
+    <view id="cateall" data-catype="{{catelist.res.all}}" bindtap="cateselect"
+          class="cl_list {{catelist.checked.name==catelist.res.all.name?'checked':''}}">
+        <text class="cl_ico_checked cl_ico" wx:if="{{catelist.checked.name==catelist.res.all.name}}"></text>
+        {{catelist.res.all.name}}
+    </view>
+    <view class="catelist" id="c{{idx}}" wx:key="{{item}}" wx:for-items="{{catelist.res.categories}}"
+          wx:for-index="idx">
+        <view class="cl_list cl_ico">
+            <image src="../../images/cm2_discover_icn_{{idx}}@2x.png"></image>
+            <text>{{item}}</text>
+        </view>
+        <view class="cl_list {{catelist.checked.name==re.name?'checked':''}} " wx:if="{{re.category==idx}}"
+              bindtap="cateselect" data-catype="{{re}}" data-catname="{{re.name}}" wx:for-items="{{catelist.res.sub}}"
+              wx:key="{{item.name}}" wx:for-item="re">
+            <!--<text class="cl_ico_hot cl_ico" wx:if="{{re.hot}}"></text>-->
+            <text class="cl_ico_checked cl_ico" wx:if="{{catelist.checked.name==re.name}}"></text>
+            {{re.name}}
+        </view>
+    </view>
+</scroll-view>

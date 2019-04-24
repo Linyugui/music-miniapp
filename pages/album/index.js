@@ -18,11 +18,8 @@ Page({
         //     des: ""
         // }
     },
-    // toggleplay: function () {
-    //     util.toggleplay(this, app);
-    // },
-    playnext: function (e) {
-        app.nextplay(e.currentTarget.dataset.pt)
+    toggleplay: function () {
+        util.toggleplay(this, app);
     },
     music_next: function (r) {
         this.setData({
@@ -108,14 +105,6 @@ Page({
             }
         });
     },
-    onShareAppMessage: function () {
-        if (this.data.share.id) return;
-        return {
-            title: this.data.share.title,
-            desc: this.data.share.des,
-            path: 'page/component/playing/index?id=' + this.data.share.id
-        }
-    },
     onShow: function () {
         nt.addNotification("music_next", this.music_next, this);
         nt.addNotification("music_toggle", this.music_toggle, this);
@@ -133,9 +122,10 @@ Page({
         })
     },
     playall: function (event) {
-        this.setplaylist(this.data.canplay[0], 0);
-        app.seekmusic(1)
-
+        if(this.data.canplay.length){
+            this.setplaylist(this.data.canplay[0], 0);
+            app.seekmusic(1)
+        }
     },
     setplaylist: function (music, index) {
         //设置播放列表，设置当前播放音乐，设置当前音乐在列表中位置
@@ -148,19 +138,6 @@ Page({
         app.globalData.globalStop = false;
     },
     playmusic: function (event) {
-        // var that = this;
-        // var music = event.currentTarget.dataset.idx;
-        // var st = event.currentTarget.dataset.st;
-        // if (st * 1 < 0) {
-        //     wx.showToast({
-        //         title: '歌曲已下架',
-        //         icon: 'success',
-        //         duration: 2000
-        //     });
-        //     return;
-        // }
-        // music = this.data.result.songs[music];
-        // that.setplaylist(music, event.currentTarget.dataset.idx);
         var idx = event.currentTarget.dataset.idx;
         var st = event.currentTarget.dataset.st;
         var pl = event.currentTarget.dataset.pl;

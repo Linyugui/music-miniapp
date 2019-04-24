@@ -1,4 +1,4 @@
-var common = require('../../utils/util.js');
+var util = require('../../utils/util.js');
 var bsurl = require('../../utils/csurl.js');
 var asurl = require('../../utils/bsurl.js');
 var nt = require('../../utils/nt.js');
@@ -12,6 +12,9 @@ Page({
     data: {
         playing: false,
         music: {},
+        lrc: [],
+        lrcindex: 0,
+        showlrc: false,
         playtime: '00:00',  //当前时间
         duration: '00:00',  //播放时间
         percent: 0,
@@ -37,13 +40,16 @@ Page({
                 that.setData({
                     start: 0,   //start?
                     music: app.globalData.curplay,
-                    duration: common.formatduration(app.globalData.curplay.dt || app.globalData.curplay.duration)
+                    duration: util.formatduration(app.globalData.curplay.dt)
                 });
                 wx.setNavigationBarTitle({title: app.globalData.curplay.name});
                 app.seekmusic(1);
             }
         })
 
+    },
+    loadlrc: function () {
+        util.loadlrc(this);
     },
     // togminfo: function () {
     //     this.setData({
@@ -54,15 +60,12 @@ Page({
     // },
     togpinfo: function () {
         this.setData({
-            showminfo: false,
             showainfo: false,
             showpinfo: !this.data.showpinfo
         })
     },
-    //
     togainfo: function () {
         this.setData({
-            showminfo: false,
             showpinfo: false,
             showainfo: !this.data.showainfo
         })
@@ -80,15 +83,6 @@ Page({
             downloadPercent: 0, //已缓存百分比
         });
         app.nextplay(type);
-        // app.nextplay(type, function () {
-        //     that.setData({
-        //         share: {
-        //             id: app.globalData.curplay.id,
-        //             title: app.globalData.curplay.name,
-        //             des: (app.globalData.curplay.ar || app.globalData.curplay.artists)[0].name
-        //         }
-        //     })
-        // });
     },
     playshuffle: function () {
         //切换播放顺序
@@ -145,6 +139,8 @@ Page({
         var that = this
         nextime = app.globalData.curplay.dt * nextime / 100000;
         app.globalData.currentPosition = nextime;               //计算下次进度条百分比
+        console.log('---------- index.js.museek()  line:148()  app.globalData.curplay='); console.dir(app.globalData.curplay);
+        console.log('---------- index.js.museek()  line:148()  nextime='); console.dir(nextime);
         app.seekmusic(1, app.globalData.currentPosition, function () {
             that.setData({
                 percent: e.detail.value
@@ -164,7 +160,7 @@ Page({
             that.setData({
                 start: 0,
                 music: app.globalData.curplay,
-                duration: common.formatduration(app.globalData.curplay.dt || app.globalData.curplay.duration),
+                duration: util.formatduration(app.globalData.curplay.dt),
                 share: {
                     id: app.globalData.curplay.id,
                     br: options.br,
@@ -196,7 +192,7 @@ Page({
         var that = this;
         app.globalData.playtype = 1;
         nt.addNotification("music_next", this.music_next, this);
-        common.playAlrc(that, app);
+        util.playAlrc(that, app);
     },
     onUnload: function () {
         nt.removeNotification("music_next", this)
@@ -207,14 +203,15 @@ Page({
     music_next: function (r) {
         var that = this;
         that.setData({
-            music: r.music
+            music: r.music,
+            duration: util.formatduration(app.globalData.curplay.dt),
         });
         wx.setNavigationBarTitle({title: app.globalData.curplay.name});
 
     },
     playingtoggle: function (event) {
         console.log('---------- index.js.playingtoggle()  line:262()  event='); //console.dir(event);
-        common.toggleplay(this, app, function () {
+        util.toggleplay(this, app, function () {
         })
     },
 

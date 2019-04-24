@@ -27,8 +27,7 @@
 				<image src="../../images/pl-playall.png" mode="widthFix" />
 			</view>
 			<view class="flexlist">
-				<text id="pa-count">播放全部 <text> (共{{result.songs.length}}首)</text>
-				</text>
+				<text id="pa-count">播放全部<text> (共{{result.songs.length}}首)</text></text>
 			</view>
 		</view>
 		<template is="playlist" data="{{list:result.songs,privileges:result.privileges,curplay:curplay}}" />

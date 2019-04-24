@@ -18,7 +18,8 @@
             <!--playlist-->
             <view class="st_title">
                 <image width="30" mode="widthFix" src="../../images/cm2_discover_icn_recmd@2x.png"/>
-                推荐歌单
+                热门歌单
+                <navigator class="rbtn" url="../playlists/index">更多></navigator>
             </view>
             <view class='flex-boxlist'>
                 <view class="tl_cnt" wx:for-items="{{rec.re[0]}}" wx:key="{{item.id}}">

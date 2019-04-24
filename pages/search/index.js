@@ -25,19 +25,6 @@ Page({
         this.setData({value: name});
     },
     playmusic: function (event) {
-        // let that = this;
-        // let music = event.currentTarget.dataset.idx;
-        // let st = event.currentTarget.dataset.st;
-        // if (st * 1 < 0) {
-        //     wx.showToast({
-        //         title: '歌曲已下架',
-        //         icon: 'success',
-        //         duration: 2000
-        //     });
-        //     return;
-        // }
-        // music = this.data.tabs[0].relist.songs[music];
-        // app.globalData.curplay = music
         var idx = event.currentTarget.dataset.idx;
         var st = event.currentTarget.dataset.st;
         var pl = event.currentTarget.dataset.pl;
@@ -71,11 +58,12 @@ Page({
         var that = this;
         tl = this.data.tabs;
         this.httpsearch(name, curtab.offset, this.data.tab.tab, curloved_music, function (res) {
-            var resultarry = res.songs || res.albums || [];
+            console.log('---------- index.js.()  line:61()  res='); console.dir(res);
+            var resultarry = res.songs || res.albums || res.artists || [];
             curtab.relist = res;
             curtab.loading = true;
             curtab.offset = resultarry.length;
-            var size = res.songCount || res.albumCount;
+            var size = res.songCount || res.albumCount || res.artistCount;
             size = size ? size : 0;
             curtab.none = curtab.offset >= size ? true : false;
             tl[index] = curtab;
@@ -126,8 +114,8 @@ Page({
             tabs: tl
         })
         this.httpsearch(this.data.prevalue, curtab.offset, this.data.tab.tab, curloved_music, function (res) {
-            var resultarry = res.songs || res.albums || [];
-            var size = res.songCount || res.albumCount;
+            var resultarry = res.songs || res.albums || res.artists || [];
+            var size = res.songCount || res.albumCount || res.artistCount;
             size = size ? size : 0;
             var length = resultarry.length;
             curtab.loading = true;
@@ -136,6 +124,7 @@ Page({
             curtab.relist.songs = curtab.relist.songs ? curtab.relist.songs.concat(resultarry) : null;
             curtab.relist.privileges = curtab.relist.songs ? curtab.relist.privileges.concat(res.privileges) : null;
             curtab.relist.albums = curtab.relist.albums ? curtab.relist.albums.concat(resultarry) : null;
+            curtab.relist.artists = curtab.relist.artists ? curtab.relist.artists.concat(resultarry) : null;
             tl[that.data.tab.index] = curtab
             that.setData({
                 tabs: tl
@@ -192,7 +181,7 @@ Page({
 
                     })
                 }
-                else {
+                else if(type == 10 && res.data.result.albumCount > 0) {
                     var albums = res.data.result.albums || [];
                     for (var i = 0, len = albums.length; i < len; i++) {
                         if (love.indexOf(albums[i].id) != -1) {
@@ -202,6 +191,9 @@ Page({
                             albums[i].love = 0;
                         }
                     }
+                    cb && cb(res.data.result);
+                }
+                else{
                     cb && cb(res.data.result);
                 }
 
@@ -220,14 +212,13 @@ Page({
         var tl = that.data.tabs;
         if (!curtab.loading) {
             this.httpsearch(this.data.prevalue, curtab.offset, type, curloved_music, function (res) {
-                var resultarry = res.songs || res.albums || [];
+                var resultarry = res.songs || res.albums || res.artists ||  [];
                 curtab.loading = true;
                 curtab.relist = res;
                 curtab.offset = resultarry.length;
-                var size = res.songCount || res.albumCount;
+                var size = res.songCount || res.artistCount || res.albumCount;
                 size = size ? size : 0;
                 curtab.none = curtab.offset >= size ? true : false;
-                //console.log(size, curtab.offset)
                 tl[index] = curtab;
                 that.setData({
                     tabs: tl

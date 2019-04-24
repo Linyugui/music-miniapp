@@ -6,7 +6,7 @@ var util = require('../../utils/util.js');
 Page({
     data: {
         list: [],
-        curplay: {},
+        curplay: -1,
         cover: '',
         music: {},
         playing: false,
@@ -59,9 +59,10 @@ Page({
         this.httpsearch();
     },
     playall: function (event) {
-        this.setplaylist(this.data.canplay[0], 0);
-        app.seekmusic(1)
-
+        if(this.data.canplay.length){
+            this.setplaylist(this.data.canplay[0], 0);
+            app.seekmusic(1)
+        }
     },
     setplaylist: function (music, index) {
         //设置播放列表，设置当前播放音乐，设置当前音乐在列表中位置

@@ -1,14 +1,15 @@
 {
   "pages": [
+
+    "pages/index/index",
     "pages/me/index",
     "pages/search/index",
     "pages/artist/index",
-    "pages/index/index",
-
     "pages/mysong/index",
     "pages/mysimilar/index",
     "pages/myalbum/index",
     "pages/playlist/index",
+    "pages/playlists/index",
     "pages/playing/index",
     "pages/authorize/index",
     "pages/album/index"

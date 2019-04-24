@@ -5,7 +5,7 @@ var util = require('../../utils/util.js');
 Page({
     data: {
         list: [],
-        curplay: {},
+        curplay: -1,
         pid: 0,
         cover: '',
         music: {},
@@ -94,9 +94,10 @@ Page({
         });
     },
     playall: function (event) {
-        this.setplaylist(this.data.canplay[0], 0);
-        app.seekmusic(1)
-
+        if(this.data.canplay.length){
+            this.setplaylist(this.data.canplay[0], 0);
+            app.seekmusic(1)
+        }
     },
     setplaylist: function (music, index) {
         //设置播放列表，设置当前播放音乐，设置当前音乐在列表中位置
@@ -109,18 +110,6 @@ Page({
         app.globalData.globalStop = false;
     },
     playmusic: function (event) {
-        // let music = event.currentTarget.dataset.idx;
-        // let st = event.currentTarget.dataset.st;
-        // if (st * 1 < 0) {
-        //     wx.showToast({
-        //         title: '歌曲已下架',
-        //         icon: 'success',
-        //         duration: 2000
-        //     });
-        //     return;
-        // }
-        // music = this.data.list.playlist.tracks[music];
-        // this.setplaylist(music, event.currentTarget.dataset.idx)
         var idx = event.currentTarget.dataset.idx;
         var st = event.currentTarget.dataset.st;
         var pl = event.currentTarget.dataset.pl;
